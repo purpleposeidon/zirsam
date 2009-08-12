@@ -1,0 +1,84 @@
+#!/usr/bin/python3.0
+"""
+A quick script to test lujvo for my python lojban parser.
+If it properly parses a selbri, it should output selbri(WORD).
+It caches the last error.
+
+OR, instead of running this script (which is very slow), you can do:
+	cat data/WORDTYPE | ./yanother_metthod_of_attack.py | grep cmavo
+to see if there are any regressions.
+"""
+
+
+import os
+import sys
+
+err = os.path.expanduser('~/.test_lujvo_error')
+
+def test(line):
+	line = line.strip()
+	assert ' ' not in line
+	assert '(' not in line
+	assert '#' not in line
+	assert '[' not in line
+	t = "selbri(%s)" % (line)
+	cmd = "echo %r | ../yanother_method_of_attack.py" % line.strip()
+	output = os.popen(cmd).read().strip()
+	if output != t:
+		print("!!!Error with", line.strip(), ':')
+		os.system("echo %r | jbofihe -x" % line)
+		print("Got", output, "expected", t, ".")
+		os.system(cmd + ' --token-error')
+		open(err, 'w').write(line.strip())
+		return False
+	return True
+		
+
+def test_all():
+	for line in open("../data/lujvo"):
+		line = line.strip()
+		print("\r", line, end='            ', sep='')
+		if line[0] == '#':
+			print(" (ignored) ", end='')
+		elif not test(line):
+			return False
+	return True
+	
+
+def test_old():
+	try:
+		first = open(err).read().strip()
+	except:
+		pass
+
+	if first:
+		if test(first):
+			open(err, 'w').close()
+		else:
+			return False
+	return True
+	
+
+def run_test():
+	if test_old():
+		if test_all():
+			print("Hooray! :D\a\a")
+			for x in range(5):
+				os.system("beep; sleep .7")
+			raise SystemExit
+	else:
+		return False
+
+if __name__ == '__main__':
+	if 'loop' in sys.argv:
+		while 1:
+			run_test()
+			i = True
+			while i:
+				i = input().strip()
+				if i:
+					if test(i):
+						print("Passed.")
+			print("=====================================")
+	else:
+		run_test()
