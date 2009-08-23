@@ -108,6 +108,8 @@ class Character:
   
   def __init__(self, c, position, config):
     self.original = c
+    if c == "é":
+      raise Exception
     assert position != None
     self.position = position
     
