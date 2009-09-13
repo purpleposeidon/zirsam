@@ -1,0 +1,265 @@
+text0 =
+    [NAI ...] [CMENE ... # | (indicators & free ...)] [joik-jek] text-1 ;
+text-12 =
+    [(I [jek | joik] [[stag] BO] #) ... | NIhO ... #] [paragraphs] ;
+paragraphs4 =
+    paragraph [NIhO ... # paragraphs] ;
+paragraph10 =
+    (statement | fragment) [I # [statement | fragment]] ... ;
+sttement11 =
+    statement-1
+    | prenex statement ;
+statement-112 =
+    statement-2 [I joik-jek [statement-2]] ... ;
+statement-213 =
+    statement-3 [I [jek | joik] [stag] BO # [statement-2]] ;
+statement-314 =
+    sentence
+    | [tag] TUhE # text-1 /TUhU#/ ;
+fragment20 =
+    ek #
+    | gihek #
+    | quantifier
+    | NA #
+    | terms /VAU#/
+    | prenex
+    | relative-clauses
+    | links
+    | linkargs ;
+prenex30 =
+    terms ZOhU #;
+sentence40 =
+    [terms [CU #]] bridi-tail ;
+subsentence41 =
+    sentence
+    | prenex subsentence ;
+bridi-tail50 =
+    bridi-tail-1 [gihek [stag] KE # bridi-tail /KEhE#/ tail-terms] ;
+bridi-tail-151 =
+    bridi-tail-2 [gihek # bridi-tail-2 tail-terms] ... ;
+bridi-tail-252 =
+    bridi-tail-3 [gihek [stag] BO # bridi-tail-2 tail-terms] ;
+bridi-tail-353 =
+    selbri tail-terms
+    | gek-sentence ;
+gek-sentence54 =
+    gek subsentence gik subsentence tail-terms
+    | [tag] KE # gek-sentence /KEhE#/
+    | NA # gek-sentence ;
+tail-terms71 =
+    [terms] /VAU#/ ;
+terms80 =
+    terms-1 ... ;
+terms-181 =
+    terms-2 [PEhE # joik-jek terms-2] ... ;
+terms-282 =
+    term [CEhE # term] ... ;
+term83 =
+    sumti | (tag | FA #) (sumti
+    | /KU#/)
+    | termset
+    | NA KU # ;
+termset85 =
+    NUhI # gek terms /NUhU#/ gik terms /NUhU#/
+    | NUhI # terms /NUhU#/ ;
+sumti90 =
+    sumti-1 [VUhO # relative-clauses] ;
+sumti-191 =
+    sumti-2 [(ek | joik) [stag] KE # sumti /KEhE#/] ;
+sumti-292 =
+    sumti-3 [joik-ek sumti-3] ... ;
+sumti-393 =
+    sumti-4 [(ek
+    | joik) [stag] BO # sumti-3] ;
+sumti-494 =
+    sumti-5
+    | gek sumti gik sumti-4 ;
+sumti-595 =
+    [quantifier] sumti-6 [relative-clauses]
+    | quantifier selbri /KU#/ [relative-clauses] ;
+sumti-697 =
+    (LAhE # | NAhE BO #) [relative-clauses] sumti /LUhU#/
+    | KOhA #
+    | lerfu-string /BOI#/
+    | LA # [relative-clauses] CMENE ... #
+    | (LA | LE) # sumti-tail /KU#/
+    | LI # mex /LOhO#/
+    | ZO any-word #
+    | LU text /LIhU#/
+    | LOhU any-word ... LEhU #
+    | ZOI any-word anything any-word # ;
+sumti-tail111 =
+    [sumti-6 [relative-clauses]] sumti-tail-1
+    | relative-clauses sumti-tail-1 ;
+sumti-tail-1112 =
+    [quantifier] selbri [relative-clauses]
+    | quantifier sumti ;
+relative-clauses121 =
+    relative-clause [ZIhE # relative-clause] ... ;
+relative-clause122 =
+    GOI # term /GEhU#/
+    | NOI # subsentence /KUhO#/ ;
+selbri130 =
+    [tag] selbri-1 ;
+selbri-1131 =
+    selbri-2
+    | NA # selbri ;
+selbri-2132 =
+    selbri-3 [CO # selbri-2] ;
+selbri-3133 =
+    selbri-4 ... ;
+selbri-4134 =
+    selbri-5 [joik-jek selbri-5 | joik [stag] KE # selbri-3 /KEhE#/] ... ;
+selbri-5135 =
+    selbri-6 [(jek | joik) [stag] BO # selbri-5] ;
+selbri-6136 =
+    tanru-unit [BO # selbri-6]
+    | [NAhE #] guhek selbri gik selbri-6 ;
+tanru-unit150 =
+    tanru-unit-1 [CEI # tanru-unit-1] ... ;
+tanru-unit-1151 =
+    tanru-unit-2 [linkargs] ;
+tanru-unit-2152 =
+    BRIVLA #
+    | GOhA [RAhO] #
+    | KE # selbri-3 /KEhE#/
+    | ME # sumti /MEhU#/ [MOI #] | (number
+    | lerfu-string) MOI #
+    | NUhA # mex-operator
+    | SE # tanru-unit-2
+    | JAI # [tag] tanru-unit-2
+    | any-word (ZEI any-word) ...
+    | NAhE # tanru-unit-2
+    | NU [NAI] # [joik-jek NU [NAI] #] ... subsentence /KEI#/ ;
+linkargs160 =
+    BE # term [links] /BEhO#/ ;
+links161 =
+    BEI # term [links] ;
+quantifier300 =
+    number /BOI#/
+    | VEI # mex /VEhO#/ ;
+mex310 =
+    mex-1 [operator mex-1] ...
+    | FUhA # rp-expression ;
+mex-1311 =
+    mex-2 [BIhE # operator mex-1] ;
+mex-2312 =
+    operand
+    | [PEhO #] operator mex-2 ... /KUhE#/ ;
+rp-expression330 =
+    rp-operand rp-operand operator ;
+rp-operand332 =
+    operand
+    | rp-expression ;
+operator370 =
+    operator-1 [joik-jek operator-1 | joik [stag] KE # operator /KEhE#/] ... ;
+operator-1371 =
+    operator-2
+    | guhek operator-1 gik operator-2
+    | operator-2 (jek | joik) [stag] BO # operator-1 ;
+operator-2372 =
+    mex-operator
+    | KE # operator /KEhE#/ ;
+mex-operator374 =
+    SE # mex-operator
+    | NAhE # mex-operator
+    | MAhO # mex /TEhU#/
+    | NAhU # selbri /TEhU#/
+    | VUhU # ;
+operand381 =
+    operand-1 [(ek | joik) [stag] KE # operand /KEhE#/] ;
+operand-1382 =
+    operand-2 [joik-ek operand-2] ... ;
+operand-2383 =
+    operand-3 [(ek | joik) [stag] BO # operand-2] ;
+operand-3385 =
+    quantifier
+    | lerfu-string /BOI#/
+    | NIhE # selbri /TEhU#/
+    | MOhE # sumti /TEhU#/
+    | JOhI # mex-2 ... /TEhU#/
+    | gek operand gik operand-3
+    | (LAhE # | NAhE BO #) operand /LUhU#/ ;
+number812 =
+    PA [PA | lerfu-word] ... ;
+lerfu-string817 =
+    lerfu-word [PA | lerfu-word] ... ;
+lerfu-word987 =
+    BY
+    | any-word BU
+    | LAU lerfu-word
+    | TEI lerfu-string FOI ;
+ek802 =
+    [NA] [SE] A [NAI] ;
+gihek818 =
+    [NA] [SE] GIhA [NAI] ;
+jek805 =
+    [NA] [SE] JA [NAI] ;
+joik806 =
+    [SE] JOI [NAI]
+    | interval
+    | GAhO interval GAhO ;
+interval932 =
+    [SE] BIhI [NAI] ;
+joik-ek421 =
+    joik #
+    | ek # ;
+joik-jek422 =
+    joik #
+    | jek # ;
+gek807 =
+    [SE] GA [NAI] #
+    | joik GI #
+    | stag gik ;
+guhek808 =
+    [SE] GUhA [NAI] # ;
+gik816 =
+    GI [NAI] # ;
+tag491 =
+    tense-modal [joik-jek tense-modal] ... ;
+stag971 =
+    simple-tense-modal [(jek | joik) simple-tense-modal] ... ;
+tense-modal815 =
+    simple-tense-modal #
+    | FIhO # selbri /FEhU#/ ;
+simple-tense-modal972 =
+    [NAhE] [SE] BAI [NAI] [KI]
+    | [NAhE] (time [space]
+    | space [time]) & CAhA [KI]
+    | KI
+    | CUhE ;
+time1030 =
+    ZI & time-offset ... & ZEhA [PU [NAI]] & interval-property ... ;
+time-offset1033 =
+    PU [NAI] [ZI] ;
+space1040 =
+    VA & space-offset ... & space-interval & (MOhI space-offset) ;
+space-offset1045 =
+    FAhA [NAI] [VA] ;
+space-interval1046 =
+    ((VEhA & VIhA) [FAhA [NAI]]) & space-int-props ;
+space-int-props1049 =
+    (FEhE interval-property) ... ;
+interval-property1051 =
+    number ROI [NAI]
+    | TAhE [NAI]
+    | ZAhO [NAI] ;
+free32 =
+    SEI # [terms [CU #]] selbri /SEhU/
+    | SOI # sumti [sumti] /SEhU/
+    | vocative [relative-clauses] selbri [relative-clauses] /DOhU/
+    | vocative [relative-clauses] CMENE ... # [relative-clauses] /DOhU/
+    | vocative [sumti] /DOhU/
+    | (number | lerfu-string) MAI
+    | TO text /TOI/
+    | XI # (number | lerfu-string) /BOI/
+    | XI # VEI # mex /VEhO/ ;
+vocative415 =
+    (COI [NAI]) ... & DOI ;
+indicators411 =
+    [FUhE] indicator ... ;
+indicator413 =
+    (UI | CAI) [NAI]
+    | Y
+    | DAhO
+    | FUhO;

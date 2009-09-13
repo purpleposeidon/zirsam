@@ -1,10 +1,18 @@
 # -*- coding: utf-8 -*-
 
+"""
+Cmavo data.
+To determine the selma'o of a cmavo, look of that cmavo's value in the SELMAHO dictionary
+that is defined by this module.
+"""
 
-SELMAHO_DICT = {}
+SELMAHO = {}
+
 
 class selmaho:
   #Base class for selmaho objects
+  def __repr__(self):
+    return self._class
   def __init__(self, _class, forms):
     """
     Define a new selma'o.
@@ -17,9 +25,17 @@ class selmaho:
         forms = forms.split(' ')
       else:
         forms = [forms]
-    SELMAHO_DICT[_class] = forms
+    for form in forms:
+      SELMAHO[form] = self
+    #SELMAHO_DICT[_class] = forms
     self._class = _class
     self.forms = forms
+
+  def __contains__(self, token):
+    #Returns True if token is a member of the given selma'o
+    #I might not use this?
+    return token.value in self.forms
+    #return any(token.value == _ for _ in self.forms)
 
 """
 What I want.
@@ -31,7 +47,8 @@ document_root(iter, config)
 
 
 
-#I count 122 selmaho
+#I count 122 selma'o
+#Everything below is more data than code
 A = selmaho('A', 'a e ji o u')
 BAhE = selmaho('BAhE', "ba'e za'e")
 BAI = selmaho('BAI', "ba'i bai bau be'i ca'i cau ci'e ci'o ci'u cu'u de'i di'o do'e du'i du'o fa'e fau fi'e ga'a gau ja'e ja'i ji'e ji'o ji'u ka'a ka'i kai ki'i ki'u koi ku'u la'u le'a li'e ma'e ma'i mau me'a me'e mu'i mu'u ni'i pa'a pa'u pi'o po'i pu'a pu'e ra'a ra'i rai ri'a ri'i sau si'u ta'i tai ti'i ti'u tu'i va'o va'u zau zu'e")
@@ -155,5 +172,3 @@ ZOhU = selmaho('ZOhU', "zo'u")
 ZOI = selmaho('ZOI', "la'o zoi")
 ZO = selmaho('ZO', 'zo')
 
-
-magic = (ZO, LOhU, LEhU, ZEI, BU, ZOI, SI, SA, SU, FAhO)

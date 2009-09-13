@@ -1,0 +1,13 @@
+# -*- coding: utf-8 -*-
+
+class ParsingStructure:
+  def __init__(self, token_stream):
+    self.buffer = token_stream
+    self.root = None
+
+
+
+
+@rule
+def document(parse_structure):
+  

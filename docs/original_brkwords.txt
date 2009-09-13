@@ -1,0 +1,224 @@
+Morphology Algorithm
+Internal Revision 4.1, 8 June 1992
+
+The following will become the official baseline algorithm for resolution of
+Lojban text into individual words from sounds, stress, and pause.  As such,
+it is the ultimate standard of Lojban's unambiguous resolvability, which
+may make Lojban speech recognition by computers more possible than for
+other languages.  While the algorithm looks very complicated, almost all of
+it is resolving special cases, and performing what error detection and
+correction may be possible.
+
+
+We have a string representing the speech stream, marked with stress and
+pauses.  We want to break it up into words.
+
+
+1.  First, break at all pauses (cannot pause in the middle of a word).
+2.  Then, pick the first piece that has not been uniquely resolved.
+ A.  The first thing is to deal with some constructs which are required to
+ end with a pause:
+   1)  Names:
+     a)  If the last letter of the piece is a consonant, we have a name.  A
+     name must have a pause before it UNLESS it is immediately preceded by
+     a /la/, /lai/, /la'i/ or /doi/ as a marker, and it cannot contain any
+     of these markers unless the marker is immediately preceded by a conso-
+     nant.  So, look backwards from the end of the piece for any of the
+     allowed markers.  If we don't find one (e.g. /jonz/), then the whole
+     piece has been resolved as a name.
+     b)  If you do find such a marker, then check what immediately precedes
+     it.  If there is nothing (e.g. /ladjAn/), or if a vowel precedes (e.g.
+     /mivIskaladjAn./, break off the marker as a resolved piece (/la/), and
+     what follows it is also a resolved piece, a name (/djAn/), leaving us
+     with whatever preceded the marker, if anything, as still unresolved
+     (/mivIska/).
+     c)  If what precedes the marker is a consonant (e.g. /karoslAInas/)
+     then ignore the marker and continue looking backwards.  This exception
+     is allowed because /karos/ with no following pause cannot represent a
+     separate word.
+   2)  ".y.", the hesitation:
+     If the piece consists solely of /y/, then it resolves as the
+     hesitation word (which is required to be surrounded by pauses).
+   
+   3) If the piece ends in "y", check for some lerfu words:  specifically,   the last lerfu word of a string, if it ends in a "y" (e.g. /abubycydy/
+   or /y'y/), must be followed by a pause:
+     a)  If the "y" is preceded by a consonant, break off the consonant+"y"
+     as a resolved lerfu word (e.g. /abubycydy/ gives /abubycy/ unresolved,
+     and /dy/ resolved as a lerfu word). Continue breaking off any Cy
+     pieces as lerfu words if they're there (e.g. unresolved /abubycy/
+     gives unresolved /abuby/ + resolved /cy/; then /abuby/ gives un-
+     resolved /abu/ plus resolved /by/).
+      Note that the Cy-type lerfu words will NEVER come before the other
+      lerfu word pieces in a breath-group - the "abu" and "y'y" types -
+      since they begin with vowels, they MUST be preceded by pauses; and Cy
+      followed by anything but another Cy must be followed by a pause
+      (because "y" is used as glue in lujvo, it could cause resolvability
+      problems if not separate; e.g. /micybusmAbru/ would not uniquely re-
+      solve).
+     b)  If the "y" is preceded by "V'" or "y'" (e.g. /y'y/), break before
+     the "V", and the "V'y" is resolved as a lerfu word.
+     c)  If the "y" is preceded by an "i" or "u" ("iy" and "uy" are
+     reserved) the piece cannot be resolved.
+     d)  If the "y" is preceded by a vowel (V) other than "i" or "u", the
+     piece is in error and cannot be further resolved.
+ B.  Next, see if the piece is composed entirely of cmavo.
+   1)  Check the piece to see if there are any consonant clusters (a
+   consonant cluster is of one of the forms CC or CyC). If there are none,
+   break up the piece before each consonant, resolving each piece as a
+   cmavo (e.g. /alenumibaca'a/ breaks into the cmavo /a/ + /le/ + /nu/ +
+   /mi/ + /ba/ + /ca'a/).  If there are no consonants, the piece is a
+   single cmavo.  In either case, the piece is completely resolved.o
+ C.  Now we have a piece which we are sure contains a brivla (a gismu, a
+ lujvo or a le'avla).  We know that a brivla must have a consonant cluster
+ (CC or CyC) within the 1st five letters (ignoring apostrophes in the
+ count), and must have penultimate stress (ignoring "y" syllables, which
+ are not allowed to be stressed).
+   1)  First, let's check for a potential error (a form which shouldn't
+   arise):
+     a)  If the piece contains no stress, but has a consonant cluster (CC
+     or CyC), it is in error.  The consonant cluster indicates it contains
+     a brivla (gismu, lujvo or le'avla), which requires penultimate stress.
+     The only place this MIGHT validly occur is inside a zoi-quote (and
+     therefore need not be resolved at all).
+     b)  However, if stress information is not available, assume the brivla
+     ends at the end of the piece.  (This rule gives the right behavior
+     with canonical written Lojban, where spaces separate all words except
+     for some cmavo compounds and stress is normally not marked.)
+   2)  Next, we need to find THE penultimate stress for the first brivla in
+   the piece (the brivla is expected to end after the syllable following
+   the stress, ignoring "y" syllables).  Starting from the first consonant
+   cluster (CC or CyC):
+     a)  If the previous letter is a stressed vowel, take that as THE
+     penultimate stress of the brivla.
+     b)  If the previous letter is an unstressed vowel, but the letter
+     before that is a stressed vowel, then it is a stressed diphthong;
+     treat the entire diphthong as stressed (So that "find the next vowel"
+     will not get just the second half of the diphthong).  Take that as THE
+     penultimate stress.
+     c)  Otherwise, find the first stress after the consonant cluster.  If
+     the stress is on a diphthong, treat the entire diphthong as stressed
+     (So that "find the next vowel" will not get just the second half of
+     the diphthong).  Take that as THE penultimate stress.
+   3)  Next, let's find the end of the first brivla in the piece:     a)  If there is no vowel in the piece after the stress, it can't be a
+     penultimate stress, so the piece is in error (unresolvable).  This is
+     also true if "y" is the only vowel after the stress (e.g. */stAsy/ is
+     not a valid breath-group).
+     b)  If the NEXT vowel following the stress (skipping over "y"'s ) is
+     immediately followed by "'V" (as in /mlAtyci'a/), then the syllable
+     following the stress cannot be the last syllable of a word (since the
+     'V cannot begin the next word).  Ordinarily we would count this as an
+     error, but let's instead assume that this was a secondary stress and
+     ignore the fact that there is some stress on it.  Go find the next
+     stress to use as THE penultimate stress for this brivla (e.g. in
+     /mlAtyci'abrIjuti/, assume the penultimate stress is "I", not "A").
+     c)  Having eliminated all the potential problems with finding the end,
+     let's cut the piece after the end of the brivla:
+      Find the first vowel (not counting "y") after the stress.  If it is
+      part of a diphthong, break after the diphthong; otherwise, break
+      after the vowel itself.
+   4)  Now let's find the beginning of the brivla in the front part of the
+   piece we just broke off:
+     a)  First, break off as many obvious cmavo pieces off the front as we
+     can:
+      1]  If there is no consonant cluster (CC or CyC) in the first 5
+      letters (ignoring apostrophes in the count), then, if the piece
+      starts with a vowel, break off before the first consonant (e.g.
+      /alekArce/ becomes /a/ = cmavo) + /lekArce/ = unresolved), otherwise
+      break off before the second consonant (e.g. /vilekArce/ becomes /vi/
+      = cmavo + /lekArce/ = unresolved).  The front piece is then resolved
+      as a cmavo.
+      2]  Repeat the above as many times as we can (so, /lekArce/ becomes
+      /le/ = cmavo + /kArce/ = unresolved. Since /kArce/ has a consonant
+      cluster in the first five letters, we can't go any further).
+      3]  If the piece we have left starts with a vowel, find the first
+      consonant.  If the first consonant is part of a consonant cluster
+      (only CC-form this time), and this consonant cluster is NOT a valid
+      initial cluster (with each adjacent pair of consonants is a valid
+      initial pair), then we can resolve the entire piece as a le'avla
+      (e.g. /antipAsto/); otherwise (if the first consonant is NOT part of
+      a consonant cluster, or the consonant cluster IS a valid initial
+      cluster), break off before the first consonant as a cmavo (e.g.
+      /a'ofArlu/ becomes /a'o/ = cmavo + /fArlu/ = unresolved; or,
+      /aismAcu/ becomes /ai/ = cmavo + /smAcu/ = unresolved).
+     b)  What's left begins with a consonant and has a consonant cluster
+     (CC or CyC) in the first 5 letters.  The whole thing may be a brivla,
+     or there may be (at most) one consonant-initial cmavo in front.  Here
+     are the possibilities for the start of the piece, and their
+     resolutions:
+      1]  CC...  or CVCyC...:
+        Resolve whole thing as a brivla (a gismu, lujvo, or le'avla).
+      2]  CyC... :
+        Invalid form.  Unresolvable.
+      3]  CVVCC... :        (Note: stressing a cmavo on the final syllable before a brivla is
+        not allowed.)
+        a]  If there is no stress on the VV and the consonant cluster
+        beginning with the CC is a valid initial cluster (i.e., each
+        adjacent pair of consonants is a valid initial pair), then break
+        off the CVV, and resolve it as a cmavo; the remaining piece can
+        then be resolved as a brivla (see "CC....", above).  For example,
+        /leiprEnu/ becomes /lei/ = cmavo + /prEnu/ = brivla.
+        b]  Otherwise (i.e. there IS a stress on the VV, or the first
+        consonant cluster is not a valid initial cluster), resolve the
+        whole thing as a brivla (e.g. /cAItro/ = brivla)
+      4]  CV'VCC... :
+        (Note: stressing a cmavo on the final syllable before a brivla is
+        not allowed.)
+        a]  If there is no stress on the final vowel of the V'V) and the
+        consonant cluster beginning with the CC is a valid initial cluster
+        (i.e., each adjacent pair of consonants is a valid initial pair),
+        then break off the CV'V, and resolve it as a cmavo; the remaining
+        piece can then be resolved as a brivla (see "CC....", above).  For
+        example, /so'iprEnu/ becomes /so'i/ = cmavo + /prEnu/ = brivla.
+        b]  Otherwise (i.e. there is a stress on the final vowel of the
+        V'V, or the first consonant cluster is not a valid initial
+        cluster), resolve the whole thing as a brivla (e.g. /cA'Itro/ =
+        brivla)
+      5]  CVCC... (This is the hard one.  Is the front CV a separate
+      word?):
+        a]  If the whole piece is CVCCV, then the whole thing resolves as a
+        gismu.
+        b]  If the consonant cluster beginning with the CC is not a valid
+        initial cluster (with each adjacent pair of consonants is a valid
+        initial pair), then the whole piece can be resolved as a brivla
+        (gismu, lujvo, or le'avla).  For example, /selfArlu/,
+        /cidjrspagEti/.
+        c]  If the penultimate stress is on the 1st vowel of the CVCC (e.g.
+        /mAtcti/, then resolve the whole thing as a brivla (a lujvo or
+        le'avla).
+        d]  If there is a "y", we need to look at the sub-piece up to the
+        first "y":
+          1>  If the sub-piece consists entirely of CVC's repeating (at
+          least 2 needed: e.g. /cacric/), and all the CC's of the sub-piece
+          are valid initial clusters, then resolve the initial CV as a
+          cmavo, and the rest of the whole piece is a brivla (a lujvo or
+          le'avla).
+          2>  Otherwise, if the sub-piece can be broken down into any
+          number (including 0) of valid lujvo "front-middles" in front and
+          exactly one valid lujvo "end" thereafter, resolve the whole piece
+          as a brivla.
+           a>  Valid front-middles (we've eliminated all but those starting
+           with CV): CVC CVV CV'V CCV
+           b>  Valid ends: CVC CCVC CVCC
+          3>  Otherwise, the front CV should be resolved as a cmavo, and
+          the remaining piece is resolved as a brivla (a lujvo or le'avla)
+        e]  If there is no "y":
+          1>  If the piece consists of CVC's repeating (at least 2 needed)
+          up to a final CV (e.g. /cacricfu/), and all the CC's of the sub-
+          piece are valid initial clusters, then resolve the initial CV as
+          a cmavo, and the rest of the piece is a brivla (a lujvo).
+          2>  Otherwise, if the piece can be broken down into any number
+          (including 0) of valid lujvo "front-middles" in front and exactly
+          one valid lujvo "end", then resolve the whole piece as a brivla          (a lujvo).
+           a>  Valid front-middles (we've eliminated all but those starting
+           with CV): CVC CVV CV'V CVC
+           d>  Valid ends: CVV CV'V CCV CCVCV CVCCV
+
+          3>  Otherwise, the front CV should be resolved as a cmavo, and
+          the remaining piece is resolved as a brivla (a le'avla).         
+               
+      6]  Any other beginning (e.g. CVVCyC):
+        Resolve the whole as an error.
+
+
+
+_______________________________________

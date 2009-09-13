@@ -12,6 +12,7 @@ import sys
 
 
 class GlyphTable(dict):
+  tables = {}
   """A map of funny characters to latin ones. Its capabilities are:
     * Multiple foreign characters can be linked to a single latin character
     * Multiple foreign characters can be linked to a string of latin characters
@@ -72,7 +73,7 @@ class GlyphTable(dict):
     """
     dict.__init__(self)
     self.name = name
-    
+    GlyphTable.tables[self.name] = self
     self.accentmark = accentmark #This means the next character is accented
     self.unaccentmark = unaccentmark #This means the next character is not accented
     self.accenton = accenton #This means everything following is accented
@@ -132,9 +133,14 @@ _eof = ['', '\00', '\x0c', '\x06'] #Empty string, null character, ^L, ^F. Maybe 
 #The default, strict alphabet
 latin_alphabet = GlyphTable("latin", GlyphTable.latin_lower, GlyphTable.latin_upper)
 # XXX NOTE: This is from Wikipedia. I can not verify if it is correct. All the CLL I've seen seem to have display issues. Can somebody verify this?
-ipa_alphabet = GlyphTable("ipa", "b ʃʂ d fɸ g ʒʐ k lɭ mɱ nɳɲŋ p rɾɹʀ s t vβ x z aɑ eɛ i oɔ u ə hθ ʔ ,".split(), None, accentmark='^') 
+ipa_alphabet = GlyphTable("ipa", "b ʃʂ d fɸ g ʒʐ k lɭ mɱ nɳɲŋ p rɾɹʀ s t vβ x z aɑ eɛ i oɔ u ə hθ .ʔ ,".split(), None, accentmark='^')
 #As this is also from Wikipedia, maybe it could also use some verification from a Cyrillic-user
 cyrillic_alphabet = GlyphTable("cyrillic", "б ш д ф г ж к л м н  п р  с т в х з а е и о у ъ ' . ,".split(),  'Б Ш Д Ф Г Ж К Л М Н  П Р  С Т В Х З А Е И О У Ъ " . ,'.split())
+_s = "bb S d f g Z k l mnN p rR s t uvB x z aA Ee I oO u @ h ?".split(' ')
+sampa_alphabet = GlyphTable("sampa", _s, _s)
+del _s
+
+
 
 #And now, for the fun stuff! :D
 
@@ -150,11 +156,11 @@ for vowel in _v:
   for extra in _v[vowel]:
     accent_extra[extra] = vowel
 
-accent_alphabet = GlyphTable("latin_accent", GlyphTable.latin_lower, GlyphTable.latin_upper, extra=accent_extra)
+accent_alphabet = GlyphTable("latin+accent", GlyphTable.latin_lower, GlyphTable.latin_upper, extra=accent_extra)
 
 
 leet_accent_extra = dict(accent_extra, **_PA_map) #(I love that dict trick. It merges two dictionaries)
-leet_accent_alphabet = GlyphTable("leet_accent", GlyphTable.latin_lower, GlyphTable.latin_upper, extra=leet_accent_extra)
+leet_accent_alphabet = GlyphTable("leet+accent", GlyphTable.latin_lower, GlyphTable.latin_upper, extra=leet_accent_extra)
 
 
 #And now, for the best one:
@@ -176,31 +182,56 @@ If an error prevents the text from being fully parsed, a non-zero value is retur
 
 Arguments (In no particular order):"""
   __help = {'help':"Shows this help", \
-  'debug':"Print information from parsing", \
-  'token error':"Raise an Exception when the first token is made, causing a backtrace", \
-  'do exit':"Exit without parsing", \
-  'print tokens':"Print out a tokens as they are created", \
   'quiet':"Don't print warnings", \
-  'strict':"Count warnings as errors", \
-  'no dotside':"Don't require a pause following cmene-markers", \
-  'latin':"Use the regular (strict) Latin alphabet; this is the default", \
-  '1337':"Use Latin alphabet, changing Arabic numbers into PA, allowing for terrors like {s1ti}", \
-  'accent':"Allow the use of accent marks. May be combined with --1337", \
-  'liberal':"Allow very non-standard letters", \
-  'microblog':"Uses regular Latin, but ignores @, #, and !", \
-  'ipa':"Use the International Phonetic Alphabet", \
-  'cyrillic':"Use Cyrillic alphabet", \
-  'accent':"Permit accents", \
-  'forbid warn':"Treat warnings as errors", \
   'err2out':"Write what would normally go to stderr to the output", \
-  'no space':"Echo input spaceless", \
-  }
   
+  'alphabet':"Select alphabet. --alphabet=? lists available values. The default is 'latin'", \
+  
+  'no dotside':"Don't require a pause following cmene-markers", \
+  'forbid warn':"Treat warnings as errors", \
+  'strict':"Count warnings as errors", \
+  
+  'debug':"(DEBUG OPTION) Print information from parsing", \
+  'token error':"(DEBUG OPTION) Raise an Exception when the first token is made, which prints a backtrace", \
+  'do exit':"(DEBUG OPTION) Exit without parsing", \
+  'print tokens':"(DEBUG OPTION) Print out a tokens as they are created", \
+  
+  'no space':"Convert input to not use spaces (Not implemented)", \
+  
+  }
+  __help_order = 'help, quiet, err2out, alphabet, no dotside, forbid warn, strict, debug, token error, do exit, print tokens, no space'.split(', ') #Help, Parsing configuration, Debug, unimplemented
   def __check_options(self, argv):
     argv = list(argv) #Use a copy
     possible_args = list(Configuration.__help.keys())
     
-    
+    def valued_arg(name, val_dict):
+      if name not in Configuration.__help:
+        raise Exception("No help given for argument {0}".format(what))
+      index = 0
+      r = None
+      possible_args.pop(possible_args.index(name))
+      for arg in argv:
+        if arg.find('--'+name+'=') == 0:
+          val = arg[len(name)+3:].strip()
+          argv.pop(index)
+          if val in val_dict:
+            r = val
+          elif val == '?' or val == '':
+            r = 'Usage: --{0}=VALUE. Possible values for {0} are:\n'.format(name)
+            for v in val_dict:
+              r += '\t{0}\n'.format(v)
+            raise SystemExit(r)
+          else:
+            raise Exception("{0} is an invalid value for --{1}".format(repr(val), name))
+        elif arg.find('--'+name) == 0:
+          r = 'Usage: --{0}=VALUE. Possible values for {0} are:\n'.format(name)
+          for v in val_dict:
+            r += '\t{0}\n'.format(v)
+          raise SystemExit(r)
+        index += 1
+      if r:
+        return val_dict[r]
+
     def arg(what):
       #Returns True if the argument is present. Must be called exactly once.
       #XXX A thought: Make this function do all the work with __setattr__ and such
@@ -217,11 +248,13 @@ Arguments (In no particular order):"""
       
     if arg('help'):
       print(Configuration.__help_header, file=sys.stderr)
-      for cmd in Configuration.__help:
+      #for cmd in Configuration.__help:
+      for cmd in Configuration.__help_order:
         print("    {0}: {1}".format(format_arg(cmd), Configuration.__help[cmd]), file=sys.stderr)
       self.do_exit = True
     if arg('strict'):
       self._strict = True
+      self.forbid_warn = True
       self.ascii_only = True
     if arg("quiet"):
       self._quiet = True
@@ -236,32 +269,35 @@ Arguments (In no particular order):"""
       self.dotside = False
     if arg("do exit"):
       self.do_exit = True
-    if arg("latin"):
-      self.glyph_table = latin_alphabet
-    if arg("ipa"):
-      self.glyph_table = ipa_alphabet
-    if arg("cyrillic"):
-      self.glyph_table = cyrillic_alphabet
+    #if arg("latin"):
+      #self.glyph_table = latin_alphabet
+    #if arg("ipa"):
+      #self.glyph_table = ipa_alphabet
+    #if arg("cyrillic"):
+      #self.glyph_table = cyrillic_alphabet
     if arg("forbid warn"):
       self.forbid_warn = True
-    if arg("1337"):
-      if self.glyph_table == accent_alphabet:
-        self.glyph_table = leet_accent_alphabet
-      else:
-        self.glyph_table = leet_alphabet
-    if arg("accent"):
-      if self.glyph_table == leet_alphabet:
-        self.glyph_table = leet_accent_alphabet
-      else:
-        self.glyph_table = accent_alphabet
-    if arg("microblog"):
-      self.glyph_table = microblog_alphabet
-    if arg("liberal"):
-      self.gyph_table = liberal_alphabet
+    #if arg("1337"):
+      #if self.glyph_table == accent_alphabet:
+        #self.glyph_table = leet_accent_alphabet
+      #else:
+        #self.glyph_table = leet_alphabet
+    #if arg("accent"):
+      #if self.glyph_table == leet_alphabet:
+        #self.glyph_table = leet_accent_alphabet
+      #else:
+        #self.glyph_table = accent_alphabet
+    #if arg("microblog"):
+      #self.glyph_table = microblog_alphabet
+    #if arg("liberal"):
+      #self.gyph_table = liberal_alphabet
     if arg("err2out"):
       sys.stderr = sys.stdout # XXX Make this Configuration's output
     if arg("no space"):
       self.output_no_space = True
+    _ = valued_arg("alphabet", GlyphTable.tables)
+    if _:
+      self.glyph_table = _
     
     if possible_args:
       print("The following arguments have documentation, but no implementation:", file=sys.stderr)
@@ -325,6 +361,13 @@ Arguments (In no particular order):"""
   def __init__(self, args):
     """
     Configuration options to permeate the entire parser
+
+    Different levels of messaging.
+    ERRORS, which are always fatal
+    WARNINGS, which are fatal only if strict
+    DEBUG is non-fatal and only printed if debug mode is on
+    MESSAGE is informational and is never fatal
+    STRICT is shown only if strict. It is fatal
     """
     self._strict = False
     self._quiet = False

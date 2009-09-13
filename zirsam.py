@@ -1,4 +1,10 @@
 #!/usr/bin/python3.0
 # -*- coding: utf-8 -*-
 
-TODO =  "Make this the main entry point? Something...."
+"""
+If you want a general understanding of how this program works, look at common.py
+"""
+
+TODO = 'Run "morphology.py" or "orthography.py".'
+
+raise SystemExit(TODO)

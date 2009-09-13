@@ -792,12 +792,16 @@ we: {4}""".format(self.bit.buffer, cc_location, cc, ps, word_end))
       return self.tokenize(1, GARBAGE) #What is this nonsense?
     #else we have reached the EOF, and so will return None.
 
+def Stream(config, stdin):
+  bitbuf = orthography.Stream(config, stdin)
+  charbuf = Buffer(orthography.stream_char(sys.stdin, config), config)
+  return charbuf
 
 def main():
   config = Configuration(sys.argv[1:])
 
-  charbuf = Buffer(orthography.stream_char(sys.stdin, config), config)
-  bitbuf = Buffer(orthography.stream_bit(charbuf), config)
+  charbuf = Stream(config, stdin)
+  
   p = ValsiParser(bitbuf, config)
   
   if config.output_no_space:

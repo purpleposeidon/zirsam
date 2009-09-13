@@ -1,0 +1,34 @@
+
+Or, in other words, "TODO":
+
+###### Soon
+ - More error checking and recovery
+ - Make the helper code nicer
+ + Make --token-error print a backtrace on each token instead of dieing?
+ + Check your dotside!
+ - Do more garbage checking (For example, try {kláma} with default settings)
+ + Put stdin into Configuration. Probably the best way to deal with quotes
+ - make word_end in morphology.py indexed from 0 instead of 1
+ - Don't use self.config, use self.buffer.config
+ - Test IPA and other alphabets
+
+###### Later
+
+ - Check that each marker in brkwords is properly implemented and documented
+ - Add an "--abusive" option zo'o
+ - Check for TODO/XXX in code
+ + (Have error messages in lojban?)
+ - Make sure I didn't accidentally change/deleting anything in BRKWORDS.txt
+ - (seperate out the configuration options for each section?)
+
+###### Much Later
+
+ - Study and meditate upon lojban grammar
+ - Make a parser for the grammar (In another file, of course...)
+ - Emulate output of jbofihe and camxes (And other parsers?)
+ - Semantics engine and supporting stuff
+ - Jbovlaste
+ + Oh, also, learn how to speak lojban. Jeeze.
+ - Make option for output to be spaceless
+
+

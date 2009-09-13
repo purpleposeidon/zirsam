@@ -5,9 +5,13 @@
 orthography.py - Handle the messy, dirty stuff of input.
 
 This file handles the inputting of text, and the classification and grouping of characters.
+
+TODO: unicodedata.normalize
+
 """
 import sys
 
+from common import Buffer
 
 class Position:
   def __init__(self, _copy=None):
@@ -31,61 +35,6 @@ class Position:
     self.c += 1
     self.col += 1
 
-
-class Buffer:
-  def __repr__(self):
-    return "<Buffered {0}>".format(self.iterable)
-  def __init__(self, iterable, config):
-    self.iterable = iterable
-    self.buffer = []
-    self.EOF = False
-    self.config = config
-  
-  def __feed_buffer(self):
-    """Add a single item to the buffer"""
-    if self.EOF:
-      raise EOFError()
-    try:
-      self.buffer.append(self.iterable.__next__())
-    except (EOFError, StopIteration) as e:
-      self.config.debug("Buffer for {0} got exception {1}".format(self.iterable.__name__, e))
-      self.EOF = True
-    finally:
-      if self.EOF:
-        raise EOFError()
-  
-  def __fill_to(self, index):
-    while index + 1 > len(self.buffer):
-      self.__feed_buffer()
-  
-  def insert(self, index, value):
-    self.config.debug("Inserting {0} into {1}".format(value, index))
-    self.__fill_to(index)
-    if index > len(self.buffer):
-      raise Exception("Can't insert item {0} at position {1} because that is at the end of the file".format(index, value))
-    self.buffer.insert(index, value)
-
-  def __iter__(self):
-    i = 0
-    while 1:
-      try:
-        yield self[i]
-      except EOFError:
-        break
-      i += 1
-      
-  def items(self, num):
-    self.__fill_to(num)
-    return self.buffer[:num]
-  
-  def __getitem__(self, index):
-    assert index >= 0
-    self.__fill_to(index)
-    return self.buffer[index]
-  
-  def pop(self, i=0):
-    self.__fill_to(i)
-    return self.buffer.pop(i)
 
 
 
@@ -354,13 +303,18 @@ def valid_init_cc(bit):
     return v in __VALID_INIT_CC
   raise Exception("Miscall with " + str(bit))
 
+
+def Stream(config, stdin):
+  charbuf = Buffer(stream_char(sys.stdin, config), config)
+  bitbuf = Buffer(stream_bit(charbuf), config)
+  return bitbuf
+
 if __name__ == '__main__':
   print("Shows how the clusters of letters are viewed internally to the parser.", file=sys.stderr)
   from config import Configuration
   config = Configuration(sys.argv[1:])
   
-  charbuf = Buffer(stream_char(sys.stdin, config), config)
-  bitbuf = Buffer(stream_bit(charbuf), config)
+  bitbuf = Stream(config, stdin)
   i = []
   for bit in bitbuf:
     i.append(bit)
