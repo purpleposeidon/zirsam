@@ -52,6 +52,8 @@ class Buffer:
 
   def insert(self, index, value):
     self.config.debug("Inserting {0} into {1}".format(value, index))
+    if hasattr(value, position):
+      self.config.debug("(Originally located at {0})".format(value.position))
     self.__fill_to(index)
     if index > len(self.buffer):
       raise Exception("Can't insert item {0} at position {1} because that is at the end of the file".format(index, value))
@@ -82,6 +84,7 @@ class Buffer:
 def Stream(config, stdin):
   """
   This function will be found in each module that handles a level of parsing.
-  Its job is to return a Buffer that will be used by the next layer
+  Its job is to return a Buffer that will be used by the next layer.
+  This one doesn't actually do anything though. :P
   """
-  return Buffer(stream_char(sys.stdin, config), config)
+  pass

@@ -118,7 +118,9 @@ def test(lets, pos, forms, match_function):
 
 class ValsiParser:
   def __init__(self, bit_iter, config):
-    #This would be a good place to put arguments
+    """
+    djeims' valsi parser. It should and ought to follow the algorithm specified in docs/BRKWORDS.TXT
+    """
     self.bit = bit_iter
     self.config = config
   
@@ -133,7 +135,7 @@ class ValsiParser:
         continue
       elif v == None or v == []:
         break
-      elif type(v) == list:
+      elif type(v) in (list, tuple):
         for extra_token in v:
           yield extra_token
       else:
@@ -188,17 +190,20 @@ class ValsiParser:
     while 1:
       locus_ps += 1
       #self.config.debug(self.bit[locus_ps], repr(locus_ps), self.bit[locus_ps].accented)
-      if self.bit[locus_ps].accented:
-        return locus_ps
-      elif self.bit[locus_ps].wordsep:
+      if self.bit[locus_ps].wordsep:
         found_word_end = True
+        locus_ps -= 1 #XXX Test it, see {obupykyburysyty.ubuvyvybuxy.ybuzy}
         break
+      elif self.bit[locus_ps].accented:
+        return locus_ps
+
     
     if found_word_end:
       #Uh, okay. So, we're like... lujvolujvoluvjo@
       #Step back two vowels.
       vowel_count = 0
       while locus_ps >= 0:
+        print("info:", self.bit[locus_ps])
         if self.bit[locus_ps].has_V:
           vowel_count += 1
           if vowel_count == 2:
@@ -216,18 +221,21 @@ class ValsiParser:
     while count:
       b = self.bit.pop(start)
       if len(v) and b.wordsep:
-        self.config.debug(v, repr(b), self.bit.buffer)
+        m = "\n\t".join(['\tConsumed Letters: '+str(v), 'Failed letter: '+repr(b), 'Bit Buffer: '+str(self.bit.buffer)])
+        self.config.debug('EXCEPTION INFO:\n'+m)
           
         raise Exception("Tokenizing more than one word")
       v.append(b)
       count -= 1
+    the_token = t_type(v, self.config)
     if self.config.token_error or self.config.print_tokens:
       self.config.message("TOKEN {0} {1}".format(t_type.__name__, v))
     if self.config.token_error:
       raise Exception("Token Call Backtrace")
+    
     if t_type == GARBAGE:
       self.config.strict("Garbage token: {0}".format(v), v[0].position)
-    return t_type(v, self.config)
+    return the_token
   
   
   
@@ -576,7 +584,7 @@ we: {4}""".format(self.bit.buffer, cc_location, cc, ps, word_end))
     This is the function that figures out what to do. It has many different possible return values:
       A Token instance: this is the Token it found
       A list of Token instances: multiple tokens needed to be handled at once, or the word breaking algorithm suggested to return multiple items
-      An Ellipsis (also called "..."): this indicates that something happened behind the scenes, but it isn't ready to return a Token yet
+      An Ellipsis (notated as ...): this indicates that something happened behind the scenes, but it isn't ready to return a Token yet
       None: A token could not be created. It has probably reached the EOF.
     """
     if isinstance(self.bit[0], Token):
@@ -614,7 +622,7 @@ we: {4}""".format(self.bit.buffer, cc_location, cc, ps, word_end))
         return self.tokenize(1, PERIOD), self.tokenize(word_end-1, CMENE)
       else:
         if self.config.dotside:
-          self.config.strict("Dotside requires a period in front of cmene (Try --no-dotside)", self.bit[0].position)
+          self.config.strict("Dotside requires a period in front of cmene", self.bit[0].position)
         
         #{2.A.1)a)}
         #Requires a cmene marker: la, lai, la'i, doi
@@ -635,7 +643,6 @@ we: {4}""".format(self.bit.buffer, cc_location, cc, ps, word_end))
             if i > 0 and self.bit[i-1].has_V: #miviskaladjan
               #{2.A.1)b)}
               #Push this content up so that it may be handled later
-              # (An old thought was to create a seperate parser to handle the text before what has been broken)
               
               marker = self.tokenize(2, CMAVO, start=i)
               name = self.tokenize(word_end-i-2, CMENE, start=i)
@@ -653,7 +660,7 @@ we: {4}""".format(self.bit.buffer, cc_location, cc, ps, word_end))
     
     
     
-    #{2.A.3)}    
+    #{2.A.3)}
     if self.bit[word_end-1].value == 'y':
       
       if self.bit[word_end].wordsep and not isinstance(self.bit[word_end], Token):
@@ -686,7 +693,7 @@ we: {4}""".format(self.bit.buffer, cc_location, cc, ps, word_end))
               i -= 3
               didstuff = True
               continue
-            elif self.bit[i].V:
+            elif self.bit[i].V and self.bit[i+1].y:
               #{2.A.3)c)}, {2.A.3)d)} - Vy
               if self.bit[i].value in ('i', 'u'):
                 self.config.strict("iy and uy are reserved words", self.bit[i].position)
@@ -794,15 +801,13 @@ we: {4}""".format(self.bit.buffer, cc_location, cc, ps, word_end))
 
 def Stream(config, stdin):
   bitbuf = orthography.Stream(config, stdin)
-  charbuf = Buffer(orthography.stream_char(sys.stdin, config), config)
-  return charbuf
+  valsibuf = ValsiParser(bitbuf, config)
+  return valsibuf
 
 def main():
   config = Configuration(sys.argv[1:])
 
-  charbuf = Stream(config, stdin)
-  
-  p = ValsiParser(bitbuf, config)
+  p = Stream(config, sys.stdin)
   
   if config.output_no_space:
     raise SystemExit("Space removal not implemented")
@@ -817,7 +822,10 @@ def main():
   else:
     for token in p:
       if not isinstance(token, WHITESPACE):
+        config.debug('YIELD: ', end='')
         print(token, end=' ')
+        config.debug('')
+        sys.stdout.flush()
 
   print()
 

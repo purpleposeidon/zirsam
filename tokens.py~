@@ -6,7 +6,7 @@
 from selmaho import *
 
 class Token:
-  #The items below are a hack for dealing with morphology. With these values, nobody will try to re-tokenize it.
+  #The items below are a hack for the morphology module. With these values, nobody will try to re-tokenize it.
   wordsep = True
   h = False
   y = False
@@ -54,10 +54,28 @@ class Token:
       config.error("Trying to tokenize nothing!")
     self.position = self.bits[0].position
     self.value = self.calculate_value()
+    self.type = ...
+    if config.hate_token and config.hate_token == self.value:
+      #Be hatin'
+      raise Exception("Token Call Backtrace")
+
+  def classify(self):
+    if self.type != ...:
+      return
     if isinstance(self, CMAVO):
       #All cmavo should have a value
       self.type = SELMAHO[self.value]
+    elif isinstance(self, SELBRI):
+      #A gismu, a lujvo, or a fuhivla?
+      #gismu: CCVCV or CVCCV
+      if self.bits[0].CC and self.bits[1].V and self.bits[2].C and self.bits[3].V:
+        self.type = GISMU
+      elif self.bits[0].C and self.bits[1].V and self.bits[2].CC and self.bits[3].V:
+        self.type = GISMU
+      else:
+        raise Exception("TODO: Detect lujvo/fu'ivla forms!") #XXX
     else:
+      #cmene, or possibly instantiated as a lujvo/gismu/fuhivla
       self.type = type(self)
 
 
@@ -65,7 +83,7 @@ class VALSI(Token): pass
 
 class CMENE(VALSI): pass
 class CMAVO(VALSI): pass
-class SELBRIi(VALSI): pass
+class SELBRI(VALSI): pass
 #class GISMU(SELBRI): pass
 #class LUJVO(SELBRI): pass
 #class FUHIVLA(SELBRI): pass

@@ -131,7 +131,8 @@ _eof = ['', '\00', '\x0c', '\x06'] #Empty string, null character, ^L, ^F. Maybe 
 
 
 #The default, strict alphabet
-latin_alphabet = GlyphTable("latin", GlyphTable.latin_lower, GlyphTable.latin_upper)
+strict_alphabet = GlyphTable("strict", GlyphTable.latin_lower, GlyphTable.latin_upper) #Doesn't convert capitalized consonants
+latin_alphabet = GlyphTable("latin", GlyphTable.latin_lower, GlyphTable.latin_upper, extra={'B':'b', 'C':'c', 'D':'d', 'F':'f', 'G':'g', 'J':'j', 'K':'k', 'L':'l', 'M':'m', 'N':'n', 'P':'p', 'R':'r', 'S':'s', 'T':'t', 'V':'v', 'X':'x', 'Z':'z'}) #'
 # XXX NOTE: This is from Wikipedia. I can not verify if it is correct. All the CLL I've seen seem to have display issues. Can somebody verify this?
 ipa_alphabet = GlyphTable("ipa", "b ʃʂ d fɸ g ʒʐ k lɭ mɱ nɳɲŋ p rɾɹʀ s t vβ x z aɑ eɛ i oɔ u ə hθ .ʔ ,".split(), None, accentmark='^')
 #As this is also from Wikipedia, maybe it could also use some verification from a Cyrillic-user
@@ -193,27 +194,32 @@ Arguments (In no particular order):"""
   
   'debug':"(DEBUG OPTION) Print information from parsing", \
   'token error':"(DEBUG OPTION) Raise an Exception when the first token is made, which prints a backtrace", \
+  'hate token':"(DEBUG OPTION) Raise an exception when that text is encountered", \
   'do exit':"(DEBUG OPTION) Exit without parsing", \
   'print tokens':"(DEBUG OPTION) Print out a tokens as they are created", \
   
-  'no space':"Convert input to not use spaces (Not implemented)", \
+  'no space':"(NOT IMPLEMENTED) Convert input to not use spaces", \
   
   }
-  __help_order = 'help, quiet, err2out, alphabet, no dotside, forbid warn, strict, debug, token error, do exit, print tokens, no space'.split(', ') #Help, Parsing configuration, Debug, unimplemented
+  __help_order = 'help, quiet, err2out, alphabet, no dotside, forbid warn, strict, debug, token error, hate token, do exit, print tokens, no space'.split(', ') #Help, Parsing configuration, Debug, unimplemented
   def __check_options(self, argv):
     argv = list(argv) #Use a copy
     possible_args = list(Configuration.__help.keys())
-    
-    def valued_arg(name, val_dict):
+
+    def valued_arg(name, val_dict=None):
       if name not in Configuration.__help:
-        raise Exception("No help given for argument {0}".format(what))
+        raise Exception("No help defined for argument {0!r}".format(name))
       index = 0
       r = None
       possible_args.pop(possible_args.index(name))
       for arg in argv:
-        if arg.find('--'+name+'=') == 0:
+        if arg.find(format_arg(name)+'=') == 0:
           val = arg[len(name)+3:].strip()
           argv.pop(index)
+          if not val_dict:
+            if val == '?' or val == '':
+              raise SystemExit("{1}\n{0} accepts most any string.".format(name, Configuration.__help[name]))
+            return val
           if val in val_dict:
             r = val
           elif val == '?' or val == '':
@@ -298,7 +304,7 @@ Arguments (In no particular order):"""
     _ = valued_arg("alphabet", GlyphTable.tables)
     if _:
       self.glyph_table = _
-    
+    _ = valued_arg("hate token")
     if possible_args:
       print("The following arguments have documentation, but no implementation:", file=sys.stderr)
       for p in possible_args:
@@ -324,7 +330,7 @@ Arguments (In no particular order):"""
   
   
   def error(self, msg, position):
-    print(position, ': ', msg, sep='', file=sys.stderr)
+    print('ERROR: ', position, ': ', msg, sep='', file=sys.stderr)
     if self._debug:
       raise Exception
     raise SystemExit(1)
@@ -332,7 +338,7 @@ Arguments (In no particular order):"""
   def warn(self, msg, position):
     self.has_warnings = True
     if not self._quiet or self.forbid_warn:
-      print(position, ': ', msg, sep='', file=sys.stderr)
+      print('WARN: ', position, ': ', msg, sep='', file=sys.stderr)
     
     if self.forbid_warn:
       raise SystemExit(1)
@@ -340,23 +346,23 @@ Arguments (In no particular order):"""
   def message(self, msg, position=None):
     if not self._quiet:
       if position:
-        print(position, ': ', msg, sep='', file=sys.stderr)
+        print('MESSAGE: ', position, ': ', msg, sep='', file=sys.stderr)
       else:
-        print(msg, file=sys.stderr)
+        print('MESSAGE:', msg, file=sys.stderr)
   
-  def debug(self, msg, position=None):
+  def debug(self, msg, position=None, end='\n'):
     if self._debug:
       if position:
-        print(position, ': ', msg, sep='', file=sys.stderr)
+        print('DEBUG: ', position, ': ', msg, sep='', file=sys.stderr, end=end)
       else:
-        print(msg, file=sys.stderr)
+        print('DEBUG:', msg, file=sys.stderr, end=end)
   
   def strict(self, msg, position=None):
     if self._strict:
       if position:
-        print(position, ': ', msg, sep='', file=sys.stderr)
+        print('STRICT:', position, ': ', msg, sep='', file=sys.stderr)
       else:
-        print(msg, file=sys.stderr)
+        print('STRICT: ', msg, file=sys.stderr)
   
   def __init__(self, args):
     """
@@ -380,7 +386,7 @@ Arguments (In no particular order):"""
     self.glyph_table = latin_alphabet
     self.forbid_warn = False
     self.output_no_space = False
-    
+    self.hate_token = None #If we see this token, raise Exception
     
     
     self.__check_options(args)

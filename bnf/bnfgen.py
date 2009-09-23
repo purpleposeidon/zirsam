@@ -33,30 +33,125 @@ Which don't do. So, instead, use....
 #NOTE : Some of these are written NAME##, where the name is actually "NAME#", and
 #       the trailing numbers are references to yac rule #
 
-src = """
-sumti-tail111 =
-    [sumti-6 [relative-clauses]] sumti-tail-1
-    | relative-clauses sumti-tail-1 ;
-"""
-
-
-TESTsrc = """
-statement-314 =
-sentence
- | [tag] TUhE # text-1 /TUhU#/ ;
-"""
-
-TESTsrc = """
-test = a | b ... & c#;
-"""
 
 src = open('../data/lojban.bnf').read()
+
+
 
 #from sys import stdout
 stdout = io.StringIO()
 
+class End:
+  def __init__(self, t):
+    self.t = t
+
+src = """
+test = foo | BY;
+"""
+
+'''
+Names in lower case are grammatical constructs.
+Names in UPPER CASE are selma'o (lexeme) names, and are terminals.
+Concatenation is expressed by juxtaposition with no operator symbol.
+| represents alternation (choice).
+[] represents an optional element.
+& represents and/or (``A & B'' is the same as ``A | B | A B'').
+... represents optional repetition of the construct to the left. Left-grouping is implied; right-grouping is shown by explicit self-referential recursion with no ``...''
+() serves to indicate the grouping of the other operators. Otherwise, ``...'' binds closer than &, which binds closer than |.
+# is shorthand for ``[free ...]'', a construct which appears in many places.
+// encloses an elidable terminator, which may be omitted (without change of meaning) if no grammatical ambiguity results.
+
+Order of Operations
+  adjacent items
+  ...
+  &
+  |
+
+'''
+
+
 def gen_rule(r):
+  tokens = get_tokens(r)
+  print(tokens)
+  return handle_tokens(tokens)
+
+def find_end(tokens, end_type):
+  p_count = 1
+  i = 0
+  while p_count > 0:
+    if isinstance(tokens[i], end_type):
+      p_count += 1
+    elif isinstance(tokens[i], End) and tokens[i].t == end_type:
+      p_count -= 1
+    i += 1
+  return i
+
+def handle_tokens(tokens):
+  c = Concatenation(())
+  while tokens:
+    t = tokens.pop(0)
+    if isinstance(t, Paren):
+      i = find_end(tokens, Paren)
+      retoks = tokens[:i] #Everythign before the End(Paren)
+      tokens = tokens[i+1:] #+1 for the End(Paren)
+      c.items.append(Paren(handle_tokens(retoks))
+    elif isinstance(t, Optional):
+      i = find_end(tokens, Optional)
+      retoks = tokens[:i] #Everything before the End(Paren)
+      tokens = tokens[i+1:] #+1 for the End(Paren)
+      c.items.append(Optional(handle_tokens(retoks))
+    else:
+      c.items.append(t)
+    
+    
+
+def get_tokens(r):
+  tokens = []
   in_elidable = False
+  while r:
+    if r[0] in letters:
+      n = ''
+      while r and r[0] in letters:
+        n += r[0]
+        r = r[1:]
+      if n.replace('h', 'H') == n.upper():
+        #Is a terminal
+        tokens.append(Terminal(n))
+      else:
+        tokens.append(Rule(n))
+    elif r[0] in '[':
+      tokens.append(Optional)
+    elif r[0] in ']':
+      tokens.append(End(Optional))
+    elif r[0] in '(':
+      tokens.append(Paren)
+    elif r[0] in ')':
+      tokens.append(End(Paren))
+    elif r[0] in '|':
+      tokens.append(Or)
+    elif r[:3] == '...':
+      r = r[2:]
+      tokens.append(Repeated)
+    elif r[0] in ' \n\t':
+      pass
+    elif r[0] in '#':
+      tokens.append(_free)
+    elif r[0] in '&':
+      tokens.append(AndOr)
+    elif r[0] in '/':
+      in_elidable = not in_elidable
+      if in_elidable:
+        tokens.append(Elidable)
+      else:
+        tokens.append(End(Elidable))
+    else:
+      raise Exception("Can't handle character %r" % r[0])
+    r = r[1:]
+  return tokens
+
+def ORIGgen_rule(r):
+  in_elidable = False
+  stdout.write("Concat(")
   while r:
     if r[0] in letters:
       n = ''
@@ -75,7 +170,7 @@ def gen_rule(r):
       stdout.write("Paren(")
       r = r[1:]
     elif r[0] in '|':
-      stdout.write(" |")
+      stdout.write(") | Concat(")
       r = r[1:]
     elif r[:3] in '...':
       r = r[3:]
@@ -102,6 +197,7 @@ def gen_rule(r):
         stdout.write(")")
     else:
       raise Exception("Can't handle character %r" % r[0])
+  stdout.write(")")
 
 from string import ascii_letters as letters
 letters = letters+'-'+'1234567890'
@@ -115,9 +211,9 @@ def variable(r):
   else:
     raise Exception("The %r, is it a Rule or a Terminal?" % r)
 
-class Rule:
-  def __init__(self, value):
-    self.value = value
+#class R#ule:
+#  def __init__(self, value):
+#    self.value = value
 
 class Token:
   def __init__(self, value):
@@ -157,15 +253,18 @@ def tree_type(name):
     return ("%s%s" % (type(self).__name__, self.items)).replace(",)",')')
   def __and__(self, other):
     return AndOr(self, other)
-  return type(name, (), {'__init__':__init__, '__repr__':__repr__, '__or__':__or__, '__and__':__and__})
+  return type(name, (), {'__init__':__init__, '__repr__':__repr__, '__str__':__repr__, '__or__':__or__, '__and__':__and__})
 
 
-class Rule(str, tree_type("ruleo")):
+class Rule(tree_type("ruleo")):
+  def __hash__(self):
+    return hash(self.items[0])
   def __str__(self):
-    return "Rule({0})".format(str.__str__(self))
+    return "Rule({0})".format(self.items[0])
   def __repr__(self):
-    return "Rule({0})".format(str.__repr__(self))
+    return "Rule({0})".format(repr(self.items[0]))
 
+Concat = tree_type("Concat")
 Optional = tree_type("Optional")
 Repeated = tree_type("Repeated")
 Paren = tree_type("Paren")
@@ -173,8 +272,19 @@ Elidable = tree_type("Elidable")
 Terminal = tree_type("Terminal")
 Or = tree_type("Or")
 AndOr = tree_type("AndOr")
+_free = Optional(Repeated(Rule("free")))
 
 REPEATED = MAGIC_ADD(Repeated)
+
+class Statement:
+  rules = {}
+  def __init__(self, term, value):
+    #text = foo | bar;
+    self.term = term #text
+    self.value = value #foo | bar
+    Statement.rules[self.term.items[0]] = self
+  def __repr__(self):
+    return "%s := %s;" % (self.term, self.value)
 
 
 if __name__ == '__main__':
@@ -199,7 +309,7 @@ if __name__ == '__main__':
   s = s.replace("& , ", '& ').replace("| , ", '| ')
   s = s.replace(',,', ',')
   s = s.replace(", +REPEATED", "+REPEATED")
-
+  s = s.replace("(,", "(")
 
 
 
@@ -251,7 +361,12 @@ if __name__ == '__main__':
     print()
     print("from bnfgen import *")
     print()
-    print("rules = {")
+    print("rules = (")
     for k in rules:
-      print("  Rule(%r)" %k, ':\n    ', rules[k], ',\\')
-    print("}")
+      #print("Statement(Rule(%r), %s)," % (k, rules[k]))
+      n = str(rules[k])
+      n = n.replace("<class 'tokens.", '').replace("'>", '')
+      print("Statement(Rule(%r),\n\t%s\n), " % (k, n))
+      #print("Statement(Rule(%r), " % k, ' ', rules[k], '),\\')
+      #print("  Rule(%r)" %k, ':\n    ', rules[k], ',\\')
+    print(")")

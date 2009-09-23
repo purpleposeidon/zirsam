@@ -1,4 +1,4 @@
-lojban.bnf is from the CLL. I made one change to the formatting; every rule is now ended by a semicolon because I am a lazy programmer. Also, I renamed BRIVLA to SELBRI because I prefer to use that form.
+lojban.bnf is from the CLL. I made one change to the formatting; every rule is now ended by a semicolon because I am a lazy programmer. Also, I renamed BRIVLA to SELBRI because I prefer to use that form. And then I used a RE to get rid of the subscripts that are included in the CLL.
 
 BRKWORDS.TXT has my comments, I've also included the original file.
 

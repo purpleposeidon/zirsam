@@ -52,6 +52,8 @@ class Buffer:
 
   def insert(self, index, value):
     self.config.debug("Inserting {0} into {1}".format(value, index))
+    if hasattr(value, 'position'):
+      self.config.debug("(Originally located at {0})".format(value.position))
     self.__fill_to(index)
     if index > len(self.buffer):
       raise Exception("Can't insert item {0} at position {1} because that is at the end of the file".format(index, value))

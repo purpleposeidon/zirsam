@@ -314,7 +314,7 @@ if __name__ == '__main__':
   from config import Configuration
   config = Configuration(sys.argv[1:])
   
-  bitbuf = Stream(config, stdin)
+  bitbuf = Stream(config, sys.stdin)
   i = []
   for bit in bitbuf:
     i.append(bit)

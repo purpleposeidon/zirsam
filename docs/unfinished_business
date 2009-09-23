@@ -11,6 +11,7 @@ Or, in other words, "TODO":
  - make word_end in morphology.py indexed from 0 instead of 1
  - Don't use self.config, use self.buffer.config
  - Test IPA and other alphabets
+ - Check the bottom of the BNF. Are there non-formal rules?
 
 ###### Later
 
