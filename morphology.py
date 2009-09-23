@@ -602,7 +602,10 @@ we: {4}""".format(self.bit.buffer, cc_location, cc, ps, word_end))
       r = self.tokenize(1, WHITESPACE)
       return r
     
-    
+    if self.bit[0].comma:
+      #{None}
+      self.config.warn("This comma is probably nonsensical", self.bit[0].position)
+      return self.tokenize(1, GARBAGE)
     
     word_end = self.word()
     
