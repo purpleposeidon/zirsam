@@ -613,12 +613,11 @@ we: {4}""".format(self.bit.buffer, cc_location, cc, ps, word_end))
     if self.bit[0].period:
       word_end += self.word(word_end+1)
     
-    
     if self.bit[word_end-1].has_C or (self.bit[word_end-1].period and (word_end >= 2 and self.bit[word_end-2].has_C)): #It's a cmene! OMG!
       #{2.A.1)}
       
       #The cmene must have a pause in front unless (not DOTSIDE and) there is a marker
-      if self.bit[0].period:
+      if not 'broken' and self.bit[0].period: #XXX if enabled, .i.a'odoklAmatidoidjan
         return self.tokenize(1, PERIOD), self.tokenize(word_end-1, CMENE)
       else:
         if self.config.dotside:
@@ -627,16 +626,16 @@ we: {4}""".format(self.bit.buffer, cc_location, cc, ps, word_end))
         #{2.A.1)a)}
         #Requires a cmene marker: la, lai, la'i, doi
         i = word_end - 2 #We're looking for two bits, so we have to have space for two bits when we start
-        found_token = False
+        found_vocative = False
         while i >= 0:
           if self.bit[i].value == 'l' and self.bit[i+1].value in ('a', 'ai', "a'i"):
-            found_token = True
+            found_vocative = True
             #return self.tokenize(2, CMAVO), self.tokenize(word_end-2, CMENE)
           elif self.bit[i].value == 'd' and self.bit[i+1].value == 'oi':
-            found_token = True
+            found_vocative = True
             #return self.tokenize(2, CMAVO), self.tokenize(word_end-2, CMENE)
           
-          if found_token:
+          if found_vocative:
             #{2.A.1)b)}
             if i == 0: #ladjan
               return self.tokenize(2, CMAVO), self.tokenize(word_end-2, CMENE)
@@ -792,7 +791,8 @@ we: {4}""".format(self.bit.buffer, cc_location, cc, ps, word_end))
             elif i > 5:
               raise "what? NO...."
           return self.tokenize(i, CMAVO)
-    
+
+    self.config.debug("Buffer:"+str(self.bit.buffer))
     self.config.error("Nothing happened!", self.bit[0].position)
       
     if not self.bit.EOF:
@@ -821,10 +821,11 @@ def main():
       pass
   else:
     for token in p:
-      if not isinstance(token, WHITESPACE):
-        config.debug('YIELD: ', end='')
-        print(token, end=' ')
-        config.debug('')
+      if not isinstance(token, BORING): # XXX Maybe "BORING" instead
+        if config._debug:
+          config.debug('yielding '+str(token))
+        else:
+          print(token, end=' ')
         sys.stdout.flush()
 
   print()

@@ -88,11 +88,11 @@ class SELBRI(VALSI): pass
 #class LUJVO(SELBRI): pass
 #class FUHIVLA(SELBRI): pass
 
-class boring(Token): pass #Ignore
-class WHITESPACE(boring): pass
-class HESITATION(boring): pass
+class BORING(Token): pass #Don't mention these items. BORING is a fake token
+class WHITESPACE(BORING): pass
 
 
-class extra(Token): pass
-class GARBAGE(extra): pass
-class PERIOD(extra, boring): pass
+class EXTRA(Token): pass #
+class GARBAGE(EXTRA): pass
+class PERIOD(EXTRA, BORING): pass
+class HESITATION(EXTRA): pass
