@@ -12,6 +12,7 @@ Or, in other words, "TODO":
  - Don't use self.config, use self.buffer.config
  - Test IPA and other alphabets
  - Check the bottom of the BNF. Are there non-formal rules?
+ + Use GNU readline! Not being able to edit lines in jbofihe is /so/ annoying
 
 ###### Later
 
