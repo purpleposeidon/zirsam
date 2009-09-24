@@ -8,7 +8,7 @@ ladjan.KLAmalezDAnibeVO'a.,PUleNUlaMEris.nO'a #CMAVO(la) CMENE(djan) SELBRI(klam
 ##Weasel words for cmegadri lexing.
 MUstelaVIson #SELBRI(muste) CMAVO(la) CMENE(vison)
 muSTElaVIson #GARBAGE(must) CMAVO(E) CMAVO(la) CMENE(vison)
-MUstela.VIson
+MUstela.VIson #SELBRI(muste) CMAVO(la) CMENE(.vison)
 muSTEla.VIson
 MUste.laVIson
 muSTE.laVIson
