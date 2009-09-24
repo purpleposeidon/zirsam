@@ -4,15 +4,16 @@ Or, in other words, "TODO":
 ###### Soon
  - More error checking and recovery
  - Make the helper code nicer
- + Make --token-error print a backtrace on each token instead of dieing?
+ - Make --token-error print a backtrace on each token instead of dieing?
  + Check your dotside!
  - Do more garbage checking (For example, try {kláma} with default settings)
  + Put stdin into Configuration. Probably the best way to deal with quotes
  - make word_end in morphology.py indexed from 0 instead of 1
  - Don't use self.config, use self.buffer.config
- - Test IPA and other alphabets
+ + Test IPA and other alphabets
  - Check the bottom of the BNF. Are there non-formal rules?
  + Use GNU readline! Not being able to edit lines in jbofihe is /so/ annoying
+ + Go through morph_test_sentences.txt (And also, get a URL and an original copy)
 
 ###### Later
 
@@ -32,5 +33,5 @@ Or, in other words, "TODO":
  - Jbovlaste
  + Oh, also, learn how to speak lojban. Jeeze.
  - Make option for output to be spaceless
-
+ - Make a funny/bad// joke about {tosmabru}
 

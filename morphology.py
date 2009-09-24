@@ -299,6 +299,7 @@ we: {4}""".format(self.bit.buffer, cc_location, cc, ps, word_end))
         end_of_brivla -= 1
         if not found_v:
           #part of {2.C.3)b)} - it is required to have a vowel!
+          self.config.warn("This supposed selbri is supposed to have a vowel", self.bit.buffer[0].position)
           return self.tokenize(end_of_brivla, GARBAGE)
         break #There's the end. Stops the while loop
       if bit.has_V:
@@ -645,7 +646,8 @@ we: {4}""".format(self.bit.buffer, cc_location, cc, ps, word_end))
             if i > 0 and self.bit[i-1].has_V: #miviskaladjan
               #{2.A.1)b)}
               #Push this content up so that it may be handled later
-              
+              # XXX camxes says that miviskaladjan is a single cmene
+              # Brkwords disagrees (morph_test:muSTElaVIson)
               marker = self.tokenize(2, CMAVO, start=i)
               name = self.tokenize(word_end-i-2, CMENE, start=i)
               
