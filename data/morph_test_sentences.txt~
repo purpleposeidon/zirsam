@@ -15,7 +15,7 @@ muSTE.laVIson #GARBAGE(must) CMAVO(E) CMAVO(la) CMENE(vison)
 MUste.la.VIson #SELBRI(muste) CMAVO(la) CMENE(vison)
 muSTE.la.VIson #GARBAGE(must) CMAVO(E) CMAVO(la) CMENE(vison)
 MUstel,aVIson #CMENE(mUstel,avIson)
-muSTEl,aVIson
+muSTEl,aVIson #muSTEl,aVIson
 ##Examples of well and badly formed names
 las les lis los lus lys
 laas laes lais laos laus lays
