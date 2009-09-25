@@ -614,9 +614,10 @@ we: {4}""".format(self.bit.buffer, cc_location, cc, ps, word_end))
     #{2.A}
     
     #if self.config.dotside and self.bit[0].period:
+    #if self.bit[0].period:
+      #word_end += self.word(word_end+1)
     if self.bit[0].period:
-      word_end += self.word(word_end+1)
-    
+      return self.tokenize(1, PERIOD)
     if self.bit[word_end-1].has_C or (self.bit[word_end-1].period and (word_end >= 2 and self.bit[word_end-2].has_C)): #It's a cmene! OMG!
       #{2.A.1)}
       
@@ -647,7 +648,7 @@ we: {4}""".format(self.bit.buffer, cc_location, cc, ps, word_end))
               #{2.A.1)b)}
               #Push this content up so that it may be handled later
               # XXX camxes says that miviskaladjan is a single cmene
-              # Brkwords disagrees
+              # Brkwords disagrees (morph_test:muSTElaVIson)
               marker = self.tokenize(2, CMAVO, start=i)
               name = self.tokenize(word_end-i-2, CMENE, start=i)
               

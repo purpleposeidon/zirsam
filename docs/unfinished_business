@@ -14,6 +14,7 @@ Or, in other words, "TODO":
  - Check the bottom of the BNF. Are there non-formal rules?
  + Use GNU readline! Not being able to edit lines in jbofihe is /so/ annoying
  + Go through morph_test_sentences.txt (And also, get a URL and an original copy)
+ - Handle whitespace so that the fact that there is a word seperation is returned immediatly, instead of reading 'til the first non-whitespace. Possibilities include returning a Bit for each whitespace, returning a Bit for the first whitespace and merging the rest, or returning a bit that has no value, but is treated as a whitespace, and having the actual whitespace slurped up later.
 
 ###### Later
 
@@ -23,6 +24,7 @@ Or, in other words, "TODO":
  + (Have error messages in lojban?)
  - Make sure I didn't accidentally change/deleting anything in BRKWORDS.txt
  - (seperate out the configuration options for each section?)
+ - It would be interesting to have an option to disable line-buffering; the user could see the immediate tokenization.
 
 ###### Much Later
 

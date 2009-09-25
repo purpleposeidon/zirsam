@@ -614,9 +614,10 @@ we: {4}""".format(self.bit.buffer, cc_location, cc, ps, word_end))
     #{2.A}
     
     #if self.config.dotside and self.bit[0].period:
+    #if self.bit[0].period:
+      #word_end += self.word(word_end+1)
     if self.bit[0].period:
-      word_end += self.word(word_end+1)
-    
+      return self.tokenize(1, PERIOD)
     if self.bit[word_end-1].has_C or (self.bit[word_end-1].period and (word_end >= 2 and self.bit[word_end-2].has_C)): #It's a cmene! OMG!
       #{2.A.1)}
       
@@ -826,7 +827,7 @@ def main():
       pass
   else:
     for token in p:
-      if not isinstance(token, BORING): # XXX Maybe "BORING" instead
+      if config._debug or not isinstance(token, BORING): # XXX Maybe "BORING" instead
         if config._debug:
           config.debug('yielding '+str(token))
         else:
