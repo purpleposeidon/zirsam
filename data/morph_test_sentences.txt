@@ -1,4 +1,8 @@
 #I'm adding how my parser parses these lines
+#I'm also going through them (probably not *all of them*) by hand, and using them to test my parser.
+#When I am satisified that the parser handles it acceptably, I add the morphology result to the line in a comment.
+#I've kept track of the changes I make this way using git. To get a copy of the parser in that state,
+#you can look up git's short log using that test sentence
 #########
 ## Pierre's
 #########
@@ -18,7 +22,7 @@ MUstel,aVIson #CMENE(mUstel,avIson)
 muSTEl,aVIson #muSTEl,aVIson
 ##Examples of well and badly formed names
 las les lis los lus lys #CMAVO(la) CMENE(s) CMENE(les) CMENE(lis) CMENE(los) CMENE(lus) CMENE(lys)
-laas laes lais laos laus lays
+laas laes lais laos laus lays #CMENE(laas) CMENE(laes) CMAVO(lai) CMENE(s) CMENE(laos) CMENE(laus) CMAVO(la) CMENE(ys)
 laias laies laiis laios laius laiys
 la'ias la'ies la'iis la'ios la'ius la'iys
 doias doies doiis doios doius doiys
