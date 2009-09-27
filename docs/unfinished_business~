@@ -24,7 +24,7 @@ Or, in other words, "TODO":
  + (Have error messages in lojban?)
  - Make sure I didn't accidentally change/deleting anything in BRKWORDS.txt
  - (seperate out the configuration options for each section?)
- - It would be interesting to have an option to disable line-buffering; text really would be tokenized ASAP.
+ - It would be interesting to have an option to disable line-buffering; the user could see the immediate tokenization.
 
 ###### Much Later
 

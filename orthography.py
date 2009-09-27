@@ -305,7 +305,7 @@ def valid_init_cc(bit):
 
 
 def Stream(config, stdin):
-  charbuf = Buffer(stream_char(sys.stdin, config), config)
+  charbuf = Buffer(stream_char(stdin, config), config)
   bitbuf = Buffer(stream_bit(charbuf), config)
   return bitbuf
 
