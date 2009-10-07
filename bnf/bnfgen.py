@@ -45,7 +45,7 @@ class End:
   def __init__(self, t):
     self.t = t
 
-src = """
+Xsrc = """
 test = foo | BY;
 """
 
@@ -87,19 +87,19 @@ def find_end(tokens, end_type):
   return i
 
 def handle_tokens(tokens):
-  c = Concatenation(())
+  c = Concat(())
   while tokens:
     t = tokens.pop(0)
     if isinstance(t, Paren):
       i = find_end(tokens, Paren)
       retoks = tokens[:i] #Everythign before the End(Paren)
       tokens = tokens[i+1:] #+1 for the End(Paren)
-      c.items.append(Paren(handle_tokens(retoks))
+      c.items.append(Paren(handle_tokens(retoks)))
     elif isinstance(t, Optional):
       i = find_end(tokens, Optional)
       retoks = tokens[:i] #Everything before the End(Paren)
       tokens = tokens[i+1:] #+1 for the End(Paren)
-      c.items.append(Optional(handle_tokens(retoks))
+      c.items.append(Optional(handle_tokens(retoks)))
     else:
       c.items.append(t)
     
@@ -246,7 +246,7 @@ def tree_type(name):
   class klass:
     pass
   def __init__(self, *items):
-    self.items = items
+    self.items = list(items)
   def __or__(self, other):
     return Or(self, other)
   def __repr__(self):

@@ -303,8 +303,34 @@ def valid_init_cc(bit):
     return v in __VALID_INIT_CC
   raise Exception("Miscall with " + str(bit))
 
+class __NiceStdin:
+  #import readline and use the input() function to get data; this allows editing of text
+  def __init__(self):
+    self.chars = ''
+  def read(self, i=1):
+    if len(self.chars) == 0:
+      if 1: #not self.EOF or 1:
+        try:
+          l = input() #like python2.x's raw_input()
+          l += '\n' #input() strips the newline
+        except EOFError:
+          l = ''
+        self.chars += l
+      else:
+        return ''
+    x = self.chars[:i]
+    self.chars = self.chars[i:]
+    return x
+    
 
 def Stream(config, stdin):
+  if stdin.isatty(): #Should we enable GNU readline?
+    try:
+      import readline
+      #If this succeeds, then it is enabled for the input() function
+      stdin = __NiceStdin()
+    except ImportError:
+      pass
   charbuf = Buffer(stream_char(stdin, config), config)
   bitbuf = Buffer(stream_bit(charbuf), config)
   return bitbuf

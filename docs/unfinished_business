@@ -9,13 +9,12 @@ Or, in other words, "TODO":
  - Do more garbage checking (For example, try {kláma} with default settings)
  + Put stdin into Configuration. Probably the best way to deal with quotes
  - make word_end in morphology.py indexed from 0 instead of 1
- - Don't use self.config, use self.buffer.config
+ - Don't use self.config, use self.buffer.config? (the way it is now is more flexible)
  + Test IPA and other alphabets
  - Check the bottom of the BNF. Are there non-formal rules?
- + Use GNU readline! Not being able to edit lines in jbofihe is /so/ annoying
- + Go through morph_test_sentences.txt (And also, get a URL and an original copy)
  - Handle whitespace so that the fact that there is a word seperation is returned immediatly, instead of reading 'til the first non-whitespace. Possibilities include returning a Bit for each whitespace, returning a Bit for the first whitespace and merging the rest, or returning a bit that has no value, but is treated as a whitespace, and having the actual whitespace slurped up later.
- + Some strange issue when using an io.StringIO, fix it!
+ - Study and meditate upon lojban grammar
+ - Make a parser for the grammar (In another file, of course...)
 
 ###### Later
 
@@ -29,12 +28,17 @@ Or, in other words, "TODO":
 
 ###### Much Later
 
- - Study and meditate upon lojban grammar
- - Make a parser for the grammar (In another file, of course...)
- - Emulate output of jbofihe and camxes (And other parsers?)
+ - Emulate output of jbofihe and camxes? (And other parsers?)
  - Semantics engine and supporting stuff
  - Jbovlaste
  + Oh, also, learn how to speak lojban. Jeeze.
  - Make option for output to be spaceless
  - Make a funny/bad// joke about {tosmabru}
+ - If there is demand: xml output
 
+
+
+###### Some things I've completed, to make me feel special
+ + Use GNU readline! Not being able to edit lines in jbofihe is /so/ annoying
+ + Go through morph_test_sentences.txt (And also, get a URL and an original copy)
+    (Okay, only half-heartedly. It wasn't so useful.)

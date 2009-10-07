@@ -3,6 +3,8 @@
 #When I am satisified that the parser handles it acceptably, I add the morphology result to the line in a comment.
 #I've kept track of the changes I make this way using git. To get a copy of the parser in that state,
 #you can look up git's short log using that test sentence
+#I obtained it from Robin's site at http://teddyb.org/~rlpowell/hobbies/lojban/grammar/morph_test_sentences.txt
+#I've also included a copy of the original.
 #########
 ## Pierre's
 #########
