@@ -25,6 +25,7 @@ Or, in other words, "TODO":
  - Make sure I didn't accidentally change/deleting anything in BRKWORDS.txt
  - (seperate out the configuration options for each section?)
  - It would be interesting to have an option to disable line-buffering; the user could see the immediate tokenization.
+ - Have bnf_loader/__init__.py check modification times for bnf sources
 
 ###### Much Later
 
@@ -35,7 +36,7 @@ Or, in other words, "TODO":
  - Make option for output to be spaceless
  - Make a funny/bad// joke about {tosmabru}
  - If there is demand: xml output
-
+ - look into proper distribution methods, something about python eggs...?
 
 
 ###### Some things I've completed, to make me feel special
