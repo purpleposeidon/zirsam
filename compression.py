@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 
 """
+INCOMPLETE
+
 Compress or decompress lojban text using our special format.
 Input text is the data represented as 1's and 0's, with a newline seperating each 8-bit byte.
 Output is formatted the same.

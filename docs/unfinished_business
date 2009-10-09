@@ -13,8 +13,8 @@ Or, in other words, "TODO":
  + Test IPA and other alphabets
  - Check the bottom of the BNF. Are there non-formal rules?
  - Handle whitespace so that the fact that there is a word seperation is returned immediatly, instead of reading 'til the first non-whitespace. Possibilities include returning a Bit for each whitespace, returning a Bit for the first whitespace and merging the rest, or returning a bit that has no value, but is treated as a whitespace, and having the actual whitespace slurped up later.
- - Study and meditate upon lojban grammar
- - Make a parser for the grammar (In another file, of course...)
+ - Study and meditate upon lojban grammar, make grammar parser
+ - Check that I'm parsing the BNF correctly. For example, the &'s in "simple-tense-modal" (I don't know for certain that the way it parses is correct)
 
 ###### Later
 
@@ -36,7 +36,8 @@ Or, in other words, "TODO":
  - Make option for output to be spaceless
  - Make a funny/bad// joke about {tosmabru}
  - If there is demand: xml output
- - look into proper distribution methods, something about python eggs...?
+ - look into proper distribution methods, see the distutils module http://docs.python.org/distutils/
+     "package_data" for setup.py
 
 
 ###### Some things I've completed, to make me feel special

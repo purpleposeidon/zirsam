@@ -14,6 +14,7 @@ import sys
 from common import Buffer
 
 class Position:
+  #Stores information on which line/col/index a character is located at
   def __init__(self, _copy=None):
     if _copy:
       self.c = _copy.c
@@ -37,14 +38,14 @@ class Position:
 
 
 
-
 class Character:
   def clean_val(v):
     #Escapes stuff if neccessary. "\n" -> "\\n"
-    if '\\' in repr(v):
-      return repr(v)[1:-1]
-    else:
-      return str(v)
+    return repr(v)[1:-1]
+#    if '\\' in repr(v):
+#      return repr(v)[1:-1]
+#    else:
+#      return str(v)
   
   def __str__(self):
     return Character.clean_val(self.value)
@@ -70,8 +71,6 @@ class Character:
     self.whitespace = False
     self.garbage = False
     self.EOF = False
-    
-    
     
     
     if c == '':
@@ -131,6 +130,7 @@ def stream_bit(fd):
     yield Bit(fd)
 
 class Bit:
+  """Stores a logical sequence of characters"""
   def __len__(self):
     return len(self.chars)
   def __str__(self):
@@ -150,7 +150,6 @@ class Bit:
     self.chars = None
     self.value = ''
     
-    ###TODO - Anything else we might want? Is this all valid. I think so.
     self.valid_cc = True
     self.valid_initial_cc = True
     
@@ -159,7 +158,7 @@ class Bit:
     self.CCC = False
     self.CyC = False
     self.CyCC = False
-    self.CCyC = False
+    self.CCyC = False # XXX - CCyC and CyCC counts as CCC, right?
     
     self.counts_CC = False
     self.has_C = False
@@ -232,36 +231,35 @@ class Bit:
       for letter in self.chars:
         if letter.accented:
           self.accented = True
+    elif first.whitespace:
+      self.whitespace = True
+      self.wordsep = True
+      self.chars = [first]
+      while fd[0].whitespace: # XXX - this makes evevrything unresponsive when inputting text
+        self.chars.append(fd.pop())
+    elif first.y:
+      self.y = True
+      self.chars = [first]
+      #XXX I don't like this
+      #while fd[0].y:
+        #self.chars.append(fd.pop())
+    elif first.h:
+      self.h = True
+      self.chars = [first]
+    elif first.comma:
+      self.comma = True
+      self.chars = [first]
+    elif first.period:
+      self.wordsep = True
+      self.period = True
+      self.chars = [first]
+      while fd[0].period:
+        self.chars.append(fd.pop())
     else:
-      if first.whitespace:
-        self.whitespace = True
-        self.wordsep = True
-        self.chars = [first]
-        while fd[0].whitespace:
-          self.chars.append(fd.pop())
-      elif first.y:
-        self.y = True
-        self.chars = [first]
-        #XXX I don't like this
-        #while fd[0].y:
-          #self.chars.append(fd.pop())
-      elif first.h:
-        self.h = True
-        self.chars = [first]
-      elif first.comma:
-        self.comma = True
-        self.chars = [first]
-      elif first.period:
-        self.wordsep = True
-        self.period = True
-        self.chars = [first]
-        while fd[0].period:
-          self.chars.append(fd.pop())
-      else:
-        self.garbage = True
-        self.chars = [first]
-        while fd[0].garbage:
-          self.chars.append(fd.pop())
+      self.garbage = True
+      self.chars = [first]
+      while fd[0].garbage:
+        self.chars.append(fd.pop())
     
     
     assert self.chars

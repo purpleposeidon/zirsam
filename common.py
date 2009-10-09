@@ -2,13 +2,16 @@
 
 """
 There are several modules with fancy latinesque names. Each handles a different phase of parsing, and they depend on a module below them. Each module functions independantly of the one above it
+
   orthography
       Converts arbitrary alphabets into latin. Then it determines the type of the letter. Then it groups the vowels and the consonants together.
+
   morphology
       Creates individual valsi.
   [As of writing, the modules below aren't done/started/implemented]
   dendrography
       Uses the BNF to create a parse tree, and then sorts it out to make it nice and pretty. The Magic words are (?) handled by the BNF... TODO see look uhm
+
   semasiology
       Re-structures the tree. Changes pro-valsi to original values, check that selbri are real words
 
@@ -18,11 +21,11 @@ There are other files:
   selmaho, tokens
       Creates token objects
   zirsam
-      Will eventually be the main entry-point for everything
+      Will eventually be the main entry-point for everything, right now is uninteresting
 
 """
 
-#Contains the general Buffer, a class used by every layer of the parser
+#Contains the Buffer, a class used by every layer of the parser
 
 class Buffer:
   def __repr__(self):

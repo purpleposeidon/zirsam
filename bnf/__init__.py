@@ -9,7 +9,11 @@ import os
 import sys
 import time
 
-os.chdir('bnf') #XXX - Do this more robustly
+try:
+  os.chdir('bnf') #XXX - Do this more robustly
+except:
+  if not 'convert_bnf.py' in os.listdir('./'):
+    raise SystemExit("Please run directly from the JBOPARSER directory")
 
 deps = "../data/lojban.bnf ../data/bnf.html convert_bnf.py dehtml_bnf.py magic_bnf.py".split()
 final = "bnf_data.py"
@@ -24,8 +28,11 @@ try:
   #import bnf_data
 except:
   if not 'src_bnf.bnf' in os.listdir('./'):
-    sys.stderr.write("Cleaning up HTML BNF\n")
-    os.system("python ./dehtml_bnf.py")
+    if 'w3m' in os.popen('which w3m').read().strip():
+      sys.stderr.write("Cleaning up HTML BNF\n")
+      os.system("python ./dehtml_bnf.py")
+    else:
+      print("Warning: BNF HTML source was modified, but don't have w3m to dump it.")
   sys.stderr.write("Converting data/lojban.bnf\n")
   os.system("python ./convert_bnf.py")
   #os.chdir('../')
