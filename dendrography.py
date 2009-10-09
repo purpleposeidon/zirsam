@@ -19,10 +19,10 @@ A thought:
 import sys
 
 import morphology
-from bnf import *
+from bnf import BNF
 
 
-class TreeParser:
+class GrammarParser:
   def __init__(self, token_iter, config):
     self.valsi = token_iter
     self.config = config
@@ -74,8 +74,9 @@ class TreeParser:
 
 
 def Stream(config, stdin):
-  valsibuf = morphology.Stream(config, stdin)
-  treebuf = TreeParser(valsibuf, config)
+  valsibuff = morphology.Stream(config, stdin)
+  treebuff = TreeParser(valsibuff, config)
+  return treebuff
 
 if __name__ == '__main__':
   config = Configuration(sys.argv[1:])
@@ -83,3 +84,10 @@ if __name__ == '__main__':
   p = Stream(config, sys.stdin)
   for i in p:
     print(i)
+'''
+So...
+we get the rule with the longest match! Okay, so then we have that 'rule'. Now we have to match 'rule'+following token.
+
+Except that there shouldn't be a 'longest match', it should be the only match!
+
+'''

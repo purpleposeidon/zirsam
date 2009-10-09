@@ -827,7 +827,7 @@ def main():
       pass
   else:
     for token in p:
-      if config._debug or not isinstance(token, BORING): # XXX Maybe "BORING" instead
+      if not isinstance(token, BORING): # XXX Maybe "BORING" instead
         if config._debug:
           config.debug('yielding '+str(token))
         else:
