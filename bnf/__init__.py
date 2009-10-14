@@ -8,9 +8,10 @@ Get our BNF stuff, generate it if it isn't there, or re-gen if it's old
 import os
 import sys
 import time
-
+did_CD = False
 try:
   os.chdir('bnf') #XXX - Do this more robustly
+  did_CD = True
 except:
   if not 'convert_bnf.py' in os.listdir('./'):
     raise SystemExit("Please run directly from the JBOPARSER directory")
@@ -35,8 +36,14 @@ except:
       print("Warning: BNF HTML source was modified, but don't have w3m to dump it.")
   sys.stderr.write("Converting data/lojban.bnf\n")
   os.system("python ./convert_bnf.py")
-  #os.chdir('../')
+
+#os.chdir('../')
+import sys
+sys.path.append('')
 import bnf_data
 
 BNF = bnf_data.BNF
 __all__ = ['BNF']
+
+#if did_CD:
+  

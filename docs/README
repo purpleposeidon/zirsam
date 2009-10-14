@@ -3,3 +3,17 @@ lojban.bnf is from the CLL. I made one change to the formatting; every rule is n
 BRKWORDS.TXT has my comments, I've also included the original file.
 
 unfinished_business is the todo list
+
+
+To start parsing something, first pick what depth of understanding you want. Do you want orthography, morphology, dendrography, or semantography?
+
+So, to get valsi, do:
+
+import sys
+import morphology
+import config
+
+stream = morphology.Stream(config.Configuration(), sys.stdin)
+#Stream() returns a parser, which you can iterate over.
+
+t = list(stream)

@@ -102,6 +102,7 @@ def matchall(lets, pos, values):
     
   
 def test(lets, pos, forms, match_function):
+  #XXX Give better function name
   #Look for a matching form. Returns the number of items in that form. If not, then it returns None
   rs = []
   

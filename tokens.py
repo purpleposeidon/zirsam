@@ -3,7 +3,7 @@
 #Different kinds of tokens
 
 
-from selmaho import *
+from selmaho import SELMAHO
 
 class Token:
   #The items below are a hack for the morphology module. With these values, nobody will try to re-tokenize it.
@@ -55,6 +55,7 @@ class Token:
     self.position = self.bits[0].position
     self.value = self.calculate_value()
     self.type = ...
+    self.classify()
     if config.hate_token and config.hate_token == self.value:
       #Be hatin'
       raise Exception("Tokenization Backtrace")
@@ -75,7 +76,7 @@ class Token:
       else:
         raise Exception("TODO: Detect lujvo/fu'ivla forms!") #XXX
     else:
-      #cmene, or possibly instantiated as a lujvo/gismu/fuhivla
+      #cmene, or possibly instantiated as a lujvo/gismu/fuhivla, or maybe garbage
       self.type = type(self)
 
 
@@ -84,9 +85,9 @@ class VALSI(Token): pass
 class CMENE(VALSI): pass
 class CMAVO(VALSI): pass
 class SELBRI(VALSI): pass
-#class GISMU(SELBRI): pass
-#class LUJVO(SELBRI): pass
-#class FUHIVLA(SELBRI): pass
+class GISMU(SELBRI): pass
+class LUJVO(SELBRI): pass
+class FUHIVLA(SELBRI): pass
 
 class BORING(Token): pass #Don't mention these items. BORING is a fake token
 class WHITESPACE(BORING): pass

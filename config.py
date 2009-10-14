@@ -364,7 +364,7 @@ Arguments (In no particular order):"""
       else:
         print('STRICT: ', msg, file=sys.stderr)
   
-  def __init__(self, args):
+  def __init__(self, args=None):
     """
     Configuration options to permeate the entire parser
 
@@ -375,6 +375,8 @@ Arguments (In no particular order):"""
     MESSAGE is informational and is never fatal
     STRICT is shown only if strict. It is fatal
     """
+    if args == None:
+      args = sys.argv[1:]
     self._strict = False
     self._quiet = False
     self._debug = False
