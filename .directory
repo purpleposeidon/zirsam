@@ -1,2 +1,13 @@
 [Desktop Entry]
 Icon=folder-orange
+
+[Dolphin]
+AdditionalInfo=35
+ShowPreview=false
+SortOrder=1
+Sorting=1
+Timestamp=2009,10,14,19,37,24
+ViewMode=1
+
+[Settings]
+ShowDotFiles=true

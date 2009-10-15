@@ -88,6 +88,8 @@ class SELBRI(VALSI): pass
 class GISMU(SELBRI): pass
 class LUJVO(SELBRI): pass
 class FUHIVLA(SELBRI): pass
+BRIVLA = SELBRI
+
 
 class BORING(Token): pass #Don't mention these items. BORING is a fake token
 class WHITESPACE(BORING): pass

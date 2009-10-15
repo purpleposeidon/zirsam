@@ -393,7 +393,7 @@ Arguments (In no particular order):"""
     
     self.__check_options(args)
     self.has_warnings = False
-    
+    self.parsing_unit = "sentence"
     
     
     if self.do_exit:

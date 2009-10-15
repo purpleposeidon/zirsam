@@ -85,9 +85,9 @@ class VALSI(Token): pass
 class CMENE(VALSI): pass
 class CMAVO(VALSI): pass
 class SELBRI(VALSI): pass
-#class GISMU(SELBRI): pass
-#class LUJVO(SELBRI): pass
-#class FUHIVLA(SELBRI): pass
+class GISMU(SELBRI): pass
+class LUJVO(SELBRI): pass
+class FUHIVLA(SELBRI): pass
 
 class BORING(Token): pass #Don't mention these items. BORING is a fake token
 class WHITESPACE(BORING): pass
