@@ -16,15 +16,10 @@ class selmaho:
   def __init__(self, _class, forms):
     """
     Define a new selma'o.
-    _class is the selma'o name (like KOhA)
-    forms is either a list of strings that are forms of the selma'o,
-    or a string in which each form is seperated by a space.
+    "_class" is the selma'o name (like KOhA)
+    "forms" is a string listing each member of the selma'o, seperated by a space.
     """
-    if type(forms) == str:
-      if ' 'in forms:
-        forms = forms.split(' ')
-      else:
-        forms = [forms]
+    forms = forms.split(' ')
     for form in forms:
       SELMAHO[form] = self
     #SELMAHO_DICT[_class] = forms
@@ -38,13 +33,14 @@ class selmaho:
     #return any(token.value == _ for _ in self.forms)
 
 """
-What I want.
-is_selmaho(token, SELMAhO)
-document_root(iter, config)
-
+What is this?
+      '''
+      What I want.
+      is_selmaho(token, SELMAhO)
+      document_root(iter, config)
+      '''
+For the first item, I can use token.class. "document_root"? Uhm. Whatever, just delete this at some point
 """
-
-
 
 
 #I count 122 selma'o

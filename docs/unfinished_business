@@ -3,6 +3,8 @@ Or, in other words, "TODO":
 
 ###### Soon
  - More error checking and recovery
+ + lerfu!
+ + EncodingTable vs. GlyphTable! !??!
  - Make the helper code nicer
  - Make --token-error print a backtrace on each token instead of dieing?
  + Check your dotside!
@@ -26,7 +28,8 @@ Or, in other words, "TODO":
  - Make sure I didn't accidentally change/deleting anything in BRKWORDS.txt
  - (seperate out the configuration options for each section?)
  - It would be interesting to have an option to disable line-buffering; the user could see the immediate tokenization.
- - Have bnf_loader/__init__.py check modification times for bnf sources
+ - How do I like Position?
+ - Do I like how the Configuration object is propagated?
 
 ###### Much Later
 

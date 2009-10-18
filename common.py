@@ -8,7 +8,11 @@ There are several modules with fancy latinesque names. Each handles a different 
 
   morphology
       Creates individual valsi.
-  [As of writing, the modules below aren't done/started/implemented]
+  
+  [As of writing, the modules below aren't implemented]
+  
+  thaumatology
+      A post-processor for morphology
   dendrography
       Uses the BNF to create a parse tree, and then sorts it out to make it nice and pretty. The Magic words are (?) handled by the BNF... TODO see look uhm
 
@@ -25,16 +29,26 @@ There are other files:
 
 """
 
+import sys
+
+import config
+
 #Contains the Buffer, a class used by every layer of the parser
 
 class Buffer:
   def __repr__(self):
-    return "<Buffered {0}>".format(self.iterable)
-  def __init__(self, iterable, config):
+    return "<Buffered {0}>".format(self.orig)
+  def __init__(self, iterable, conf):
+    if not hasattr(iterable, '__next__'):
+      #raise Exception("Wrap in an iterator plz")
+      self.orig = iterable
+      iterable = iter(iterable)
+    else:
+      self.orig = iterable
     self.iterable = iterable
     self.buffer = []
     self.EOF = False
-    self.config = config
+    self.config = conf
 
   def __feed_buffer(self):
     """Add a single item to the buffer"""
@@ -43,7 +57,7 @@ class Buffer:
     try:
       self.buffer.append(self.iterable.__next__())
     except (EOFError, StopIteration) as e:
-      self.config.debug("Buffer for {0} got exception {1}".format(self.iterable.__name__, e))
+      self.config.debug("{0} got exception {1}".format(self, e))
       self.EOF = True
     finally:
       if self.EOF:
@@ -84,10 +98,16 @@ class Buffer:
     self.__fill_to(i)
     return self.buffer.pop(i)
 
-def Stream(config, stdin):
+
+def Stream(conf=None, stdin=None):
   """
   This function will be found in each module that handles a level of parsing.
-  Its job is to return a Buffer that will be used by the next layer.
+  Its job is to return a Buffer that will be used by the next client.
   This one doesn't actually do anything though. :P
   """
+  if conf == None:
+    conf = config.Configuration()
+  if stdin == None:
+    stdin = sys.stdin
   pass
+

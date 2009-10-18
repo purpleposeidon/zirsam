@@ -15,7 +15,7 @@ import inspect
 from common import Buffer
 import orthography
 from orthography import valid_init_cc
-from config import Configuration
+import config
 from tokens import *
 
 """
@@ -118,12 +118,13 @@ def test(lets, pos, forms, match_function):
 
 
 class ValsiParser:
-  def __init__(self, bit_iter, config):
+  def __init__(self, bit_iter, conf):
     """
     djeims' valsi parser. It should and ought to follow the algorithm specified in docs/BRKWORDS.TXT
     """
     self.bit = bit_iter
-    self.config = config
+    self.config = conf
+    self.EOF = False
   
   def __iter__(self):
     while 1:
@@ -131,10 +132,13 @@ class ValsiParser:
         v = self.get_token()
       except EOFError:
         self.config.debug("EOF hit in ValsiParser")
+        self.EOF = True
         return
       if v == ...:
         continue
       elif v == None or v == []:
+        self.config.debug("Nothing left for ValsiParser")
+        self.EOF = True
         break
       elif type(v) in (list, tuple):
         for extra_token in v:
@@ -806,17 +810,23 @@ we: {4}""".format(self.bit.buffer, cc_location, cc, ps, word_end))
       return self.tokenize(1, GARBAGE) #What is this nonsense?
     #else we have reached the EOF, and so will return None.
 
-def Stream(config, stdin):
-  bitbuf = orthography.Stream(config, stdin)
-  valsibuf = ValsiParser(bitbuf, config)
-  return valsibuf
+
+
+def Stream(conf=None, stdin=None):
+  if conf == None:
+    conf = config.Configuration()
+  if stdin == None:
+    stdin = sys.stdin
+  
+  bitbuf = orthography.Stream(conf, stdin)
+  valsip = ValsiParser(bitbuf, conf)
+  return Buffer(valsip, conf)
 
 def main():
-  config = Configuration(sys.argv[1:])
 
-  p = Stream(config, sys.stdin)
+  p = Stream()
   
-  if config.output_no_space:
+  if p.config.output_no_space:
     raise SystemExit("Space removal not implemented")
     for token in p:
       """
@@ -829,8 +839,8 @@ def main():
   else:
     for token in p:
       if not isinstance(token, BORING): # XXX Maybe "BORING" instead
-        if config._debug:
-          config.debug('yielding '+str(token))
+        if p.config._debug: #Makes it prettier
+          p.config.debug('yielding '+str(token))
         else:
           print(token, end=' ')
         sys.stdout.flush()

@@ -12,6 +12,7 @@ TODO: unicodedata.normalize
 import sys
 
 from common import Buffer
+import config
 
 class Position:
   #Stores information on which line/col/index a character is located at
@@ -106,28 +107,7 @@ class Character:
       self.value = c
     
 
-def stream_char(fd, config):
-  #XXX TODO: Use EncodingTable
-  p = Position()
-  
-  while 1:
-    #c = fd.read(1)
-    #This is where we do that GlyphTable stuff
-    c = config.glyph_table.get_char(fd, p)
-    #assert c.lower() in "bcdfgjklmnprstvxz \n ',. aeiouy"
-    
-    if c in '':
-      yield Character('', Position(p), config)
-      break
-    else:
-      for _c in c:
-        yield Character(_c, Position(p), config)
 
-def stream_bit(fd):
-  while 1:
-    if fd.EOF:
-      break
-    yield Bit(fd)
 
 class Bit:
   """Stores a logical sequence of characters"""
@@ -302,7 +282,7 @@ def valid_init_cc(bit):
   raise Exception("Miscall with " + str(bit))
 
 class __NiceStdin:
-  #import readline and use the input() function to get data; this allows editing of text
+  #Use the input() function to get data; this allows editing of text
   def __init__(self):
     self.chars = ''
   def read(self, i=1):
@@ -321,24 +301,50 @@ class __NiceStdin:
     return x
     
 
-def Stream(config, stdin):
-  if stdin.isatty(): #Should we enable GNU readline?
+def stream_char(fd, config):
+  #XXX TODO: Use EncodingTable
+  p = Position()
+
+  while 1:
+    #c = fd.read(1)
+    #This is where we do that GlyphTable stuff
+    c = config.glyph_table.get_char(fd, p)
+    #assert c.lower() in "bcdfgjklmnprstvxz \n ',. aeiouy"
+
+    if c in '':
+      yield Character('\n', Position(p), config) # haXXX, if morphology doesn't get a whitespace at the end it doesn't give up the last token
+      yield Character('', Position(p), config)
+      break
+    else:
+      for _c in c:
+        yield Character(_c, Position(p), config)
+
+def stream_bit(fd):
+  while 1:
+    if fd.EOF:
+      break
+    yield Bit(fd)
+
+def Stream(conf=None, stdin=None):
+  if conf == None:
+    conf = config.Configuration()
+  if stdin == None:
+    stdin = sys.stdin
+  
+  if stdin.isatty() and conf.permit_readline: #Should we enable GNU readline?
     try:
       import readline
       #If this succeeds, then it is enabled for the input() function
       stdin = __NiceStdin()
     except ImportError:
       pass
-  charbuf = Buffer(stream_char(stdin, config), config)
-  bitbuf = Buffer(stream_bit(charbuf), config)
+  charbuf = Buffer(stream_char(stdin, conf), conf)
+  bitbuf = Buffer(stream_bit(charbuf), conf)
   return bitbuf
 
 if __name__ == '__main__':
   print("Shows how the clusters of letters are viewed internally to the parser.", file=sys.stderr)
-  from config import Configuration
-  config = Configuration(sys.argv[1:])
-  
-  bitbuf = Stream(config, sys.stdin)
+  bitbuf = Stream()
   i = []
   for bit in bitbuf:
     i.append(bit)

@@ -344,6 +344,7 @@ Arguments (In no particular order):"""
       raise SystemExit(1)
   
   def message(self, msg, position=None):
+    #Discussion: Should position be required?
     if not self._quiet:
       if position:
         print('MESSAGE: ', position, ': ', msg, sep='', file=sys.stderr)
@@ -377,7 +378,7 @@ Arguments (In no particular order):"""
     """
     if args == None:
       args = sys.argv[1:]
-    self._strict = False
+    self._strict = False #XXX - organize by layer
     self._quiet = False
     self._debug = False
     self.print_tokens = False
@@ -389,12 +390,19 @@ Arguments (In no particular order):"""
     self.forbid_warn = False
     self.output_no_space = False
     self.hate_token = None #If we see this token, raise Exception
-    
+    self.permit_readline = True
     
     self.__check_options(args)
     self.has_warnings = False
     self.parsing_unit = "sentence"
-    
+
+    #magic-words stuff
+    self.allow_erasure = True
+    self.si_depth = 5 #Store always at least 5 words for si erasure
+    self.handle_su = True #Don't flush until EOT in case we find a su
+    self.handle_sa = True #Don't flush for a sentence?
+    self.flush_on = None #I or NIhO?
+    self.end_on_faho = True #Treat FAhO as EOT, or uhm... don't yield it...?
     
     if self.do_exit:
       raise SystemExit

@@ -2,7 +2,7 @@
 
 #Different kinds of tokens
 
-
+import orthography #Amusingly enough, modules can recursively import eachother
 from selmaho import SELMAHO
 
 class Token:
@@ -16,22 +16,38 @@ class Token:
     r = type(self).__name__+'('
     for i in self.bits:
       r += repr(i)
-    return r+repr(self.bits[0].position)+')'
+    end = ''
+    if self.content:
+      end += ' ' + repr(self.content)
+    if self.end:
+      end += ':' + repr(self.end)
+    return r+repr(self.bits[0].position)+end+')'
 
   def __str__(self):
-    #r = ''
-    #for b in self.bits:
-      #r += str(b)
-    return "{0}({1})".format(type(self).__name__, self.value)
+    val = str(self.value)
+    if self.content:
+      val += ' ' + str(self.content)
+    if self.end:
+      val += ':' + str(self.end)
+    return "{0}({1})".format(type(self).__name__, val)
 
-  def calculate_value(self):
+  def calculate_value(self, config):
     """
     Return the ascii value of the token
     """
     #Assemble a string out of the values of every bit
     v = ''
+    bad_bit = False
     for bit in self.bits:
       v += bit.value
+      if not isinstance(bit, orthography.Bit):
+        bad_bit = True
+
+    if bad_bit:
+      ##config.warn("Observation: A token of non-bits has been made, so it might have a weird value", self.bits[0].position)
+      ##config.debug(repr(self.bits)+'='+v, self.bits[0].position)
+      return v
+      
     #Check for irregular stress. If the stress is regular, then we can do str.lower()
     #We want penultimate stress.
     stressed_regularly = ...
@@ -53,9 +69,11 @@ class Token:
     if not len(bits):
       config.error("Trying to tokenize nothing!")
     self.position = self.bits[0].position
-    self.value = self.calculate_value()
+    self.value = self.calculate_value(config)
     self.type = ...
     self.classify()
+    self.content = None
+    self.end = None
     if config.hate_token and config.hate_token == self.value:
       #Be hatin'
       raise Exception("Tokenization Backtrace")
@@ -80,22 +98,25 @@ class Token:
       self.type = type(self)
 
 
+
 class VALSI(Token): pass
-
-class CMENE(VALSI): pass
-class CMAVO(VALSI): pass
-class SELBRI(VALSI): pass
-class GISMU(SELBRI): pass
-class LUJVO(SELBRI): pass
-class FUHIVLA(SELBRI): pass
-BRIVLA = SELBRI
-
-
-class BORING(Token): pass #Don't mention these items. BORING is a fake token
-class WHITESPACE(BORING): pass
+class   CMENE(VALSI): pass
+class   CMAVO(VALSI): pass
+class   SELBRI(VALSI): pass
+class     GISMU(SELBRI): pass
+class     LUJVO(SELBRI): pass
+class     FUHIVLA(SELBRI): pass
+BRIVLA = SELBRI #I prefer SELBRI, lojban.bnf uses BRIVLA  XXX could replace it in the BNF
 
 
-class EXTRA(Token): pass #
-class GARBAGE(EXTRA): pass
-class PERIOD(EXTRA, BORING): pass
-class HESITATION(EXTRA): pass
+class EXTRA(Token): pass #Something that can't be parsed
+class   GARBAGE(EXTRA): pass
+class   NONLOJBAN(EXTRA): pass
+
+
+class BORING(Token): pass #tokens don't uffect meaning; lower-level clients might want access to them tho
+class   WHITESPACE(BORING): pass
+class   PERIOD(BORING): pass
+class   HESITATION(BORING): pass
+class   DELETED(BORING): pass
+

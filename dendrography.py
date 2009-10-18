@@ -37,15 +37,22 @@ class Node:
     pass
 
 
+def match_bnf(tokens, start=None):
+  #Returns a list of every rule that tokens matches
+  #So, what about excluding items?
+  if start is None:
+    start = BNF.keys()
+  matches = []
+  for test in start:
+    if BNF[test].match(tokens):
+      matches.append(test]
+  return matches
+
 class GrammarParser:
   def __init__(self, token_iter, config):
     self.valsi = token_iter
     self.config = config
 
-  def parse(self):
-    """
-    Parse everything at once, make a big tree
-    """
 
   def parse_to(self, top_rule):
     """When the rule "top_rule" has been fullfilled, return the value."""
@@ -60,8 +67,12 @@ class GrammarParser:
     ...
 
 
-def Stream(config, stdin):
-  valsibuff = morphology.Stream(config, stdin)
+def Stream(conf=None, stdin=None):
+  if conf == None:
+    conf = config.Configuration()
+  if stdin == None:
+    stdin = sys.stdin
+  valsibuff = thaumatology.Stream(config, stdin)
   treebuff = GrammarParser(valsibuff, config)
   return treebuff
 
