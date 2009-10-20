@@ -92,7 +92,8 @@ class Token:
       elif self.bits[0].C and self.bits[1].V and self.bits[2].CC and self.bits[3].V:
         self.type = GISMU
       else:
-        raise Exception("TODO: Detect lujvo/fu'ivla forms!") #XXX
+        self.type = SELBRI
+        #raise Exception("TODO: Detect lujvo/fu'ivla forms!") #XXX
     else:
       #cmene, or possibly instantiated as a lujvo/gismu/fuhivla, or maybe garbage
       self.type = type(self)

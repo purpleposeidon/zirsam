@@ -11,7 +11,7 @@ TODO: unicodedata.normalize
 """
 import sys
 
-from common import Buffer
+import common
 import config
 
 class Position:
@@ -39,28 +39,32 @@ class Position:
 
 
 
+
+
+
+
+def clean_val(v):
+  #Escapes stuff if neccessary. "\n" -> "\\n"
+  if v == '\\': return '\\'
+  return repr(v)[1:-1]
+
 class Character:
-  def clean_val(v):
-    #Escapes stuff if neccessary. "\n" -> "\\n"
-    return repr(v)[1:-1]
-#    if '\\' in repr(v):
-#      return repr(v)[1:-1]
-#    else:
-#      return str(v)
-  
   def __str__(self):
-    return Character.clean_val(self.value)
+    return clean_val(self.value)
   
   def __repr__(self):
-    return str(self)
     #return "{0}={1}".format(self, self.value)
     #return "<{0} {1}>".format(self.value, self.position)
-  
+    return str(self)
   
   def __init__(self, c, position, config):
-    self.original = c
+    """
+    A single character. 
+    """
+    #self.original = c
     assert position != None
     self.position = position
+    self.value = c
     
     self.accented = False
     self.V = False
@@ -73,60 +77,55 @@ class Character:
     self.garbage = False
     self.EOF = False
     
-    
     if c == '':
       self.EOF = True
-      self.value = ''
     elif c in 'AEIOU':
-      self.value = c
       self.accented = True
       self.V = True
     elif c in 'aeiou':
-      self.value = c
       self.V = True
     elif c in "bcdfgjklmnprstvxz":
-      self.value = c.lower()
       self.C = True
     elif c in 'y':
-      self.value = 'y'
       self.y = True
     elif c in ',': 
-      self.value = ','
       self.comma = True
     elif c in '.':
-      self.value = '.'
       self.period = True
     elif c in "'":
-      self.value = "'"
       self.h = True
-    elif c in ' \t\n\r':
-      self.value = c
+    elif c in ' \t\n\r': #Could be put into config or something
       self.whitespace = True
     else:
       self.garbage = True
-      self.value = c
     
-
 
 
 class Bit:
   """Stores a logical sequence of characters"""
-  def __len__(self):
-    return len(self.chars)
   def __str__(self):
     r = ''
     for c in self.chars:
-      r += c.original
+      r += c.value
     return r
-  def __getitem__(self, index):
-    return self.chars[index]
+  
   def __repr__(self):
     r = '<'
     for c in self.chars:
       r += str(c)
     r += '>'
     return r
+  
+  def __len__(self):
+    return len(self.chars)
+  
+  def __getitem__(self, index):
+    return self.chars[index]
+  
   def __init__(self, fd):
+    """
+    Create a group of characters
+    """
     self.chars = None
     self.value = ''
     
@@ -142,13 +141,13 @@ class Bit:
     
     self.counts_CC = False
     self.has_C = False
-    self.accented = False
     
     self.V = False
     self.VV = False
     self.VhV = False
     self.counts_VV = False
     self.has_V = False
+    self.accented = False
     
     self.h = False
     self.y = False
@@ -254,6 +253,7 @@ class Bit:
 
 __VALID_INIT_CC = "bl br cf ck cl cm cn cp cr ct dj dr dz fl fr gl gr jb jd jg jm jv kl kr ml mr pl pr sf sk sl sm sn sp sr st tc tr ts vl vr xl xr zb zd zg zm zv".split(' ')
 def valid_init_cc(bit):
+  #XXX I bet I only use one of these if's
   if type(bit) == list:
     assert len(bit) == 2
     assert all(type(x) == str for x in bit)
@@ -282,15 +282,14 @@ def valid_init_cc(bit):
   raise Exception("Miscall with " + str(bit))
 
 class __NiceStdin:
-  #Use the input() function to get data; this allows editing of text
+  #Use the input() function to get data; this allows the use of GNU readline to edit the text
   def __init__(self):
     self.chars = ''
   def read(self, i=1):
     if len(self.chars) == 0:
       if 1: #not self.EOF or 1:
         try:
-          l = input() #like python2.x's raw_input()
-          l += '\n' #input() strips the newline
+          l = input() + '\n' #input() strips the newline
         except EOFError:
           l = ''
         self.chars += l
@@ -307,16 +306,17 @@ def stream_char(fd, config):
   while 1:
     #c = fd.read(1)
     #This is where we do that GlyphTable stuff
-    c = config.glyph_table.get_char(fd, p)
+    c = config.glyph_table.get_char(fd, p, config)
     #assert c.lower() in "bcdfgjklmnprstvxz \n ',. aeiouy"
 
-    if c in '':
+    if c == []:
       yield Character('\n', Position(p), config) # haXXX, if morphology doesn't get a whitespace at the end it doesn't give up the last token
       yield Character('', Position(p), config)
       break
     else:
       for _c in c:
-        yield Character(_c, Position(p), config)
+        yield _c
+        #yield Character(_c, Position(p), config)
 
 def stream_bit(fd):
   while 1:
@@ -337,15 +337,18 @@ def Stream(conf=None, stdin=None):
       stdin = __NiceStdin()
     except ImportError:
       pass
-  charbuf = Buffer(stream_char(stdin, conf), conf)
-  bitbuf = Buffer(stream_bit(charbuf), conf)
+  charbuf = common.Buffer(stream_char(stdin, conf), conf)
+  bitbuf = common.Buffer(stream_bit(charbuf), conf)
   return bitbuf
 
 if __name__ == '__main__':
-  print("Shows how the clusters of letters are viewed internally to the parser.", file=sys.stderr)
+  print("Shows the grouping of letter clusters", file=sys.stderr)
   bitbuf = Stream()
   i = []
   for bit in bitbuf:
     i.append(bit)
-    print(bit.position, ": ", repr(bit), sep='')
+    if bitbuf.config._debug:
+      print(bit.position, ": ", repr(bit), sep='')
+    else:
+      print(repr(bit), end='')
   print()

@@ -1,8 +1,14 @@
 
+
 Or, in other words, "TODO":
+
+###### !!Now!!
+  
 
 ###### Soon
  - More error checking and recovery
+ + lerfu!
+ + EncodingTable vs. GlyphTable! !??!
  - Make the helper code nicer
  - Make --token-error print a backtrace on each token instead of dieing?
  + Check your dotside!
@@ -25,7 +31,9 @@ Or, in other words, "TODO":
  - Make sure I didn't accidentally change/deleting anything in BRKWORDS.txt
  - (seperate out the configuration options for each section?)
  - It would be interesting to have an option to disable line-buffering; the user could see the immediate tokenization.
- - Have bnf_loader/__init__.py check modification times for bnf sources
+ - How do I like Position?
+ - Do I like how the Configuration object is propagated?
+ - Make GlyphTable handle multi-length inputs?
 
 ###### Much Later
 
@@ -44,3 +52,9 @@ Or, in other words, "TODO":
  + Use GNU readline! Not being able to edit lines in jbofihe is /so/ annoying
  + Go through morph_test_sentences.txt (And also, get a URL and an original copy)
     (Okay, only half-heartedly. It wasn't so useful.)
+ - Make stream(config, stdin) more like stream(stdin, config=None) and make config take care of itself
+ - Make thaumatology.py not print valsi type
+Ortohgraphy - what happens to capitalized letters with strict ortho?
+    * they are garbage
+  Resolve recursive import failures
+    * done

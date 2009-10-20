@@ -29,7 +29,7 @@ class Token:
       val += ' ' + str(self.content)
     if self.end:
       val += ':' + str(self.end)
-    return "{0}({1})".format(type(self).__name__, value)
+    return "{0}({1})".format(type(self).__name__, val)
 
   def calculate_value(self, config):
     """

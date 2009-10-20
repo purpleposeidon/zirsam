@@ -6,201 +6,8 @@ Which is the REAL zirsam.py file? Perhaps I'll just make a seperate file to hand
 """
 
 import sys
+import alphabets
 
-
-class GlyphTable2(dict):
-  tables = {} #Dictionary of the GlyphTable objects
-  def __repr__(self):
-    return "<GlyphTable {0}>".format(self.name)
-
-  def get_char(self, fd, pos):
-    #Return a list of retrieved characters
-    while 1:
-      
-
-  def __init__(self, name, mapping):
-    """
-    mapping is a dictionary with keys of single 'foreign' characters, and values of their latin equivalents.
-    Some special cases:
-      End Of File character: ''
-      Ignored Character: None
-
-    A single foreign character may map to multiple latin characters (such as '1' to 'pa'). More advanced implementations than this are free to map multiple foreign characters to any amount of latin ones (maybe 'lol' to "u'i").
-
-    If the mapping doesn't define how to handle some character, that character's actual value is returned.
-    """
-    dict.__init__(self, mapping)
-    self.name = name
-    GlyphTable2.tables[self.name] = self
-
-class GlyphTable(dict):
-  tables = {}
-  """A map of funny characters to latin ones. Its capabilities are:
-    * Multiple foreign characters can be linked to a single latin character
-    * Multiple foreign characters can be linked to a string of latin characters
-  It can not map a string of foreign characters to latin characters. """
-  latin_lower = "b c d f g h j k l m n p r s t v x z a e i o u y ' . ,".split(' ')
-  latin_upper = 'B C D F G H J K L M N P R S T V X Z A E I O U Y " . ,'.split(' ')
-  def __repr__(self):
-    return "<GlyphTable {0}>".format(self.name)
-  def get_char(self, fd, pos):
-    #Uses the file-like object fd to return a single latin character.
-    
-    accent_next = False
-    unaccent_next = False
-    while 1:
-      print('|', "getting character")
-      c = fd.read(1)
-      print('|', "got", repr(c))
-      if c == '': return ''
-      if 'EOF' in self and c in self["EOF"]: return ''
-      
-      if pos:
-        if c in self and self[c] == '\n':
-          pos.pushline()
-        else:
-          pos.pushcol()
-      
-      if self.ignore and c in self.ignore:
-        continue
-      elif self.accentmark and c in self.accentmark:
-        accent_next = True
-      elif self.unaccentmark and c in self.unaccentmark:
-        unaccent_next = False
-      elif self.accenton and c in self.accenton:
-        self.accent_locked_on = True
-      elif self.accentoff and c in self.accentoff:
-        self.accent_locked_on = False
-      else:
-        if c in self:
-          l = self[c] #This is a latin letter
-          print("|", repr(c), "is mapped to", repr(l))
-          if accent_next or self.accent_locked_on:
-            return l.upper()
-          elif unaccent_next:
-            return l.lower()
-          else:
-            return l
-        else:
-          print("|", repr(c), "is unknown, returning itself")
-          return c #Possibly garbage. Or zoi-quote'd
-      accent_next = False
-      unaccent_next = False
-    
-    
-  def __init__(self, name, foreign_lower, foreign_upper, accentmark=None, unaccentmark=None, accenton=None, accentoff=None, extra={}, newline='\n', ignore='\r', eof=['','\0','\x0c','\x06']):
-    """
-    name is the name of the alphabet
-    foreign_lower is a string of lower case characters, seperated by spaces. They do not imply accent. If multiple foreign letters map to a single latin letter, do not seperate them with a space
-    foreign_upper is in a similiar format, except that these letters imply accent. You may specify None, but you'll want to define some kind of accent marking.
-    accentmark is a string of characters that mean, "The next character is accented"
-    unaccentmark is similiar
-    accenton is a string of characters that mean, "Everything following is accented"
-    accentoff is a string of characters that mean, "Everything following is unaccented"
-    accenton/accentoff characters are not matched. For example, if you have "<^" as accenton and ">v" as accentoff, "<ava" will be translated to "Aa"
-    extra is a dictionary in form {latin_character:list_of_foreign_characters}. For example, you could map chinese numeral characters to equivalent latin ones. (The latin_character key doesn't have to be a single character)
-    """
-    dict.__init__(self)
-    self.name = name
-    GlyphTable.tables[self.name] = self
-    self.accentmark = accentmark #This means the next character is accented
-    self.unaccentmark = unaccentmark #This means the next character is not accented
-    self.accenton = accenton #This means everything following is accented
-    self.accentoff = accentoff #This means everything following is not accented
-    
-    self.accent_locked_on = False
-    
-    if type(foreign_lower) == str:
-      foreign_lower = foreign_lower.split()
-    if type(foreign_upper) == str:
-      foreign_upper = foreign_upper.split()
-    
-    
-    for latin, foreign in zip(GlyphTable.latin_lower, foreign_lower):
-      for c in foreign:
-        self[c] = latin
-    if foreign_upper:
-      for latin, foreign in zip(GlyphTable.latin_upper, foreign_upper):
-        for c in foreign:
-          self[c] = latin
-    
-    for foreign in extra:
-      self[foreign] = extra[foreign]
-    self[newline] = '\n'
-    self.ignore = ignore
-
-
-
-
-
-#Character classes
-_whitespace = ' \t\n\r'
-_low_vowel = 'aeiou'
-
-#Only warrior-types use macrons
-#I think somebody mentioned that {ä} goes to {'a}?
-_A = "AáÁàÀ" #āĀ
-_E = "EéÉèÈ" #ēĒ
-_I = "IíÍìÌ" #īĪ
-_O = "OóÓòÒ" #ōŌ
-_U = "UúÚùÙ" #ūŪ
-_accent_vowel = _A+_E+_I+_O+_U
-_con = 'bcdfgjklmnprstvxz'
-_y = 'yY'
-_h = "'h\"H"
-_comma = ','
-_period = "."
-_eof = ['', '\00', '\x0c', '\x06'] #Empty string, null character, ^L, ^F. Maybe ^L could be turned into ni'o?
-
-
-
-
-
-
-
-
-#The default, strict alphabet
-strict_alphabet = GlyphTable("strict", GlyphTable.latin_lower, GlyphTable.latin_upper) #Doesn't convert capitalized consonants
-latin_alphabet = GlyphTable("latin", GlyphTable.latin_lower, GlyphTable.latin_upper, extra={'B':'b', 'C':'c', 'D':'d', 'F':'f', 'G':'g', 'J':'j', 'K':'k', 'L':'l', 'M':'m', 'N':'n', 'P':'p', 'R':'r', 'S':'s', 'T':'t', 'V':'v', 'X':'x', 'Z':'z'}) #'
-# XXX NOTE: This is from Wikipedia. I can not verify if it is correct. All the CLL I've seen seem to have display issues. Can somebody verify this?
-ipa_alphabet = GlyphTable("ipa", "b ʃʂ d fɸ g ʒʐ k lɭ mɱ nɳɲŋ p rɾɹʀ s t vβ x z aɑ eɛ i oɔ u ə hθ .ʔ ,".split(), None, accentmark='^')
-#As this is also from Wikipedia, maybe it could also use some verification from a Cyrillic-user
-cyrillic_alphabet = GlyphTable("cyrillic", "б ш д ф г ж к л м н  п р  с т в х з а е и о у ъ ' . ,".split(),  'Б Ш Д Ф Г Ж К Л М Н  П Р  С Т В Х З А Е И О У Ъ " . ,'.split())
-_s = "bb S d f g Z k l mnN p rR s t uvB x z aA Ee I oO u @ h ?".split(' ')
-sampa_alphabet = GlyphTable("sampa", _s, _s)
-
-test_alphabet = GlyphTable("test", "c c c c c c c c c c c c c c c c c c e e e e e y ' . ,", "K K K K K K K K K K K K K K K K K K A A A A A y ' . ,")
-null_alphabet = GlyphTable("null", "", "")
-del _s
-
-
-
-#And now, for the fun stuff! :D
-
-#P3rm1t teh 1337s
-_PA_map = {'1':'pa', '2':'re', '3':'ci', '4':'vo', '5':'mu', '6':'xa', '7':'ze', '8':'bi', '9':'so', '0':'no'}
-leet_alphabet = GlyphTable("leet", GlyphTable.latin_lower, GlyphTable.latin_upper, extra=_PA_map)
-
-#Permíts all mannèr of áccents
-#(But first, do a bit of voodoo on those character lists)
-accent_extra = {}
-_v = {'A':_A, 'E':_E, "I":_I, "O":_O, "U":_U}
-for vowel in _v:
-  for extra in _v[vowel]:
-    accent_extra[extra] = vowel
-
-accent_alphabet = GlyphTable("latin+accent", GlyphTable.latin_lower, GlyphTable.latin_upper, extra=accent_extra)
-
-
-leet_accent_extra = dict(accent_extra, **_PA_map) #(I love that dict trick. It merges two dictionaries)
-leet_accent_alphabet = GlyphTable("leet+accent", GlyphTable.latin_lower, GlyphTable.latin_upper, extra=leet_accent_extra)
-
-
-#And now, for the best one:
-liberal_extra = dict(leet_accent_extra, **{"Y":'y', "h":"'", "H":"'", '!':'sai'})
-liberal_alphabet = GlyphTable("liberal", GlyphTable.latin_lower, GlyphTable.latin_upper, extra=liberal_extra)
-
-microblog_alphabet = GlyphTable("microblog", GlyphTable.latin_lower, GlyphTable.latin_upper, ignore='@!#\r')
 
 
 def format_arg(w):
@@ -213,14 +20,14 @@ class Configuration:
 Jbobau to parse is read from standard input. Parsed text is sent to stdout, errors and messages are sent to stderr.
 If an error prevents the text from being fully parsed, a non-zero value is returned.
 
-Arguments (In no particular order):"""
-  __help = {'help':"Shows this help", \
+Arguments:"""
+  __help = {'help':"Shows this message", \
   'quiet':"Don't print warnings", \
-  'err2out':"Write what would normally go to stderr to the output", \
+  'err2out':"Write what would normally go to stderr to stdout", \
   
   'alphabet':"Select alphabet. --alphabet=? lists available values. The default is 'latin'", \
   
-  'no dotside':"Don't require a pause following cmene-markers", \
+  'no dotside':"Don't require a pause following cmene-markers (XXX CHECKME)", \
   'forbid warn':"Treat warnings as errors", \
   'strict':"Count warnings as errors", \
   
@@ -255,14 +62,14 @@ Arguments (In no particular order):"""
           if val in val_dict:
             r = val
           elif val == '?' or val == '':
-            r = 'Usage: --{0}=VALUE. Possible values for {0} are:\n'.format(name)
+            r = 'Usage for --{0}=VALUE\n  Possible values for {0} are:\n'.format(name)
             for v in val_dict:
               r += '\t{0}\n'.format(v)
             raise SystemExit(r)
           else:
             raise Exception("{0} is an invalid value for --{1}".format(repr(val), name))
         elif arg.find('--'+name) == 0:
-          r = 'Usage: --{0}=VALUE. Possible values for {0} are:\n'.format(name)
+          r = 'Usage for --{0}=VALUE\n  Possible values for {0} are:\n'.format(name)
           for v in val_dict:
             r += '\t{0}\n'.format(v)
           raise SystemExit(r)
@@ -288,7 +95,7 @@ Arguments (In no particular order):"""
       print(Configuration.__help_header, file=sys.stderr)
       #for cmd in Configuration.__help:
       for cmd in Configuration.__help_order:
-        print("    {0}: {1}".format(format_arg(cmd), Configuration.__help[cmd]), file=sys.stderr)
+        print("    {0}:\n\t{1}".format(format_arg(cmd), Configuration.__help[cmd]), file=sys.stderr)
       self.do_exit = True
     if arg('strict'):
       self._strict = True
@@ -313,7 +120,7 @@ Arguments (In no particular order):"""
       sys.stderr = sys.stdout # XXX Make this Configuration's output
     if arg("no space"):
       self.output_no_space = True
-    _ = valued_arg("alphabet", GlyphTable.tables)
+    _ = valued_arg("alphabet", alphabets.GlyphTable.tables)
     if _: self.glyph_table = _
     _ = valued_arg("hate token")
     if _: self.hate_token = _
@@ -400,7 +207,7 @@ Arguments (In no particular order):"""
     self.ascii_only = False
     self.token_error = False
     self.do_exit = False
-    self.glyph_table = latin_alphabet
+    self.glyph_table = alphabets.GlyphTable.tables['latin']
     self.forbid_warn = False
     self.output_no_space = False
     self.hate_token = None #If we see this token, raise Exception
