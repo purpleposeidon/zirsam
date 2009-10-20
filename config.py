@@ -8,8 +8,30 @@ Which is the REAL zirsam.py file? Perhaps I'll just make a seperate file to hand
 import sys
 
 
+class GlyphTable2(dict):
+  tables = {} #Dictionary of the GlyphTable objects
+  def __repr__(self):
+    return "<GlyphTable {0}>".format(self.name)
 
+  def get_char(self, fd, pos):
+    #Return a list of retrieved characters
+    while 1:
+      
 
+  def __init__(self, name, mapping):
+    """
+    mapping is a dictionary with keys of single 'foreign' characters, and values of their latin equivalents.
+    Some special cases:
+      End Of File character: ''
+      Ignored Character: None
+
+    A single foreign character may map to multiple latin characters (such as '1' to 'pa'). More advanced implementations than this are free to map multiple foreign characters to any amount of latin ones (maybe 'lol' to "u'i").
+
+    If the mapping doesn't define how to handle some character, that character's actual value is returned.
+    """
+    dict.__init__(self, mapping)
+    self.name = name
+    GlyphTable2.tables[self.name] = self
 
 class GlyphTable(dict):
   tables = {}
@@ -20,19 +42,24 @@ class GlyphTable(dict):
   latin_lower = "b c d f g h j k l m n p r s t v x z a e i o u y ' . ,".split(' ')
   latin_upper = 'B C D F G H J K L M N P R S T V X Z A E I O U Y " . ,'.split(' ')
   def __repr__(self):
-    return "<{0}>".format(self.name)
+    return "<GlyphTable {0}>".format(self.name)
   def get_char(self, fd, pos):
     #Uses the file-like object fd to return a single latin character.
-    c = fd.read(1)
-    if c == '': return ''
-    if 'EOF' in self and c in self["EOF"]: return ''
+    
     accent_next = False
     unaccent_next = False
     while 1:
-      if c in self and self[c] == '\n':
-        pos.pushline()
-      else:
-        pos.pushcol()
+      print('|', "getting character")
+      c = fd.read(1)
+      print('|', "got", repr(c))
+      if c == '': return ''
+      if 'EOF' in self and c in self["EOF"]: return ''
+      
+      if pos:
+        if c in self and self[c] == '\n':
+          pos.pushline()
+        else:
+          pos.pushcol()
       
       if self.ignore and c in self.ignore:
         continue
@@ -47,6 +74,7 @@ class GlyphTable(dict):
       else:
         if c in self:
           l = self[c] #This is a latin letter
+          print("|", repr(c), "is mapped to", repr(l))
           if accent_next or self.accent_locked_on:
             return l.upper()
           elif unaccent_next:
@@ -54,6 +82,7 @@ class GlyphTable(dict):
           else:
             return l
         else:
+          print("|", repr(c), "is unknown, returning itself")
           return c #Possibly garbage. Or zoi-quote'd
       accent_next = False
       unaccent_next = False
@@ -139,6 +168,9 @@ ipa_alphabet = GlyphTable("ipa", "b ʃʂ d fɸ g ʒʐ k lɭ mɱ nɳɲŋ p rɾɹ�
 cyrillic_alphabet = GlyphTable("cyrillic", "б ш д ф г ж к л м н  п р  с т в х з а е и о у ъ ' . ,".split(),  'Б Ш Д Ф Г Ж К Л М Н  П Р  С Т В Х З А Е И О У Ъ " . ,'.split())
 _s = "bb S d f g Z k l mnN p rR s t uvB x z aA Ee I oO u @ h ?".split(' ')
 sampa_alphabet = GlyphTable("sampa", _s, _s)
+
+test_alphabet = GlyphTable("test", "c c c c c c c c c c c c c c c c c c e e e e e y ' . ,", "K K K K K K K K K K K K K K K K K K A A A A A y ' . ,")
+null_alphabet = GlyphTable("null", "", "")
 del _s
 
 
@@ -275,28 +307,8 @@ Arguments (In no particular order):"""
       self.dotside = False
     if arg("do exit"):
       self.do_exit = True
-    #if arg("latin"):
-      #self.glyph_table = latin_alphabet
-    #if arg("ipa"):
-      #self.glyph_table = ipa_alphabet
-    #if arg("cyrillic"):
-      #self.glyph_table = cyrillic_alphabet
     if arg("forbid warn"):
       self.forbid_warn = True
-    #if arg("1337"):
-      #if self.glyph_table == accent_alphabet:
-        #self.glyph_table = leet_accent_alphabet
-      #else:
-        #self.glyph_table = leet_alphabet
-    #if arg("accent"):
-      #if self.glyph_table == leet_alphabet:
-        #self.glyph_table = leet_accent_alphabet
-      #else:
-        #self.glyph_table = accent_alphabet
-    #if arg("microblog"):
-      #self.glyph_table = microblog_alphabet
-    #if arg("liberal"):
-      #self.gyph_table = liberal_alphabet
     if arg("err2out"):
       sys.stderr = sys.stdout # XXX Make this Configuration's output
     if arg("no space"):
@@ -378,9 +390,11 @@ Arguments (In no particular order):"""
     """
     if args == None:
       args = sys.argv[1:]
-    self._strict = False #XXX - organize by layer
+    self._strict = False
     self._quiet = False
     self._debug = False
+    
+    #XXX TODO - organize these variables by parsing layer
     self.print_tokens = False
     self.dotside = True
     self.ascii_only = False

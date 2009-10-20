@@ -20,7 +20,8 @@ A thought:
 import sys
 
 from config import Configuration
-import morphology
+from common import Buffer
+import thaumatology
 from bnf import BNF
 
 REVERSE_BNF = {}
@@ -45,7 +46,7 @@ def match_bnf(tokens, start=None):
   matches = []
   for test in start:
     if BNF[test].match(tokens):
-      matches.append(test]
+      matches.append(test)
   return matches
 
 class GrammarParser:
@@ -69,17 +70,15 @@ class GrammarParser:
 
 def Stream(conf=None, stdin=None):
   if conf == None:
-    conf = config.Configuration()
+    conf = Configuration()
   if stdin == None:
     stdin = sys.stdin
-  valsibuff = thaumatology.Stream(config, stdin)
-  treebuff = GrammarParser(valsibuff, config)
-  return treebuff
+  valsibuff = thaumatology.Stream(conf, stdin)
+  treebuff = GrammarParser(valsibuff, conf)
+  return Buffer(treebuff, conf)
 
 if __name__ == '__main__':
-  config = Configuration()
-  
-  p = Stream(config, sys.stdin)
+  p = Stream()
   for i in p:
     print(i)
 '''

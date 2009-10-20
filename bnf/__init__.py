@@ -49,6 +49,8 @@ import sys
 sys.path.append('')
 try:
   import bnf_data
+  import magic_bnf
+  magic_bnf.BNF = bnf_data.BNF
   BNF = bnf_data.BNF
 except:
   raise SystemExit("Unable to load BNF data. Some possible causes: Not being run from the correct directory, bad regexp applied to lojban.bnf, missing lojban.bnf, incorrect syntax in lojban.bnf")
@@ -56,6 +58,8 @@ __all__ = ['BNF']
 
 if needs_redo:
   print("lojban BNF sucessfuly loaded!", file=sys.stderr)
+
+
 
 #if did_CD:
   

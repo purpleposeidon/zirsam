@@ -302,7 +302,6 @@ class __NiceStdin:
     
 
 def stream_char(fd, config):
-  #XXX TODO: Use EncodingTable
   p = Position()
 
   while 1:
