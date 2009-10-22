@@ -12,24 +12,32 @@ class Token:
   y = False
   counts_CC = False
 
+  def __getname(self):
+    if self.type == ...:
+      return type(self).__name__
+    else:
+      return self.type.__name__
+
   def __repr__(self):
-    r = type(self).__name__+'('
+    return str(self)
+    #The below is more informative, but fugly
+    r = self.__getname()+'('
     for i in self.bits:
       r += repr(i)
     end = ''
     if self.content:
-      end += ' ' + repr(self.content)
+      end += ', content=' + repr(self.content)
     if self.end:
-      end += ':' + repr(self.end)
+      end += ', end=' + repr(self.end)
     return r+repr(self.bits[0].position)+end+')'
 
   def __str__(self):
     val = str(self.value)
     if self.content:
-      val += ' ' + str(self.content)
+      val += ', content=' + str(self.content)
     if self.end:
-      val += ':' + str(self.end)
-    return "{0}({1})".format(type(self).__name__, val)
+      val += ', end=' + str(self.end)
+    return "{0}({1})".format(self.__getname(), val)
 
   def calculate_value(self, config):
     """
@@ -71,19 +79,23 @@ class Token:
     self.position = self.bits[0].position
     self.value = self.calculate_value(config)
     self.type = ...
-    self.classify()
+    self.classify(config)
     self.content = None
     self.end = None
     if config.hate_token and config.hate_token == self.value:
       #Be hatin'
       raise Exception("Tokenization Backtrace")
 
-  def classify(self):
+  def classify(self, config):
     if self.type != ...:
       return
     if isinstance(self, CMAVO):
       #All cmavo should have a value
-      self.type = SELMAHO[self.value]
+      if self.value in SELMAHO:
+        self.type = SELMAHO[self.value]
+      else:
+        config.warn("Unknown cmavo %r"%(self.value), self.position)
+        self.type = SELMAHO['UNKNOWN']
     elif isinstance(self, SELBRI):
       #A gismu, a lujvo, or a fuhivla?
       #gismu: CCVCV or CVCCV

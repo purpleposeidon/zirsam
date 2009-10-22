@@ -300,13 +300,13 @@ class __NiceStdin:
     return x
     
 
-def stream_char(fd, config):
+def stream_char(config):
   p = Position()
 
   while 1:
     #c = fd.read(1)
     #This is where we do that GlyphTable stuff
-    c = config.glyph_table.get_char(fd, p, config)
+    c = config.glyph_table.get_char(config.stdin, p, config)
     #assert c.lower() in "bcdfgjklmnprstvxz \n ',. aeiouy"
 
     if c == []:
@@ -324,20 +324,19 @@ def stream_bit(fd):
       break
     yield Bit(fd)
 
-def Stream(conf=None, stdin=None):
+def Stream(conf=None):
   if conf == None:
     conf = config.Configuration()
-  if stdin == None:
-    stdin = sys.stdin
   
-  if stdin.isatty() and conf.permit_readline: #Should we enable GNU readline?
+  
+  if conf.stdin.isatty() and conf.permit_readline: #Should we enable GNU readline?
     try:
       import readline
       #If this succeeds, then it is enabled for the input() function
-      stdin = __NiceStdin()
+      conf.stdin = __NiceStdin()
     except ImportError:
       pass
-  charbuf = common.Buffer(stream_char(stdin, conf), conf)
+  charbuf = common.Buffer(stream_char(conf), conf)
   bitbuf = common.Buffer(stream_bit(charbuf), conf)
   return bitbuf
 

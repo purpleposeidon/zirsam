@@ -3,12 +3,12 @@
 Or, in other words, "TODO":
 
 ###### !!Now!!
-  
+ - Implement everything according to http://www.lojban.org/tiki/Magic+Words
+    * Make sure that everything interacts properly
 
 ###### Soon
  - More error checking and recovery
  + lerfu!
- + EncodingTable vs. GlyphTable! !??!
  - Make the helper code nicer
  - Make --token-error print a backtrace on each token instead of dieing?
  + Check your dotside!
@@ -58,3 +58,4 @@ Ortohgraphy - what happens to capitalized letters with strict ortho?
     * they are garbage
   Resolve recursive import failures
     * done
+ + EncodingTable vs. GlyphTable! !??!

@@ -3,7 +3,9 @@
 Or, in other words, "TODO":
 
 ###### !!Now!!
-  
+ - Implement everything according to http://www.lojban.org/tiki/Magic+Words
+    * Make sure that everything interacts properly
+ugh, magic...
 
 ###### Soon
  - More error checking and recovery

@@ -6,6 +6,7 @@ Which is the REAL zirsam.py file? Perhaps I'll just make a seperate file to hand
 """
 
 import sys
+
 import alphabets
 
 
@@ -92,10 +93,10 @@ Arguments:"""
         return True
       
     if arg('help'):
-      print(Configuration.__help_header, file=sys.stderr)
+      print(Configuration.__help_header, file=self.stderr)
       #for cmd in Configuration.__help:
       for cmd in Configuration.__help_order:
-        print("    {0}:\n\t{1}".format(format_arg(cmd), Configuration.__help[cmd]), file=sys.stderr)
+        print("    {0}:\n\t{1}".format(format_arg(cmd), Configuration.__help[cmd]), file=self.stderr)
       self.do_exit = True
     if arg('strict'):
       self._strict = True
@@ -117,7 +118,7 @@ Arguments:"""
     if arg("forbid warn"):
       self.forbid_warn = True
     if arg("err2out"):
-      sys.stderr = sys.stdout # XXX Make this Configuration's output
+      self.stderr = self.stdout # XXX Make this Configuration's output
     if arg("no space"):
       self.output_no_space = True
     _ = valued_arg("alphabet", alphabets.GlyphTable.tables)
@@ -125,9 +126,9 @@ Arguments:"""
     _ = valued_arg("hate token")
     if _: self.hate_token = _
     if possible_args:
-      print("The following arguments have documentation, but no implementation:", file=sys.stderr)
+      print("The following arguments have documentation, but no implementation:", file=self.stderr)
       for p in possible_args:
-        print('\t', format_arg(p), file=sys.stderr)
+        print('\t', format_arg(p), file=self.stderr)
     
     self.debug("\n\nCurrent settings:\n{0}".format(self))
     
@@ -149,7 +150,7 @@ Arguments:"""
   
   
   def error(self, msg, position):
-    print('ERROR: ', position, ': ', msg, sep='', file=sys.stderr)
+    print('ERROR: ', position, ': ', msg, sep='', file=self.stderr)
     if self._debug:
       raise Exception
     raise SystemExit(1)
@@ -157,7 +158,7 @@ Arguments:"""
   def warn(self, msg, position):
     self.has_warnings = True
     if not self._quiet or self.forbid_warn:
-      print('WARN: ', position, ': ', msg, sep='', file=sys.stderr)
+      print('WARN: ', position, ': ', msg, sep='', file=self.stderr)
     
     if self.forbid_warn:
       raise SystemExit(1)
@@ -166,25 +167,25 @@ Arguments:"""
     #Discussion: Should position be required?
     if not self._quiet:
       if position:
-        print('MESSAGE: ', position, ': ', msg, sep='', file=sys.stderr)
+        print(position, ': ', msg, sep='', file=self.stderr)
       else:
-        print('MESSAGE:', msg, file=sys.stderr)
+        print(msg, file=self.stderr)
   
   def debug(self, msg, position=None, end='\n'):
     if self._debug:
       if position:
-        print('DEBUG: ', position, ': ', msg, sep='', file=sys.stderr, end=end)
+        print('DEBUG: ', position, ': ', msg, sep='', file=self.stderr, end=end)
       else:
-        print('DEBUG:', msg, file=sys.stderr, end=end)
+        print('DEBUG:', msg, file=self.stderr, end=end)
   
   def strict(self, msg, position=None):
     if self._strict:
       if position:
-        print('STRICT:', position, ': ', msg, sep='', file=sys.stderr)
+        print('STRICT:', position, ': ', msg, sep='', file=self.stderr)
       else:
-        print('STRICT: ', msg, file=sys.stderr)
+        print('STRICT: ', msg, file=self.stderr)
   
-  def __init__(self, args=None):
+  def __init__(self, args=None, stdin=None, stdout=None, stderr=None):
     """
     Configuration options to permeate the entire parser
 
@@ -200,6 +201,15 @@ Arguments:"""
     self._strict = False
     self._quiet = False
     self._debug = False
+    if stdin == None:
+      stdin = sys.stdin
+    if stdout == None:
+      stdout = sys.stdout
+    if stderr == None:
+      stderr = sys.stderr
+    self.stdin = stdin
+    self.stdout = stdout
+    self.stderr = stderr
     
     #XXX TODO - organize these variables by parsing layer
     self.print_tokens = False

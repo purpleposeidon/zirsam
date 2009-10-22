@@ -812,13 +812,12 @@ we: {4}""".format(self.bit.buffer, cc_location, cc, ps, word_end))
 
 
 
-def Stream(conf=None, stdin=None):
+def Stream(conf=None):
   if conf == None:
     conf = config.Configuration()
-  if stdin == None:
-    stdin = sys.stdin
   
-  bitbuf = orthography.Stream(conf, stdin)
+  
+  bitbuf = orthography.Stream(conf)
   valsip = ValsiParser(bitbuf, conf)
   return Buffer(valsip, conf)
 
