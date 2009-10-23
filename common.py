@@ -111,3 +111,26 @@ def Stream(conf=None, stdin=None):
     stdin = sys.stdin
   pass
 
+
+class Position:
+  #Stores information on which line/col/index a character is located at
+  def __init__(self, _copy=None):
+    if _copy:
+      self.c = _copy.c
+      self.col = _copy.col
+      self.lin = _copy.lin
+    else:
+      self.c = 0
+      self.col = 0
+      self.lin = 0
+  def __str__(self):
+    return "Line {0}, Col {1}".format(self.lin, self.col)
+  def __repr__(self):
+    return '+{0}, {1}'.format(self.lin, self.col)
+  def pushline(self):
+    self.c += 1
+    self.col = 0
+    self.lin += 1
+  def pushcol(self):
+    self.c += 1
+    self.col += 1

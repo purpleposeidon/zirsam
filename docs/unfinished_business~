@@ -5,6 +5,7 @@ Or, in other words, "TODO":
 ###### !!Now!!
  - Implement everything according to http://www.lojban.org/tiki/Magic+Words
     * Make sure that everything interacts properly
+ugh, magic...
 
 ###### Soon
  - More error checking and recovery
@@ -21,6 +22,7 @@ Or, in other words, "TODO":
  - Handle whitespace so that the fact that there is a word seperation is returned immediatly, instead of reading 'til the first non-whitespace. Possibilities include returning a Bit for each whitespace, returning a Bit for the first whitespace and merging the rest, or returning a bit that has no value, but is treated as a whitespace, and having the actual whitespace slurped up later.
  - Study and meditate upon lojban grammar, make grammar parser
  - Check that I'm parsing the BNF correctly. For example, the &'s in "simple-tense-modal" (I don't know for certain that the way it parses is correct)
+ - Have a config option for zoi to be filtered by the alphabet, or just a raw string
 
 ###### Later
 

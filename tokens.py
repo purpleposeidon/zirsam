@@ -99,13 +99,17 @@ class Token:
     elif isinstance(self, SELBRI):
       #A gismu, a lujvo, or a fuhivla?
       #gismu: CCVCV or CVCCV
-      if self.bits[0].CC and self.bits[1].V and self.bits[2].C and self.bits[3].V:
-        self.type = GISMU
-      elif self.bits[0].C and self.bits[1].V and self.bits[2].CC and self.bits[3].V:
-        self.type = GISMU
+      #XXX Todo: Detect lujvo/fu'ivla forms
+      if len(self.bits) == 4:
+        if self.bits[0].CC and self.bits[1].V and self.bits[2].C and self.bits[3].V:
+          self.type = GISMU
+        elif self.bits[0].C and self.bits[1].V and self.bits[2].CC and self.bits[3].V:
+          self.type = GISMU
+        else:
+          self.type = SELBRI
+          #raise Exception("How what?")
       else:
         self.type = SELBRI
-        #raise Exception("TODO: Detect lujvo/fu'ivla forms!") #XXX
     else:
       #cmene, or possibly instantiated as a lujvo/gismu/fuhivla, or maybe garbage
       self.type = type(self)

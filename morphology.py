@@ -713,8 +713,8 @@ we: {4}""".format(self.bit.buffer, cc_location, cc, ps, word_end))
         break
       if didstuff:
         return ...
-      else:
-        self.config.warn("Nothing happened when dealing with lerfu (%r)"%(self.bit.buffer), self.bit[0].position)
+      #else:
+        #self.config.warn("Nothing happened when dealing with lerfu. Buffer: %r"%(self.bit.buffer), self.bit[0].position)
     
     #Take care of {2.A.3)b)} again, like ".y'ybu"
     if self.bit[1].y or self.bit[0].y:
@@ -837,7 +837,7 @@ def main():
       pass
   else:
     for token in p:
-      if not isinstance(token, BORING): # XXX Maybe "BORING" instead
+      if not isinstance(token, BORING): #XXX maybe show y tho?
         if p.config._debug: #Makes it prettier
           p.config.debug('yielding '+str(token))
         else:

@@ -63,17 +63,16 @@ class GrammarParser:
     yield ROOT_TOKENs
     """
     valsi_index = 0
-    
+    root = BNF[self.config.parsing_unit]
+    yield root.match(self.valsi)
     
     ...
 
 
-def Stream(conf=None, stdin=None):
+def Stream(conf=None):
   if conf == None:
     conf = Configuration()
-  if stdin == None:
-    stdin = sys.stdin
-  valsibuff = thaumatology.Stream(conf, stdin)
+  valsibuff = thaumatology.Stream(conf)
   treebuff = GrammarParser(valsibuff, conf)
   return Buffer(treebuff, conf)
 
@@ -94,3 +93,17 @@ Well, Top-Down would make it easier to break at sentences or something...
 How about this: "seperating values"
 Ah! I like that! Okay, so, when we reach a ROOT_TOKEN, we don't go up any farther. So, for now, ROOT_TOKEN = "sentence"
 '''
+
+
+"""
+
+Rule := Grammar Expressions /terminators/
+SO, uh, how to handle the Terminators? From the EBNF?
+
+If this token matches a terminator:
+  end the rule
+else:
+  continue...?
+
+
+"""

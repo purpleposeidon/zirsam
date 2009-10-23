@@ -14,28 +14,7 @@ import sys
 import common
 import config
 
-class Position:
-  #Stores information on which line/col/index a character is located at
-  def __init__(self, _copy=None):
-    if _copy:
-      self.c = _copy.c
-      self.col = _copy.col
-      self.lin = _copy.lin
-    else:
-      self.c = 0
-      self.col = 0
-      self.lin = 0
-  def __str__(self):
-    return "Line {0}, Col {1}".format(self.lin, self.col)
-  def __repr__(self):
-    return '+{0}, {1}'.format(self.lin, self.col)
-  def pushline(self):
-    self.c += 1
-    self.col = 0
-    self.lin += 1
-  def pushcol(self):
-    self.c += 1
-    self.col += 1
+
 
 
 
@@ -57,13 +36,13 @@ class Character:
     #return "<{0} {1}>".format(self.value, self.position)
     return str(self)
   
-  def __init__(self, c, position, config):
+  def __init__(self, c, config):
     """
     A single character. 
     """
     #self.original = c
-    assert position != None
-    self.position = position
+    
+    self.position = common.Position(config.position)
     self.value = c
     
     self.accented = False
@@ -214,8 +193,9 @@ class Bit:
       self.whitespace = True
       self.wordsep = True
       self.chars = [first]
-      while fd[0].whitespace: # XXX - this makes evevrything unresponsive when inputting text
-        self.chars.append(fd.pop())
+      #I think it is decided: Don't merge whitespace, it breaks everything
+      #while fd[0].whitespace: # XXX - this makes evevrything unresponsive when inputting text
+      #  self.chars.append(fd.pop())
     elif first.y:
       self.y = True
       self.chars = [first]
@@ -301,22 +281,21 @@ class __NiceStdin:
     
 
 def stream_char(config):
-  p = Position()
 
   while 1:
     #c = fd.read(1)
     #This is where we do that GlyphTable stuff
-    c = config.glyph_table.get_char(config.stdin, p, config)
+    c = config.glyph_table.get_char(config)
     #assert c.lower() in "bcdfgjklmnprstvxz \n ',. aeiouy"
 
     if c == []:
-      yield Character('\n', Position(p), config) # haXXX, if morphology doesn't get a whitespace at the end it doesn't give up the last token
-      yield Character('', Position(p), config)
+      yield Character('\n', config) # haXXX, if morphology doesn't get a whitespace at the end it doesn't give up the last token
+      yield Character('', config)
       break
     else:
       for _c in c:
         yield _c
-        #yield Character(_c, Position(p), config)
+        #yield Character(_c, config)
 
 def stream_bit(fd):
   while 1:

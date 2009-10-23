@@ -1,19 +1,38 @@
-lojban.bnf is from the CLL. I made one change to the formatting; every rule is now ended by a semicolon because I am a lazy programmer. Also, I renamed BRIVLA to SELBRI because I prefer to use that form. And then I used a RE to get rid of the subscripts that are included in the CLL.
-
-BRKWORDS.TXT has my comments, I've also included the original file.
+BRKWORDS.TXT has my comments regarding morphology, I've also included the original file in this directory.
 
 unfinished_business is the todo list
 
 
 To start parsing something, first pick what depth of understanding you want. Do you want orthography, morphology, dendrography, or semantography?
 
-So, to get valsi, do:
 
-import sys
-import morphology
-import config
+If all you want is valsi, than you can do:
 
-stream = morphology.Stream(config.Configuration(), sys.stdin)
-#Stream() returns a parser, which you can iterate over.
 
-t = list(stream)
+
+  import morphology
+  
+  stream = morphology.Stream()
+  #module.Stream() returns an iter()-able parser
+  vals = list(stream)
+  
+  print("There are", len(vals), "tokens.")
+
+
+The vals variable will now have a list of Token objects.
+You can also set a bunch of options using the Configuration object, which is located in the config module.
+
+
+  import orthography
+  import config
+
+  conf = config.Configuration([]) #The empty list prevents Configuration from parsing arguments from sys.argv
+  conf.alphabet = config.alphabets.liberal
+
+  for c in orthography.Stream(conf):
+    print(c, end='')
+
+  print()
+
+
+
