@@ -21,6 +21,7 @@ ugh, magic...
  - Check that I am parsing the BNF correctly. For example, the &s in "simple-tense-modal" (I don't know for certain that the way it parses is correct)
  - Have a config option for zoi to be filtered by the alphabet, or just from what we get
  + Check that the BNF is being intepreted properly
+ - I think that morphology hack in orthography isn't needed anymore
 
 ###### Later
 
@@ -37,6 +38,7 @@ ugh, magic...
    - Don't use self.config, use self.buffer.config? (the way it is now is more flexible)
  + Make GlyphTable handle multi-length inputs
  - CLI argument to read stdin from a file
+ - It could be faster! Instead of Xor(Xor(...), A) do Xor(A, Xor(...). Because that would make it faster? Only if the most common forms are listed first in the BNF.
 
 ###### Much Later
 

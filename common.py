@@ -36,8 +36,9 @@ import config
 #Contains the Buffer, a class used by every layer of the parser
 
 class Buffer:
+  #If this class used less methods, the stack would be shorter
   def __repr__(self):
-    return "<Buffered {0}>".format(self.orig)
+    return "<Buffered {0}>".format(type(self.orig).__name__)
   def __init__(self, iterable, conf):
     if not hasattr(iterable, '__next__'):
       #raise Exception("Wrap in an iterator plz")
@@ -57,7 +58,7 @@ class Buffer:
     try:
       self.buffer.append(self.iterable.__next__())
     except (EOFError, StopIteration) as e:
-      self.config.debug("{0} got exception {1}".format(self, e))
+      self.config.debug("{0} got exception {1!r}".format(self, e))
       self.EOF = True
     finally:
       if self.EOF:

@@ -91,6 +91,7 @@ class Token:
       return
     if isinstance(self, CMAVO):
       #All cmavo should have a value
+      self.value = self.value.lower()
       if self.value in SELMAHO:
         self.type = SELMAHO[self.value]
       else:

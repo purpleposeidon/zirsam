@@ -16,7 +16,7 @@ except:
   if not 'convert_bnf.py' in os.listdir('./'):
     raise SystemExit("Please run directly from the JBOPARSER directory")
 
-deps = "../data/lojban.bnf ../data/bnf.html convert_bnf.py dehtml_bnf.py magic_bnf.py __init__.py".split()
+deps = "../data/lojban.bnf ../data/bnf.html convert_bnf.py dehtml_bnf.py __init__.py".split()
 final = "bnf_data.py"
 final_time = os.stat(final).st_mtime
 
@@ -47,9 +47,9 @@ except:
 #os.chdir('../')
 import sys
 sys.path.append('')
+import magic_bnf
 try:
   import bnf_data
-  import magic_bnf
   magic_bnf.BNF = bnf_data.BNF
   BNF = bnf_data.BNF
 except:

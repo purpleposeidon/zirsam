@@ -235,7 +235,7 @@ Arguments:"""
     
     self.__check_options(args)
     self.has_warnings = False
-    self.parsing_unit = "tanru_unit"
+    self.parsing_unit = "indicators"
 
     #magic-words stuff
     self.allow_erasure = True
