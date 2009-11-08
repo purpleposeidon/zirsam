@@ -41,7 +41,7 @@ ugh, magic...
  - It could be faster! Instead of Xor(Xor(...), A) do Xor(A, Xor(...). Because that would make it faster? Only if the most common forms are listed first in the BNF.
 
 ###### Much Later
-
+ 
  - Emulate output of jbofihe and camxes? (And other parsers?)
  - Semantics engine and supporting stuff
  - Jbovlaste integration
@@ -51,6 +51,21 @@ ugh, magic...
  - If there is demand: xml output
  - look into proper distribution methods, see the distutils module http://docs.python.org/distutils/
      "package_data" for setup.py
+ - Optimize the parser by not checking optionals until after we know the item following doesn't match?
+    - Is this... valid?
+      - If what follows doesn't match, then it could never match!?
+        - unless the following is optional.
+        - It would match if you had matched the optional.
+          - If it doesn't match, then check the optional.
+          - If it matches the following, than it can't match the optional (*UNLESS* the optional is the same thing):
+              rule = [FOO] FOO BAR
+            match: FOO FOO BAR:
+              tries:
+                FOO(FOO) BAR(FOO), but fails.
+              so, if it matches, but stuff before it fails, then check the optional?
+            It is quite likely that the BNF doesn't have stuff in the form [FOO] FOO.
+    Conclusion:
+      We can put off checking optionals so long as the optional isn't the same as the next part, and I doubt the BNF has anything like that. But this will prolly need more investigation.
 
 ######
 "Some things I've completed, to make me feel special"

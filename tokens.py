@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 
 #Different kinds of tokens
+import terminal
 
 import orthography #Amusingly enough, modules can recursively import eachother
 from selmaho import SELMAHO
+
 
 class Token:
   #The items below are a hack for the morphology module. With these values, nobody will try to re-tokenize it.
@@ -20,6 +22,7 @@ class Token:
 
   def __repr__(self):
     return str(self)
+    '''
     #The below is more informative, but fugly
     r = self.__getname()+'('
     for i in self.bits:
@@ -30,6 +33,7 @@ class Token:
     if self.end:
       end += ', end=' + repr(self.end)
     return r+repr(self.bits[0].position)+end+')'
+    '''
 
   def __str__(self):
     val = str(self.value)
@@ -37,7 +41,7 @@ class Token:
       val += ', content=' + str(self.content)
     if self.end:
       val += ', end=' + str(self.end)
-    return "{0}({1})".format(self.__getname(), val)
+    return "{0}{1}({2}){3}".format(terminal.BOLD, self.__getname(), val, terminal.NORMAL)
 
   def calculate_value(self, config):
     """

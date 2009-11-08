@@ -235,7 +235,8 @@ Arguments:"""
     
     self.__check_options(args)
     self.has_warnings = False
-    self.parsing_unit = "indicators"
+    self.parsing_unit = 'sumti' #'term' #"sentence" #'quantifier' #"sentence" #'subsentence' #"sumti" #terms
+    self.parsing_unit = self.parsing_unit.replace('-', '_')
 
     #magic-words stuff
     self.allow_erasure = True
