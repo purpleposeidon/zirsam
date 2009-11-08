@@ -125,10 +125,7 @@ def Stream(conf=None):
 
 
 if __name__ == '__main__':
-  import time
-  start = time.time()
   r = tuple(Stream())
-  end = time.time()
   #print('='*70)
   if not r:
     print(r, '(empty)')

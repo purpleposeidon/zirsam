@@ -1,6 +1,11 @@
 #!/usr/bin/python3.0
 
+import sys
 import random
+import time
+seed = time.time()
+print("Seed is", seed, file=sys.stderr)
+r = random.Random(seed)
 
 for _ in range(1024):
-	print(random.choice(' abcdefg\'ijklmnoprstuvxyz.,'), end='')
+	print(r.choice(' abcdefg\'ijklmnoprstuvxyz.,'), end='')
