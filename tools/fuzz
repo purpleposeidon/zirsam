@@ -1,0 +1,6 @@
+#!/usr/bin/python3.0
+
+import random
+
+for _ in range(1024):
+	print(random.choice(' abcdefg\'ijklmnoprstuvxyz.,'), end='')

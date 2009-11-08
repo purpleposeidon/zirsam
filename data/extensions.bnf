@@ -1,0 +1,14 @@
+
+; These rules are appended onto the end of lojban.bnf when it is built
+; It would be a good idea to prepend all these rules with x.
+
+
+; needs modification to
+lerfu-word =
+    BY
+    | BU ; Originally, any-word BU, but thaumatology converts this itself
+    | LAU lerfu-word
+    | TEI lerfu-string FOI  
+
+x-root =
+  sentence
