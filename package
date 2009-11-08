@@ -1,0 +1,4 @@
+#!/bin/sh
+
+tar --exclude-from=private -cf /tmp/zirsam.tar ./
+gzip /tmp/zirsam.tar

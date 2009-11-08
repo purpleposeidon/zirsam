@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 #Different kinds of tokens
-import terminal
 
 import orthography #Amusingly enough, modules can recursively import eachother
 from selmaho import SELMAHO
@@ -41,7 +40,7 @@ class Token:
       val += ', content=' + str(self.content)
     if self.end:
       val += ', end=' + str(self.end)
-    return "{0}{1}({2}){3}".format(terminal.BOLD, self.__getname(), val, terminal.NORMAL)
+    return "{0}({1})".format(self.__getname(), val)
 
   def calculate_value(self, config):
     """

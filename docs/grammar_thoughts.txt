@@ -1,0 +1,89 @@
+Parsing the grammar is the most difficult part, no? So, really, what we want to do is *make a tree*. Right? There are several different methods of attacking this with python...
+
+Write a converter for a grammar. I know of:
+  * BNF
+  * ENBF
+  * PEG
+  
+  Pros:
+    - The lojban will be parsed just like other parsers
+    - I wouldn't have to specify or translate the grammar for some other method
+  Cons:
+    - I'd need to write a grammar2python program
+    - I might need to re-work the structures for python to parse it
+    - May not work well for our __iter__ technique without modification to the grammars?
+    - Wouldn't get to play with this aspect of lojban
+  Other:
+    - There oughta be something that someone has already written that does this!
+
+
+Write a parser by hand:
+  Pros:
+    - Don't have to deal with grammar files
+    - Prolly faster
+    - Might be easier to debug in certain cases?
+    - I get to play with lojban machinery
+    - Ability to add features?
+    - I get exactly what I want
+  Cons:
+    - Tons and tons of work, have brain-melts
+    - Might be better specified in some sort of data file anyways
+    - Lots of bugs
+    - Not guranteed to agree with other parsers
+
+Write our own grammar file:
+  Pros:
+    - Could be a direct translation
+    - I get to play with lojban machinery
+    - Could allow mathmatical proofs??
+    - Easier for the engine to understand
+    - Not need to reformat parse tree?
+  Cons:
+    - Not from the horses' mouth
+    -
+
+
+Our goal: Get it done. We want this shit now. Right? So, what'll be the fastest?
+  Write a converter
+  Write our own grammar file
+
+I really think a converter would be the way to go. Okay, so, talk about this converter's process.
+
+Got our BNF file.
+Gotta turn that BNF into a dict-tree. (A pretty tree, not an ugly tree)
+Two options from here:
+  Generate python code from the dict-tree
+    + Faster execution
+    / More work for me?
+    / Wouldn't be commented
+    + But the BNF isn't either commented
+  Use the dict-tree directly
+    / Definitly slower parser
+    + Probably less work
+    ~ Have to distribute the BNF file
+
+Bah. I don't know. Ugh...............
+I feel... like... not using other peep's grammars. Why? Uhm. It's a stupid idea. Oh, because they're *big and scary*, yes. I'd like to have my own organic-type thing. Hey, look at that PEG.
+"reverse Polish flag", it's got ... wow. Uhm, that's really... okay, no, that was not written by a person, xorxes could not have spent all of that time doing that *repetative* text. So, perhaps writing making my own grammar syntax would be for the best. :/
+
+But! It should be convertable to BNF! Yes! Very important, no?
+
+I do not think that the PEG <http://chain.lojban.org/~rlpowell/hobbies/lojban/grammar/lojban.peg.txt> is well written. Perhaps it is a limitation of the syntax, but it's got so much repeated junk.
+
+Sections in the PEG:
+  Main stuff, very top-level, like "text-0"
+  Magic words
+  Minor Morphology bits
+  Spaces
+  Selmaho
+    This is what I am talking about being so very large and ugly and repetitious.
+So, if we cut out the ugly parts, I see maybe 60 real rules?
+Honestly, why magic/selmaho *shouldn't* be handled/defined by the grammar? The only argument for it I can see for it is that it could be used in any programming language without needing to re-write it... except that this isn't the case. I think that PEG is java-only, or something? In any case, every language doesn't have a PEG, right?
+
+Mmmm....
+Seriously, james. The PEG. Just cut out the ... ugly bits...
+
+So, PEG handles strictly grammar.
+I handle orthography, morphology and thaumaturgy
+
+Seriously, just do everything at once. Jeeze.
