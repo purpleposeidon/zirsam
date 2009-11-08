@@ -12,10 +12,13 @@ import magic_bnf
 
 
 
-class RuleList:
+class RuleList: #Actually, I prefer "Tracker"
   #I think this is The One.
   def __repr__(self):
-    return str(self.rule)+':'+repr(self.value)+"*"*(not self.accepted)
+    r = str(self.rule)+':'+repr(self.value)+"*"*(not self.accepted)
+    #if self.stack:
+    #  r += '<'+str(self.stack)[1:-1]+'>'
+    return r
   def __init__(self, valsi, rule, current_valsi=0, parent=None):
     self.value = []
     self.valsi = valsi
@@ -24,8 +27,9 @@ class RuleList:
     self.parent = parent
     self.rule = rule
     self.accepted = False
+    self.stack = [] #For inner-rule grammarstuffins
   def accept_terminal(self):
-    print("adding terminal", self.valsi[self.current_valsi])
+    #print("adding terminal", self.valsi[self.current_valsi])
     self.value.append(self.valsi[self.current_valsi])
     self.current_valsi += 1
   def append_rule(self, rule):
@@ -36,11 +40,11 @@ class RuleList:
     assert self.value
     self.accepted = True
     self.current_valsi = self.value[-1].current_valsi  #+ 1
-    print('ACCEPT', self)
+    #print('ACCEPT', self)
   def fail(self):
     if self.parent:
       #if self.value:
-      print("@@@ FAILING", self)
+      #print("@@@ FAILING", self)
       self.parent.value.pop(self.parent.value.index(self))
       #self.parent.value.pop(self.start)
     else:
@@ -51,6 +55,27 @@ class RuleList:
     while self.current_valsi >= 0:
       self.current_valsi -= 1
       self.valsi.pop()
+  def checkin(self):
+    """
+    Append the current state onto a stack
+    """
+    #print("checkin")
+    self.stack.append((self.current_valsi, list(self.value)))
+    #print('---', self.stack[-1])
+  def checkout(self):
+    """
+    Something failed. Restore an old state from the stack
+    """
+    old_state = self.stack.pop()
+    (self.current_valsi, self.value ) = old_state
+    #print("checkout")
+  def commit(self):
+    """
+    Something succeeded. Remove from stack
+    """
+    #print("commit")
+    self.stack.pop()
+
 
 class GrammarParser:
   def __init__(self, token_iter, config):
@@ -101,6 +126,7 @@ def Stream(conf=None):
 
 if __name__ == '__main__':
   r = tuple(Stream())
+  #print('='*70)
   if not r:
     print(r, '(empty)')
   for i in r:

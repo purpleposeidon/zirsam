@@ -3,18 +3,19 @@ BRKWORDS.TXT has my comments regarding morphology, I've also included the origin
 unfinished_business is the todo list
 
 
-To start parsing something, first pick what depth of understanding you want. Do you want orthography, morphology, dendrography, or semantography?
+To start parsing something, first pick what depth you want. Do you want orthography, morphology, thaumatology, dendrography, or semantography?
 
 
-If all you want is valsi, than you can do:
+If all you want are valsi, than you can do:
 
 
 
   import morphology
-  
+  import tokens
+
   stream = morphology.Stream()
   #module.Stream() returns an iter()-able parser
-  vals = list(stream)
+  vals = list(_ for _ in stream if not isinstance(_, tokens.BORING))
   
   print("There are", len(vals), "tokens.")
 
