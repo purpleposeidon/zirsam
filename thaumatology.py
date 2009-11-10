@@ -87,11 +87,15 @@ class QuoteStream:
         else: #Non-raw zoi, much easier, but the content is looked at by the morphology parser
           zoi = self.valsi.pop()
           delim = self.valsi.pop()
+          content = []
           while self.valsi[0].value != delim.value:
             try:
-              zoi.value.append(self.valsi.pop())
-            except:
+              content.append(self.valsi.pop())
+            except (EOFError, StopIteration):
               self.config.error("End of File reached in open ZOI quote (close it off with {0!r})".format(delim.value), delim.position)
+          end = self.valsi.pop()
+          #zoi.end = end XXX Not until raw implements something similiar, say I!
+          zoi.content = content
           yield zoi
       elif self.valsi[0].type == selmaho.ZO: #1-word quote
         zo = self.valsi.pop()
@@ -224,32 +228,36 @@ class AbsorptionStream:
     self.conf = conf
   
   def __iter__(self):
-    while 1:
-      word = self.valsi.pop()
-      if word.type == selmaho.FAhO:
-        break
-      next = self.valsi[0]
-      #Ignore ZEI in http://dag.github.com/cll/21/1/
-      if word.type == selmaho.BAhE:
-        next.modifiers.append(word)
-      else:
-        while 1:
-          if next.type == selmaho.UI:
-            word.emphasis.append(self.valsi.pop())
-          elif next.type in (selmaho.CAI, selmaho.NAI):
-            if word.emphasis[-1].type == selmaho.UI:
-              word.emphasis[-1].emphasis.append(self.valsi.pop())
+    try:
+      while 1:
+        word = self.valsi.pop()
+        if word.type == selmaho.FAhO:
+          break
+        next = self.valsi[0]
+        #Ignore ZEI in http://dag.github.com/cll/21/1/
+        if word.type == selmaho.BAhE:
+          next.modifiers.append(word)
+          continue
+        else:
+          while 1:
+            if next.type == selmaho.UI:
+              word.modifiers.append(self.valsi.pop())
+            elif next.type in (selmaho.CAI, selmaho.NAI):
+              if word.modifiers[-1].type == selmaho.UI:
+                word.modifiers[-1].modifiers.append(self.valsi.pop())
+              else:
+                self.config.warn("Some may think differently, but IMHO having a CAI/NAI when there isn't a UI in front is weird.", next.position) #Well, okay, CAI I can see. But NAI? C'mon.
+                word.modifiers.append(self.valsi.pop())
+            elif next.type in (selmaho.DAhO, selmaho.FUhE, selmaho.FUhO):
+              word.modifiers.append(self.valsi.pop())
             else:
-              self.config.warn("Some may think differently, but IMHO having a CAI/NAI when there isn't a UI in front is weird.", next.position) #Well, okay, CAI I can see. But NAI? C'mon.
-              word.emphasis.append(self.valsi.pop())
-          elif next.type in (selmaho.DAhO, selmaho.FUhE, selmaho.FUhO):
-            word.emphasis.append(self.valsi.pop())
-          else:
-            break
-          next = self.vasli[0]
-      
+              break
+            next = self.valsi[0]
+        yield word
+    except (EOFError, StopIteration):
+      assert self.valsi.buffer == []
+      assert word
       yield word
-
 
 def Stream(conf=None):
   if conf == None:
@@ -258,8 +266,11 @@ def Stream(conf=None):
   
   valsi = morphology.Stream(conf=conf)
   interest = InterestStream(Buffer(valsi, conf), conf)
+
   quoted = QuoteStream(Buffer(interest, conf), conf)
+  
   erased = ErasureStream(Buffer(quoted, conf), conf)
+  #return Buffer(erased, conf)
   absorbed = AbsorptionStream(Buffer(erased, conf), conf)
   return Buffer(absorbed, conf)
 
@@ -267,6 +278,7 @@ if __name__ == '__main__':
   results = []
   for _ in Stream(config.Configuration()):
     print(_, end=' ')
+    sys.stdout.flush()
     #print(_.value, end=' ') # XXX Set this one for the release version, use above if in debug mode
     results.append(_)
   print()

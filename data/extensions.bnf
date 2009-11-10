@@ -11,7 +11,7 @@ lerfu-word =
     | TEI lerfu-string FOI  
 
 x-parse-root =
-  sentence
+  (indicators & free ...) sentence
 
 
 ;;;;;;The following rules are non-formal:

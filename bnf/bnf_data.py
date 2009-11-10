@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 #automatically generated
-#on Mon Nov  9 16:01:49 2009
+#on Mon Nov  9 19:41:14 2009
 #by poseidon@skami
 
 from magic_bnf import *
@@ -192,7 +192,7 @@ Rule('indicator'):
 Rule('lerfu_word'):
     Terminal(BY)<<Terminal(BU)<<Terminal(LAU)*Rule('lerfu_word')<<Terminal(TEI)*Rule('lerfu_string')*Terminal(FOI),
 Rule('x_parse_root'):
-    Rule('sentence')
+    (Rule('indicators')+Rule('free')**"REPEAT")*Rule('sentence')
 }
 
 BNF['any_word'] = any_word()

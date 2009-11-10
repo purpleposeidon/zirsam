@@ -41,7 +41,11 @@ class Token:
       val += ', content=' + str(self.content)
     if self.end:
       val += ', end=' + str(self.end)
-    return "{0}({1})".format(self.__getname(), val)
+    r = "{0}({1})".format(self.__getname(), val)
+    if self.modifiers:
+      for _ in self.modifiers:
+        r += '_'+str(_)
+    return r
 
   def calculate_value(self, config):
     """
@@ -86,7 +90,7 @@ class Token:
     self.type = ...
     self.classify(config)
     self.content = None
-    self.modifiers = [] #A thought: Use a set? Nope. Need to be able to access the last value for NAI.
+    self.modifiers = [] #Emphasis and such.
     self.end = None #Acceptable types: None, Token
     if config.hate_token and config.hate_token == self.value:
       #Be hatin' - for morphology debugging
