@@ -56,6 +56,7 @@ class Buffer:
     """Add a single item to the buffer"""
     if self.EOF:
       raise EOFError()
+    #self.config.debug("Adding an item to {0}".format(self))
     try:
       self.buffer.append(self.iterable.__next__())
     except (EOFError, StopIteration) as e:
@@ -99,10 +100,6 @@ class Buffer:
   def pop(self, i=0):
     self.__fill_to(i)
     return self.buffer.pop(i)
-  
-  def end_zoi(self, token):
-    return self.iterable.end_zoi()
-
 
 class Position:
   #Stores information on which line/col/index a character is located at

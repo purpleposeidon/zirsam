@@ -28,7 +28,7 @@ ugh, magic...
 
  - Check that each marker in brkwords is properly implemented and documented
  - Add an "--abusive" option zo'o
- - Check for TODO and XXX in code
+ - Check for TODO, XXX, and ... in code
  - Check for weird/odd/wrong comments
  - (Have error messages in lojban?)
  - Make sure I didn't accidentally change/deleting anything in BRKWORDS.txt

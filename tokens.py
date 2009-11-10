@@ -86,8 +86,8 @@ class Token:
     self.type = ...
     self.classify(config)
     self.content = None
-    self.modifiers = [] #A thought: Use a set? TODO
-    self.end = None
+    self.modifiers = [] #A thought: Use a set? Nope. Need to be able to access the last value for NAI.
+    self.end = None #Acceptable types: None, Token
     if config.hate_token and config.hate_token == self.value:
       #Be hatin' - for morphology debugging
       raise Exception("Tokenization Backtrace")
