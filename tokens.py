@@ -2,12 +2,13 @@
 
 #Different kinds of tokens
 
-import orthography #Amusingly enough, modules can recursively import eachother
+import orthography
 from selmaho import SELMAHO
 
 
 class Token:
-  #The items below are a hack for the morphology module. With these values, nobody will try to re-tokenize it.
+  #The items below are a hack for the morphology module, which re-inserts tokens into the Bit stream.
+  #With these values, nobody will try to re-tokenize it.
   wordsep = True
   h = False
   y = False
@@ -45,6 +46,7 @@ class Token:
   def calculate_value(self, config):
     """
     Return the ascii value of the token
+    TODO This feels out of place here.
     """
     #Assemble a string out of the values of every bit
     v = ''
@@ -84,9 +86,10 @@ class Token:
     self.type = ...
     self.classify(config)
     self.content = None
+    self.modifiers = [] #A thought: Use a set? TODO
     self.end = None
     if config.hate_token and config.hate_token == self.value:
-      #Be hatin'
+      #Be hatin' - for morphology debugging
       raise Exception("Tokenization Backtrace")
 
   def classify(self, config):
@@ -99,11 +102,11 @@ class Token:
         self.type = SELMAHO[self.value]
       else:
         config.warn("Unknown cmavo %r"%(self.value), self.position)
-        self.type = SELMAHO['UNKNOWN']
+        self.type = SELMAHO['CIZMAhO']
     elif isinstance(self, SELBRI):
       #A gismu, a lujvo, or a fuhivla?
       #gismu: CCVCV or CVCCV
-      #XXX Todo: Detect lujvo/fu'ivla forms
+      #XXX TODO: Detect lujvo/fu'ivla forms
       if len(self.bits) == 4:
         if self.bits[0].CC and self.bits[1].V and self.bits[2].C and self.bits[3].V:
           self.type = GISMU
@@ -115,7 +118,7 @@ class Token:
       else:
         self.type = SELBRI
     else:
-      #cmene, or possibly instantiated as a lujvo/gismu/fuhivla, or maybe garbage
+      #cmene, or possibly pre-defined as a lujvo/gismu/fuhivla, or maybe garbage
       self.type = type(self)
 
 
@@ -131,13 +134,14 @@ BRIVLA = SELBRI #I prefer SELBRI, lojban.bnf uses BRIVLA  XXX could replace it i
 
 
 class EXTRA(Token): pass #Something that can't be parsed
-class   GARBAGE(EXTRA): pass
-class   NONLOJBAN(EXTRA): pass
+class   GARBAGE(EXTRA): pass #Strange characters in Lojbanistan
+class   NONLOJBAN(EXTRA): pass #Contents of a zoi-quote
 
 
-class BORING(Token): pass #tokens don't uffect meaning; lower-level clients might want access to them tho
-class   WHITESPACE(BORING): pass
-class   PERIOD(BORING): pass
-class   HESITATION(BORING): pass
-class   DELETED(BORING): pass
+class IGNORABLE(Token): pass #Not needed in grammer parsing
+class BORING(Token): pass #tokens don't uffect parsing; clients that do text transformation might want them
+class   WHITESPACE(BORING, IGNORABLE): pass
+class   PERIOD(BORING, IGNORABLE): pass
+class   HESITATION(BORING): pass #Should be absorbed into (sigh) the previous token
+class   DELETED(BORING, IGNORABLE): pass #Not used
 

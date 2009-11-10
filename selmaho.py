@@ -33,10 +33,10 @@ class selmaho:
 
 class UnknownSelmaho:
   def __repr__(self):
-    return "UNKNOWN"
+    return "CIZMAhO"
   def __init__(self):
-    SELMAHO['UNKNOWN'] = self
-    self.__name__ = 'UNKNOWN'
+    SELMAHO['CIZMAhO'] = self
+    self.__name__ = 'CIZMAhO'
     self.forms = []
 
   def __contains__(self, token):

@@ -10,5 +10,18 @@ lerfu-word =
     | LAU lerfu-word
     | TEI lerfu-string FOI  
 
-x-root =
+x-parse-root =
   sentence
+
+
+;;;;;;The following rules are non-formal:
+;word1100 =
+;   [BAhE] any-word [indicators]
+;any-word =
+;   “any single word (no compound cmavo)”
+;anything =
+;   “any text at all, whether Lojban or not” 
+;null1101 =
+;   any-word SI
+;    | utterance SA
+;    | text SU

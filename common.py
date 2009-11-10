@@ -7,15 +7,16 @@ There are several modules with fancy latinesque names. Each handles a different 
       Converts arbitrary alphabets into latin. Then it determines the type of the letter. Then it groups the vowels and the consonants together.
 
   morphology
-      Creates individual valsi.
+      Creates individual valsi using the BRKWORDS morphology algo
+
+  thaumatology
+      Does pre-processing for dendrography; it handles erasures, quoting, UI....
+
+  dendrography
+      Uses the BNF to create a parse tree, and then sorts it out to make it nice and pretty. The Magic words are (?) handled by the BNF... TODO see look uhm
   
   [As of writing, the modules below aren't implemented]
   
-  thaumatology
-      A post-processor for morphology
-  dendrography
-      Uses the BNF to create a parse tree, and then sorts it out to make it nice and pretty. The Magic words are (?) handled by the BNF... TODO see look uhm
-
   semasiology
       Re-structures the tree. Changes pro-valsi to original values, check that selbri are real words
 
@@ -98,19 +99,9 @@ class Buffer:
   def pop(self, i=0):
     self.__fill_to(i)
     return self.buffer.pop(i)
-
-
-def Stream(conf=None, stdin=None):
-  """
-  This function will be found in each module that handles a level of parsing.
-  Its job is to return a Buffer that will be used by the next client.
-  This one doesn't actually do anything though. :P
-  """
-  if conf == None:
-    conf = config.Configuration()
-  if stdin == None:
-    stdin = sys.stdin
-  pass
+  
+  def end_zoi(self, token):
+    return self.iterable.end_zoi()
 
 
 class Position:
@@ -135,3 +126,16 @@ class Position:
   def pushcol(self):
     self.c += 1
     self.col += 1
+
+
+def Stream(conf=None):
+  """
+  This function will be found in each module that handles a level of parsing.
+  Its job is to return a Buffer that will be used by the next client.
+  This one doesn't actually do anything though. :P
+  (Maybe it could return a stdin buffer? TODO)
+  """
+  if conf == None:
+    conf = config.Configuration()
+  pass
+

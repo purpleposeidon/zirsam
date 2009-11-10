@@ -131,4 +131,3 @@ if __name__ == '__main__':
     print(r, '(empty)')
   for i in r:
     print(i)
-  print(end - start)

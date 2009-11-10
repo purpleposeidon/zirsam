@@ -22,6 +22,7 @@ ugh, magic...
  - Have a config option for zoi to be filtered by the alphabet, or just from what we get
  + Check that the BNF is being intepreted properly
  - I think that morphology hack in orthography isn't needed anymore
+ - Don't use "config" for the config.Configuration() object, use "conf"
 
 ###### Later
 

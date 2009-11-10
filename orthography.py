@@ -18,10 +18,6 @@ import config
 
 
 
-
-
-
-
 def clean_val(v):
   #Escapes stuff if neccessary. "\n" -> "\\n"
   if v == '\\': return '\\'
