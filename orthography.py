@@ -10,6 +10,7 @@ TODO: unicodedata.normalize
 
 """
 import sys
+import copy
 
 import common
 import config
@@ -134,11 +135,6 @@ class Bit:
     if first.C:
       self.has_C = True
       if fd[0].C:
-        ###if fd[1].y and fd[2].C: #CCyC
-            ###self.CCyC = True
-            ###self.counts_CC = True
-            ###self.chars = [first, fd.pop(), fd.pop(), fd.pop()]
-        ###el
         if fd[1].C: #CCC or CC CC
           if fd[2].C: #CC CC
             self.CC = True
@@ -153,11 +149,6 @@ class Bit:
           self.counts_CC = True
           self.chars = [first, fd.pop()]
       elif fd[0].y and fd[1].C and not fd[2].y: #CyC
-        #if fd[2].C: 
-          #self.CyCC = True
-          #self.counts_CC = True
-          #self.chars = [first, fd.pop(), fd.pop(), fd.pop()]
-        #else:
         self.CyC = True
         self.counts_CC = True
         self.chars = [first, fd.pop(), fd.pop()]
@@ -222,6 +213,45 @@ class Bit:
         self.cc_letter_counts += 1
     
     self.position = self.chars[0].position
+  
+  def split(self, i):
+    """Splits up a bit, such as <lbr>.split(1), into <l><br>"""
+    head = FakeListBuffer(self.chars[:i])
+    tail =  FakeListBuffer(self.chars[i:])
+    print('!', head, tail)
+    head.reverse() #XXX I hope this works, but why is this needed?
+    tail.reverse()
+    yield Bit(head)
+    while tail:
+      yield Bit(tail)
+  
+  def __bool__(self): raise Exception("No")
+
+class FakeListBuffer(list):
+  def __init__(self, val):
+    #XXX Could be a child of Buffer
+    list.__init__(self, val)
+    self.C = False
+    self.CC = False
+    self.CCC = False
+    self.CyC = False
+    self.CyCC = False
+    self.CCyC = False # XXX - CCyC and CyCC counts as CCC, right?
+    
+    self.counts_CC = False
+    self.has_C = False
+    
+    self.V = False
+    self.VV = False
+    self.VhV = False
+    self.counts_VV = False
+    self.has_V = False
+    self.accented = False
+    self.y = False
+  def __getitem__(self, i):
+    if i >= len(self):
+      return self
+    return list.__getitem__(self, i)
 
 
 __VALID_INIT_CC = "bl br cf ck cl cm cn cp cr ct dj dr dz fl fr gl gr jb jd jg jm jv kl kr ml mr pl pr sf sk sl sm sn sp sr st tc tr ts vl vr xl xr zb zd zg zm zv".split(' ')

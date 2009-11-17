@@ -57,22 +57,6 @@ Desired cl options:
 
 
 
-#TODO: Single characters that expand to multiple characters
-#Also: diaerisies. I think, also + - / *, =?
-{'1':'pa', '2':'re', '3':'ci', '4':'vo', '5':'mu', '6':'xa', '7':'ze', '8':'bi', '9':'so', '0':'no'}
-
-class ParsingError(Exception): pass #For when your input sucks
-class InternalError(Exception): pass #For when your program sucks
-
-
-def lineno():
-    #Returns the current line number in our program. Debug thing.
-    return inspect.currentframe().f_back.f_lineno
-
-
-
-
-
 
 
 
@@ -824,7 +808,7 @@ def Stream(conf=None):
 def main():
 
   p = Stream()
-  
+  r = []
   if p.config.output_no_space:
     raise SystemExit("Space removal not implemented")
     for token in p:
@@ -843,9 +827,11 @@ def main():
         else:
           print(token, end=' ')
         sys.stdout.flush()
+        r.append(token)
 
   print()
+  return r
 
 
 if __name__ == '__main__':
-  main()
+  r = main()

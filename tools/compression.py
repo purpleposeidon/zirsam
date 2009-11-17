@@ -12,11 +12,17 @@ It uses the contents of the data/ directory.
 
 """
 
+'''
+Rather than re-read those delightful ideas, I'll just re-think them. Hrm.
+Need lujvo-breaker.
+
+'''
+
 
 import sys
 import os
+sys.path.append('../')
 
-import config
 import morphology
 
 data_dir = os.path.join(os.getcwd(), sys.argv[0])

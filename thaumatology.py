@@ -228,6 +228,7 @@ class AbsorptionStream:
     self.conf = conf
   
   def __iter__(self):
+    word = None
     try:
       while 1:
         word = self.valsi.pop()
@@ -240,6 +241,31 @@ class AbsorptionStream:
           continue
         else:
           while 1:
+            """
+            d. If selma'o NAI occurs immediately following any of tokens UI or CAI, absorb the NAI into the previous token.
+            e. Absorb all members of selma'o DAhO, FUhO, FUhE, UI, Y, and CAI into the previous token. All of these null grammar tokens are permitted following any word of the grammar, without interfering with that word’s grammatical function, or causing any effect on the grammatical interpretation of any other token in the text. Indicators at the beginning of text are explicitly handled by the grammar.
+            """
+            if next.type in (selmaho.UI, selmaho.CAI):
+              try:
+                if self.valsi[1].type == selmaho.NAI:
+                  nai = self.valsi.pop(1)
+                  next.modifiers.append(nai)
+                  continue
+              except (EOFError, StopIteration):
+                pass
+            if next.type in (selmaho.DAhO, selmaho.FUhO, selmaho.FUhE, selmaho.UI, selmaho.CAI) or isinstance(next, tokens.HESITATION):
+              word.modifiers.append(self.valsi.pop())
+              next = self.valsi[0]
+            else:
+              break
+            
+                
+            '''
+            #Possible cases:
+            #valsi ui[nai]
+            #valsi nai
+            #ui[nai]
+            #nai[ui]
             if next.type == selmaho.UI:
               word.modifiers.append(self.valsi.pop())
             elif next.type in (selmaho.CAI, selmaho.NAI):
@@ -253,11 +279,12 @@ class AbsorptionStream:
             else:
               break
             next = self.valsi[0]
+            '''
         yield word
     except (EOFError, StopIteration):
       assert self.valsi.buffer == []
-      assert word
-      yield word
+      if word:
+        yield word
 
 def Stream(conf=None):
   if conf == None:

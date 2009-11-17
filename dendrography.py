@@ -131,3 +131,5 @@ if __name__ == '__main__':
     print(r, '(empty)')
   for i in r:
     print(i)
+  if len(str(i)) < 33:
+    raise SystemExit(1)

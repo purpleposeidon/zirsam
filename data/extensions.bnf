@@ -1,3 +1,11 @@
+; The amazing, the incredible
+
+; ▛▀▘   ▐          ▌         ▛▀▖▙ ▌▛▀▘
+; ▙▄ ▚▗▘▜▀ ▞▀▖▛▀▖▞▀▌▄▄▖▞▀▖▄▄▖▙▄▘▌▌▌▙▄
+; ▌  ▗▚ ▐ ▖▛▀ ▌ ▌▌ ▌   ▌ ▌   ▌ ▌▌▝▌▌
+; ▀▀▘▘ ▘ ▀ ▝▀▘▘ ▘▝▀▘   ▝▀    ▀▀ ▘ ▘▘
+;
+;                       /brought to you by Trader Joe's/
 
 ; These rules are appended onto the end of lojban.bnf when it is built
 ; It would be a good idea to prepend all these rules with x.
@@ -6,22 +14,36 @@
 ; needs modification to
 lerfu-word =
     BY
-    | BU ; Originally, any-word BU, but thaumatology converts this itself
+    | BU ;  Originally, any-word BU, but thaumatology converts this itself
     | LAU lerfu-word
     | TEI lerfu-string FOI  
 
 x-parse-root =
-  (indicators & free ...) sentence
+    [CMENE ... # | (indicators & free ...)]
+;  text
+  ;[CMENE ... # | (indicators & free ...)]
+;[CMENE ... # | (indicators & free ...)]
 
 
-;;;;;;The following rules are non-formal:
-;word1100 =
+example =
+  a b c
+
+
+;text =
+;    [NAI ...] [CMENE ... # | (indicators & free ...)] [joik-jek]
+    ;text-1
+
+;               The following rules are non-formal:
+;word =
 ;   [BAhE] any-word [indicators]
 ;any-word =
 ;   “any single word (no compound cmavo)”
 ;anything =
 ;   “any text at all, whether Lojban or not” 
-;null1101 =
+;null =
 ;   any-word SI
 ;    | utterance SA
 ;    | text SU
+
+; LI(li) FUhA(fu'a) PA(bi) BOI(boi) PA(ci) BOI(boi) VUhU(gei) GOhA(du) LI(li) PA(vo)
+

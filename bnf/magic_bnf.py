@@ -2,6 +2,11 @@
 # -*- coding: utf-8 -*-
 
 
+DEBUG = True
+def debug(*args):
+  if DEBUG:
+    print(*args)
+
 """
 Match:
   {pa re ci} into <PA ...>
@@ -34,8 +39,8 @@ class BnfObjectBase:
     return Concat(self, other)
 
   def __pow__(self, other): #...
-    if other != "REPEAT":
-     raise Exception("Please multiply by string 'REPEAT'")
+    #if other != "REPEAT":
+    # raise Exception("Please multiply by string 'REPEAT'")
     return Repeat(self)
 
   def __add__(self, other): #&
@@ -87,6 +92,7 @@ class Terminal(BnfObjectBase):
 class Rule(BnfObjectBase):
   def match(self, tracker):
     #print("**** Entering Rule", self)
+    #debug("Rule:", "entering", self)
     
     target = BNF[self]
     child_tracker = tracker.append_rule(self)
@@ -95,6 +101,7 @@ class Rule(BnfObjectBase):
     #if repr(self) == 'selbri_3':
       #print("~!!!! selbri_3 RESULT:", result)
     #print(self, result)
+    debug("Rule:", self, result)
     if result == Match:
       #print("**** Exiting Rule", self, ": ACCEPT", "with", result, 'from', target)
       tracker.accept_rule()
@@ -149,13 +156,13 @@ class XOr(Condition): #Bad name, should be "Alternation"
   def match(self, tracker):
     a = self.terms[0].match(tracker)
     if a:
-      ##print('   |', self, a)
+      debug('|', self.terms[0], a)
       return Match
     
     b = self.terms[1].match(tracker)
-    ##print('   |', self, b)
+    
     if b:
-      
+      debug('|', self.terms[1], b)
       return Match
     return NoMatch
 
@@ -169,7 +176,7 @@ class Concat(Condition):
       return NoMatch
     b = self.terms[1].match(tracker)
     if b:
-      ##print(self, '@', self.terms, 'Match')
+      debug('+', self.terms[0], a, '+', self.terms[1], b)
       tracker.commit()
       return Match
     ##print(self, '@', self.terms, b)

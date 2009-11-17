@@ -13,12 +13,12 @@ There are several modules with fancy latinesque names. Each handles a different 
       Does pre-processing for dendrography; it handles erasures, quoting, UI....
 
   dendrography
-      Uses the BNF to create a parse tree, and then sorts it out to make it nice and pretty. The Magic words are (?) handled by the BNF... TODO see look uhm
+      Uses the BNF to create a parse tree, and then sorts it out to make it nice and pretty. All of the actual parsing happens in bnf/magic_bnf.py .
   
   [As of writing, the modules below aren't implemented]
   
   semasiology
-      Re-structures the tree. Changes pro-valsi to original values, check that selbri are real words
+      Re-structures the tree. Changes pro-valsi to original values, check that selbri are real words (Actually, maybe 'is-a-real-selbri' could happen even earlier, when they are tokenized?
 
 There are other files:
   config
@@ -36,11 +36,14 @@ import config
 
 #Contains the Buffer, a class used by every layer of the parser
 
+
 class Buffer:
   #If this class used less methods, the stack would be shorter
   def __repr__(self):
     return "<Buffered {0}>".format(type(self.orig).__name__)
-  def __init__(self, iterable, conf):
+  def __init__(self, iterable, conf=None):
+    if conf == None:
+      conf = config.Configuration()
     if not hasattr(iterable, '__next__'):
       #raise Exception("Wrap in an iterator plz")
       self.orig = iterable
@@ -123,6 +126,12 @@ class Position:
   def pushcol(self):
     self.c += 1
     self.col += 1
+
+def lineno():
+    #Returns the current line number in our program. Debug thing.
+    return inspect.currentframe().f_back.f_lineno
+
+
 
 
 def Stream(conf=None):

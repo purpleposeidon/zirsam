@@ -88,6 +88,7 @@ class Token:
     self.position = self.bits[0].position
     self.value = self.calculate_value(config)
     self.type = ...
+    self.ve_lujvo_rafsi = []
     self.classify(config)
     self.content = None
     self.modifiers = [] #Emphasis and such.
@@ -117,13 +118,105 @@ class Token:
         elif self.bits[0].C and self.bits[1].V and self.bits[2].CC and self.bits[3].V:
           self.type = GISMU
         else:
-          self.type = SELBRI
-          #raise Exception("How what?")
+          if self._lujvo_analyze():
+            self.type = LUJVO
+          else:
+            self.type = FUHIVLA
+          #raise Exception("Now what?")
       else:
-        self.type = SELBRI
+        if self._lujvo_analyze():
+          self.type = LUJVO
+        else:
+          self.type = FUHIVLA
     else:
-      #cmene, or possibly pre-defined as a lujvo/gismu/fuhivla, or maybe garbage
+      #cmene, or possibly pre-defined (as lujvo/gismu/fuhivla), or maybe garbage
       self.type = type(self)
+
+  def _ccc2cc_c(self, i):
+    print(self.bits)
+    base = self.bits.pop(i)
+    import sys
+    sys.b = base
+    head, *tail = base.split(1)
+    while tail:
+      self.bits.insert(i, tail.pop())
+    self.bits.insert(i, head)
+    print("Turned", base, "into", head, "and", tail)
+    print(self.bits)
+    return head, tail
+  def _get_lujvo_part(self, s=0):
+    #Rafsi forms: CVCCV, CCVCV, CVCC, CCVC, CCV, CVC, CVV
+    #Items that end in C/CC may need to be split
+    l = len(self.bits)
+    class Foo:
+      class Bar:
+        def __init__(self): self.y = self.V = self.C = self.CC = self.CCC = self.has_C = self.counts_V = self.counts_C = False
+      def __init__(self, bits): self.bits = bits
+      def __getitem__(self, i):
+        if i >= l: return Foo.Bar()
+        b = self.bits[i]
+        #if b.CyC: return Foo.Bar()
+        return b
+    
+    test = Foo(self.bits)
+    if test[s].y:
+      return 1 #y
+    elif test[s].C:
+      if test[s+1].counts_VV: #CVV
+        if s == 0: #Check hyphen words
+          if test[s+2].value[0] in 'rn':
+            if not test[s+2].C:
+              self._ccc2cc_c(s+2)
+            return 3
+        return 2
+      elif test[s+1].V:
+        if test[s+2].CC or test[s+2].CCC:
+          if test[s+2].CCC:
+            self._ccc2cc_c(s+2)
+            
+          if test[s+3].V: #CVCCV
+            return 4
+          else:
+            return 3 #CVCC
+        elif test[s+2].has_C:
+          if not test[s+2].C:
+            self._ccc2cc_c(s+2) #CVC (C...)
+          return 3 #CVC
+    elif test[s].CC and test[s+1].V:
+      if test[s+2].has_C:
+        if test[s+3].V: #CCVCV
+          return 4
+        else:
+          if (not test[s+2].C) and (test[s+2].has_C): #CCVC...
+            self._ccc2cc_c(s+2)
+          return 3 #CCVC
+      else:
+        return 2 #CCV
+
+  def _lujvo_analyze(self):
+    #Are we lujvo, or fuhivla?
+    #self.ve_lujvo_rafsi = []
+    s = 0
+    while 1:
+      i = self._get_lujvo_part(s)
+      print(i)
+      if i: # and i != s:
+        self.ve_lujvo_rafsi.append(self.bits[s:s+i])
+        print(self.bits[s:s+i])
+        s += i
+        
+      else:
+        break
+    if s == len(self.bits):
+      print(">>>", self.bits)
+      print(">>>", self.ve_lujvo_rafsi)
+      
+      return True
+      #self.type = LUJVO
+    else:
+      print("Not lujvo.")
+      print(self.ve_lujvo_rafsi)
+      self.ve_lujvo_rafsi = []
 
 
 
