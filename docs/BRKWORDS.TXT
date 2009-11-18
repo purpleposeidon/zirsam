@@ -286,6 +286,3 @@ pauses.  We want to break it up into words.                                     
       6]  Any other beginning (e.g. CVVCyC):                                            {# It would be good to see examples of other
         Resolve the whole as an error.                                                   # error forms. }
 
-
-
-_______________________________________

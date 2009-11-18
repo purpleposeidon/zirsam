@@ -27,6 +27,7 @@ Items marked "-" aren't as important as items marked "+"
 
  - Check that each marker in brkwords is properly implemented and documented
  - Add an "--abusive" option zo'o
+ - $ grep -C 2 "XXX\|TODO" *.py */*.py
  - Check for TODO, XXX, and ... in code
  - Check for weird/odd/wrong comments
  - Make sure I didn't accidentally change/deleting anything in BRKWORDS.txt
@@ -38,6 +39,7 @@ Items marked "-" aren't as important as items marked "+"
  + Make GlyphTable handle multi-length inputs
  - CLI argument to read stdin from a file
  - It could be faster! Instead of Xor(Xor(...), A) do Xor(A, Xor(...). Because that would make it faster? Only if the most common forms are listed first in the BNF.
+ - Do lujvo/fuhivla sorting crap in morphology?
 
 ###### Much Later
 

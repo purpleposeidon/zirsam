@@ -181,7 +181,7 @@ class ValsiParser:
       #self.config.debug(self.bit[locus_ps], repr(locus_ps), self.bit[locus_ps].accented)
       if self.bit[locus_ps].wordsep:
         found_word_end = True
-        locus_ps -= 1 #XXX Test it, see {obupykyburysyty.ubuvyvybuxy.ybuzy}
+        locus_ps -= 1 #XXX Test it, try "obupykyburysyty.ubuvyvybuxy.ybuzy"
         break
       elif self.bit[locus_ps].accented:
         return locus_ps
@@ -455,7 +455,7 @@ we: {4}""".format(self.bit.buffer, cc_location, cc, ps, word_end))
             fms = test(letters, i, frontmiddles, match)
             if not fms:
               #{2.C.4)b)5]d]3>} - Doesn't match a front-middle
-              return [self.tokenize(2, CMAVO), self.tokenize(has_y-2, SELBRI)] #XXX lujvo or fu'ivla
+              return [self.tokenize(2, CMAVO), self.tokenize(has_y-2, SELBRI)]
             i += fms
           
           
@@ -560,7 +560,7 @@ we: {4}""".format(self.bit.buffer, cc_location, cc, ps, word_end))
           
           
           #{2.C.4)b)5]e]3>}
-          return self.tokenize(2, CMAVO), self.tokenize(end_of_brivla-1, SELBRI)
+          return self.tokenize(2, CMAVO), self.tokenize(end_of_brivla-1, FUHIVLA)
         #endif has_y
       else: #Some other begining we don't do nothing with!
         #{2.C.4)b)6]}
@@ -821,7 +821,7 @@ def main():
       pass
   else:
     for token in p:
-      if not isinstance(token, BORING): #XXX maybe show y tho?
+      if not isinstance(token, IGNORABLE):
         if p.config._debug: #Makes it prettier
           p.config.debug('yielding '+str(token))
         else:

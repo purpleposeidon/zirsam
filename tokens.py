@@ -1,8 +1,12 @@
 # -*- coding: utf-8 -*-
 
 #Different kinds of tokens
+import io
 
+import config
+import common
 import orthography
+
 from selmaho import SELMAHO
 
 
@@ -50,7 +54,7 @@ class Token:
   def calculate_value(self, config):
     """
     Return the ascii value of the token
-    TODO This feels out of place here.
+    XXX This feels out of place
     """
     #Assemble a string out of the values of every bit
     v = ''
@@ -101,7 +105,7 @@ class Token:
     if self.type != ...:
       return
     if isinstance(self, CMAVO):
-      #All cmavo should have a value
+      #All cmavo should have a value!
       self.value = self.value.lower()
       if self.value in SELMAHO:
         self.type = SELMAHO[self.value]
@@ -111,20 +115,19 @@ class Token:
     elif isinstance(self, SELBRI):
       #A gismu, a lujvo, or a fuhivla?
       #gismu: CCVCV or CVCCV
-      #XXX TODO: Detect lujvo/fu'ivla forms
       if len(self.bits) == 4:
         if self.bits[0].CC and self.bits[1].V and self.bits[2].C and self.bits[3].V:
           self.type = GISMU
         elif self.bits[0].C and self.bits[1].V and self.bits[2].CC and self.bits[3].V:
           self.type = GISMU
         else:
-          if self._lujvo_analyze():
+          if self._lujvo_analyze(self.value):
             self.type = LUJVO
           else:
             self.type = FUHIVLA
           #raise Exception("Now what?")
       else:
-        if self._lujvo_analyze():
+        if self._lujvo_analyze(self.value):
           self.type = LUJVO
         else:
           self.type = FUHIVLA
@@ -132,92 +135,112 @@ class Token:
       #cmene, or possibly pre-defined (as lujvo/gismu/fuhivla), or maybe garbage
       self.type = type(self)
 
-  def _ccc2cc_c(self, i):
-    print(self.bits)
-    base = self.bits.pop(i)
-    import sys
-    sys.b = base
-    head, *tail = base.split(1)
-    while tail:
-      self.bits.insert(i, tail.pop())
-    self.bits.insert(i, head)
-    print("Turned", base, "into", head, "and", tail)
-    print(self.bits)
-    return head, tail
-  def _get_lujvo_part(self, s=0):
-    #Rafsi forms: CVCCV, CCVCV, CVCC, CCVC, CCV, CVC, CVV
-    #Items that end in C/CC may need to be split
-    l = len(self.bits)
-    class Foo:
-      class Bar:
-        def __init__(self): self.y = self.V = self.C = self.CC = self.CCC = self.has_C = self.counts_V = self.counts_C = False
-      def __init__(self, bits): self.bits = bits
-      def __getitem__(self, i):
-        if i >= l: return Foo.Bar()
-        b = self.bits[i]
-        #if b.CyC: return Foo.Bar()
-        return b
-    
-    test = Foo(self.bits)
-    if test[s].y:
-      return 1 #y
-    elif test[s].C:
-      if test[s+1].counts_VV: #CVV
-        if s == 0: #Check hyphen words
-          if test[s+2].value[0] in 'rn':
-            if not test[s+2].C:
-              self._ccc2cc_c(s+2)
-            return 3
-        return 2
-      elif test[s+1].V:
-        if test[s+2].CC or test[s+2].CCC:
-          if test[s+2].CCC:
-            self._ccc2cc_c(s+2)
-            
-          if test[s+3].V: #CVCCV
-            return 4
-          else:
-            return 3 #CVCC
-        elif test[s+2].has_C:
-          if not test[s+2].C:
-            self._ccc2cc_c(s+2) #CVC (C...)
-          return 3 #CVC
-    elif test[s].CC and test[s+1].V:
-      if test[s+2].has_C:
-        if test[s+3].V: #CCVCV
-          return 4
+  
+  def _match_form(self, chars, form, is_first):
+    i = 0
+    rafsi = ''
+    while i != len(form):
+      f = form[i]
+      try:
+        c = chars[i]
+      except:
+        return False
+      if f == 'y' and not c.y: return False
+      if f == 'C' and not c.C: return False
+      if f == 'V' and not c.V: return False
+      if f == 'h' and not c.h: return False
+      if f == '|' and not c.whitespace: return False
+      if f == '-': #a hyphen letter; r or n
+        if (is_first and c.value in 'rn'):
+          if c.value == 'n' and chars[i+1].value != 'r': #xorxes says n must be followed by r
+            return False
         else:
-          if (not test[s+2].C) and (test[s+2].has_C): #CCVC...
-            self._ccc2cc_c(s+2)
-          return 3 #CCVC
-      else:
-        return 2 #CCV
-
-  def _lujvo_analyze(self):
-    #Are we lujvo, or fuhivla?
-    #self.ve_lujvo_rafsi = []
-    s = 0
-    while 1:
-      i = self._get_lujvo_part(s)
-      print(i)
-      if i: # and i != s:
-        self.ve_lujvo_rafsi.append(self.bits[s:s+i])
-        print(self.bits[s:s+i])
-        s += i
+          return False
         
-      else:
-        break
-    if s == len(self.bits):
-      print(">>>", self.bits)
-      print(">>>", self.ve_lujvo_rafsi)
       
-      return True
-      #self.type = LUJVO
-    else:
-      print("Not lujvo.")
-      print(self.ve_lujvo_rafsi)
-      self.ve_lujvo_rafsi = []
+      rafsi += str(chars[i])
+      i += 1
+    return rafsi
+  def _add_rafsi(self, chars, i):
+    rafsi = ''
+    while i > 0:
+      c = chars.pop(0)
+      rafsi = rafsi + c.value
+      i -= 1
+    self.ve_lujvo_rafsi.append(rafsi)
+    return chars
 
+  def _lujvo_analyze(self, value):
+    #XXX TODO Not everything that isn't a gismu/lujvo/cmavo is a fu'ivla
+    #XXX Move somewhere else?
+    self.ve_lujvo_rafsi = []
+    chars = list(orthography.stream_char(config.Configuration(stdin=io.StringIO(value+' '))))
+    orig_chars = list(chars)
+    forms = [0]
+    
+    def next_form():
+      #The current item didn't work, so pick the next.
+      if forms[-1] > len(all_):
+        #Out of items here...
+        forms.pop()
+      if forms == []:
+        return True #FUHI!
+      forms[-1] += 1
+      return False
+    len_form = lambda: sum(len(all_[_]) for _ in forms[:-1])
+    
+    ##http://www.lojban.org/sv/lists/lojban-list/msg16628.html
+    terminal_rafsi = "CCV| CVV| CVhV| CVCCV| CCVCV|".split(' ')
+    rafsi4 = "CVCCy CCVCy".split(' ')
+    rafsi3 = "CVV- CVhV- CVC CVCy CVV CVhV CCV".split(' ')
+    all_ = terminal_rafsi + rafsi4 + rafsi3
+    
+    
+    while 1:
+      len_ = len_form()
+      chars = orig_chars[len_:]
+      if chars == []:
+        break
+      
+      try:
+        test = self._match_form(orig_chars[len_:], all_[forms[-1]], len(forms) == 1)
+      except Exception as e:
+        test = False
+      #len_ = len_form()
+      
+      if test:
+        #chars = test
+        if all_[forms[-1]][-1] == '|':
+          break
+        forms.append(0)
+      else:
+        if next_form():
+          return False #Ran out of checks. FUHI!
+      
+    #You think you found a lujvo
+    #XXX: Do I need to check for doubling?
+    first = all_[forms[0]]
+    if first in ["CVV", "CVhV"]:
+      if len(forms) != 2 or all_[forms[1]] != "CCV|":
+        return False
+    #"Check the consonant that follows CVC or CVCy." - I trust he refers to the following paragraph? >_>
+    #Maybe consonant clusters?
+    i = 0
+    for form in forms:
+      if all_[form][:2] == 'CC':
+        #Check consonant clusters
+        if not orthography.valid_init_cc(orig_chars[i].value+orig_chars[i+1].value):
+          return False
+      i += len(all_[form])
+    '''
+    if first in ['CVC', 'CVCy']:
+      if not self._lujvo_analyze(value[2:]):
+        return False
+    '''
+    while forms:
+      _ = all_[forms.pop(0)]
+      chars = self._add_rafsi(orig_chars, len(_))
+    return True
 
 
 class VALSI(Token): pass
@@ -240,5 +263,5 @@ class BORING(Token): pass #tokens don't uffect parsing; clients that do text tra
 class   WHITESPACE(BORING, IGNORABLE): pass
 class   PERIOD(BORING, IGNORABLE): pass
 class   HESITATION(BORING): pass #Should be absorbed into (sigh) the previous token
-class   DELETED(BORING, IGNORABLE): pass #Not used
+class   DELETED(BORING, IGNORABLE): pass #Nothing uses this
 

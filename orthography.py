@@ -75,7 +75,9 @@ class Character:
 
 
 class Bit:
-  """Stores a logical sequence of characters"""
+  """Stores a logical sequence of characters
+  XXX A better name? Cluster
+  """
   def __str__(self):
     r = ''
     for c in self.chars:
@@ -177,15 +179,9 @@ class Bit:
       self.whitespace = True
       self.wordsep = True
       self.chars = [first]
-      #I think it is decided: Don't merge whitespace, it breaks everything
-      #while fd[0].whitespace: # XXX - this makes evevrything unresponsive when inputting text
-      #  self.chars.append(fd.pop())
     elif first.y:
       self.y = True
       self.chars = [first]
-      #XXX I don't like this
-      #while fd[0].y:
-        #self.chars.append(fd.pop())
     elif first.h:
       self.h = True
       self.chars = [first]
@@ -214,52 +210,14 @@ class Bit:
     
     self.position = self.chars[0].position
   
-  def split(self, i):
-    """Splits up a bit, such as <lbr>.split(1), into <l><br>"""
-    head = FakeListBuffer(self.chars[:i])
-    tail =  FakeListBuffer(self.chars[i:])
-    print('!', head, tail)
-    head.reverse() #XXX I hope this works, but why is this needed?
-    tail.reverse()
-    yield Bit(head)
-    while tail:
-      yield Bit(tail)
   
-  def __bool__(self): raise Exception("No")
-
-class FakeListBuffer(list):
-  def __init__(self, val):
-    #XXX Could be a child of Buffer
-    list.__init__(self, val)
-    self.C = False
-    self.CC = False
-    self.CCC = False
-    self.CyC = False
-    self.CyCC = False
-    self.CCyC = False # XXX - CCyC and CyCC counts as CCC, right?
-    
-    self.counts_CC = False
-    self.has_C = False
-    
-    self.V = False
-    self.VV = False
-    self.VhV = False
-    self.counts_VV = False
-    self.has_V = False
-    self.accented = False
-    self.y = False
-  def __getitem__(self, i):
-    if i >= len(self):
-      return self
-    return list.__getitem__(self, i)
-
+  #def __bool__(self): raise Exception("No")
 
 __VALID_INIT_CC = "bl br cf ck cl cm cn cp cr ct dj dr dz fl fr gl gr jb jd jg jm jv kl kr ml mr pl pr sf sk sl sm sn sp sr st tc tr ts vl vr xl xr zb zd zg zm zv".split(' ')
 def valid_init_cc(bit):
-  #XXX I bet I only use one of these if's
-  if type(bit) == list:
-    assert len(bit) == 2
-    assert all(type(x) == str for x in bit)
+  if type(bit) in (list, str):
+    #assert len(bit) == 2
+    #assert all(type(x) == str for x in bit)
     return (bit[0]+bit[1]) in __VALID_INIT_CC
   if len(bit.chars) == 4: #CCyC or CyCC
     l, x, z, n = bit.chars
@@ -267,9 +225,6 @@ def valid_init_cc(bit):
       return (z.value+n.value) in __VALID_INIT_CC
     elif z.value == 'y':
       return (l.value+x.value) in __VALID_INIT_CC
-    else:
-      raise Exception("Miscall with " + str(bit))
-    
   elif len(bit.chars) == 3:
     l, m, n = bit.chars
     if l.C and m.y and n.C:
@@ -312,8 +267,9 @@ def stream_char(config):
     #assert c.lower() in "bcdfgjklmnprstvxz \n ',. aeiouy"
 
     if c == []:
-      yield Character('\n', config) # haXXX, if morphology doesn't get a whitespace at the end it doesn't give up the last token
-      yield Character('', config)
+      #XXX I don't think that stuff below is needed anymore; but if I find errors...
+      #yield Character('\n', config) # haXXX, if morphology doesn't get a whitespace at the end it doesn't give up the last token
+      #yield Character('', config) #XXX ? I don't need anymore?!?
       break
     else:
       for _c in c:
