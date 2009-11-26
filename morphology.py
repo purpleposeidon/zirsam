@@ -656,7 +656,7 @@ we: {4}""".format(self.bit.buffer, cc_location, cc, ps, word_end))
     
     #{2.A.3)}
     if self.bit[word_end-1].value == 'y':
-      
+      #lerfu has to deal with shuffling things back
       if self.bit[word_end].wordsep and not isinstance(self.bit[word_end], Token):
         if not self.bit[word_end].period:
           #Required to end with a pause

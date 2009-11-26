@@ -45,10 +45,13 @@ class Token:
       val += ', content=' + str(self.content)
     if self.end:
       val += ', end=' + str(self.end)
+    if self.ve_lujvo_rafsi:
+      val += '=' + '+'.join(self.ve_lujvo_rafsi)
     r = "{0}({1})".format(self.__getname(), val)
     if self.modifiers:
       for _ in self.modifiers:
         r += '_'+str(_)
+    
     return r
 
   def calculate_value(self, config):
@@ -174,7 +177,7 @@ class Token:
     #XXX TODO Not everything that isn't a gismu/lujvo/cmavo is a fu'ivla
     #XXX Move somewhere else?
     self.ve_lujvo_rafsi = []
-    chars = list(orthography.stream_char(config.Configuration(stdin=io.StringIO(value+' '))))
+    chars = list(orthography.stream_char(config.Configuration(stdin=io.StringIO(value+' '), args=[])))
     orig_chars = list(chars)
     forms = [0]
     
@@ -221,6 +224,7 @@ class Token:
     #XXX: Do I need to check for doubling?
     first = all_[forms[0]]
     if first in ["CVV", "CVhV"]:
+      #xorxes says a CVV must end with CCV.
       if len(forms) != 2 or all_[forms[1]] != "CCV|":
         return False
     #"Check the consonant that follows CVC or CVCy." - I trust he refers to the following paragraph? >_>
@@ -237,9 +241,17 @@ class Token:
       if not self._lujvo_analyze(value[2:]):
         return False
     '''
+    
     while forms:
       _ = all_[forms.pop(0)]
-      chars = self._add_rafsi(orig_chars, len(_))
+      orig_chars = self._add_rafsi(orig_chars, len(_))
+    #remove hyphen-letter
+    
+    if first in ["CVV-," "CVhV-"]:
+      #Remove the hyphen
+      self.ve_lujvo_rafsi[0] = self.ve_lujvo_rafsi[0][:-1]
+    
+    self.ve_lujvo_rafsi[-1] = self.ve_lujvo_rafsi[-1][:-1] #Dump the whitespace from the begining
     return True
 
 

@@ -1,10 +1,8 @@
 
 Or, in other words, "TODO"
-Items marked "-" aren't as important as items marked "+"
+Items marked "-" aren't as important as items marked "+"?
 
 
-###### Next
-  + Debug mode for dendrography
 
 ###### Soon
  - Implement everything according to http://www.lojban.org/tiki/Magic+Words
@@ -20,11 +18,11 @@ Items marked "-" aren't as important as items marked "+"
  - Study and meditate upon lojban grammar, make grammar parser (In progress! :D)
  - Have a config option for zoi to be filtered by the alphabet, or just from what we get
  + Check that the BNF is being intepreted properly
- - I think that morphology hack in orthography isn't needed anymore
  - Don't use "config" for the config.Configuration() object, use "conf"
+ + Debug mode for dendrography
+ + Ah HA! I've figured out how to handle ZOI: Keep a copy of the old crap. Well, ah, we only need to start when we hit a ZOI, but ohh.. Okay, so EVERYTHING must be copied. AH HA! Okay, that is beautiful love. Hit ZOI. Get delim. Get delim offset. Read shit from morphology, until we hit next delim. Get offset. Suck out stuff between the delim's in the old buffer! :D
 
 ###### Later
-
  - Check that each marker in brkwords is properly implemented and documented
  - Add an "--abusive" option zo'o
  - $ grep -C 2 "XXX\|TODO" *.py */*.py
@@ -36,10 +34,10 @@ Items marked "-" aren't as important as items marked "+"
  - How do I like Position? Does it match up with vi, kate, and other editors?
  - Do I like how the Configuration object is propagated? Is there a way to make it more... uhmm
    - Don't use self.config, use self.buffer.config? (the way it is now is more flexible)
- + Make GlyphTable handle multi-length inputs
+ + Make GlyphTable handle multi-length input characters
  - CLI argument to read stdin from a file
  - It could be faster! Instead of Xor(Xor(...), A) do Xor(A, Xor(...). Because that would make it faster? Only if the most common forms are listed first in the BNF.
- - Do lujvo/fuhivla sorting crap in morphology?
+ - Move lujvo/fuhivla sorting crap in morphology?
 
 ###### Much Later
 
@@ -88,3 +86,4 @@ Ortohgraphy - what happens to capitalized letters with strict ortho?
  - Handle whitespace so that the fact that there is a word seperation is returned immediatly, instead of reading 'til the first non-whitespace. Possibilities include returning a Bit for each whitespace, returning a Bit for the first whitespace and merging the rest, or returning a bit that has no value, but is treated as a whitespace, and having the actual whitespace slurped up later.  (I\'m having it just return each whitespace individualy)
  + sumti-6 in the BNF isn't being loaded correctly
  - Check that I am parsing the BNF correctly. For example, the &s in "simple-tense-modal" (I don't know for certain that the way it parses is correct)
+ - I think that morphology hack in orthography isn't needed anymore

@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 #automatically generated
-#on Sat Nov 14 19:14:25 2009
+#on Wed Nov 25 21:35:06 2009
 #by poseidon@skami
 
 from magic_bnf import *
@@ -192,7 +192,7 @@ Rule('indicator'):
 Rule('lerfu_word'):
     Terminal(BY)<<Terminal(BU)<<Terminal(LAU)*Rule('lerfu_word')<<Terminal(TEI)*Rule('lerfu_string')*Terminal(FOI),
 Rule('x_parse_root'):
-    Optional(Terminal(CMENE)**"REPEAT"*Optional(Rule('free')**"REPEAT")<<(Rule('indicators')+Rule('free')**"REPEAT")),
+    Rule('text'),
 Rule('example'):
     Rule('a')*Rule('b')*Rule('c')
 }

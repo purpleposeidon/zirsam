@@ -1,9 +1,13 @@
+For the lazy:
+  python3.0 dendrograpy.py
+
+
 BRKWORDS.TXT has my comments regarding morphology, I've also included the original file in this directory.
 
 unfinished_business is the todo list
 
 
-To start parsing something, first pick what depth you want. Do you want orthography, morphology, thaumatology, dendrography, or semantography?
+To start parsing something, first pick what depth you want. Do you want orthography, morphology, thaumatology or dendrography?
 
 
 If all you want are valsi, than you can do:

@@ -19,7 +19,8 @@ lerfu-word =
     | TEI lerfu-string FOI  
 
 x-parse-root =
-    [CMENE ... # | (indicators & free ...)]
+  text
+;    [CMENE ... # | (indicators & free ...)]
 ;  text
   ;[CMENE ... # | (indicators & free ...)]
 ;[CMENE ... # | (indicators & free ...)]

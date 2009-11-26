@@ -1,0 +1,167 @@
+#!/usr/bin/python3.0
+# -*- coding: utf-8 -*-
+
+
+"""
+I got about 67% compression rate for a bit copied from la .alis.
+Even better compression could be achieved. There are 2228 words (including some fake words), which is between 2**11 and 2**12. It presently uses 16 bits; those 4 bits could be dropped for even greater compression
+
+
+
+TODO: rename cmalu; or maybe zircma?
+TODO: Properly rebuild lujvo
+"""
+DATA_DIR = "data/"
+
+import io, sys, os, pickle, array
+sys.path.append('./')
+import morphology
+import tokens
+import config
+
+ARRAY_TYPE = 'H'
+
+r2g = pickle.load(open(os.path.join(DATA_DIR, 'r2g.pyk3'), 'rb'))
+g2r = pickle.load(open(os.path.join(DATA_DIR, 'g2r.pyk3'), 'rb'))
+
+gismu = list(line.strip() for line in open(os.path.join(DATA_DIR, 'gismu'), 'r'))
+fuhivla = (line.strip() for line in open(os.path.join(DATA_DIR, 'fuhivla'), 'r'))
+cmavo = (line.strip() for line in open(os.path.join(DATA_DIR, 'cmavo'), 'r'))
+words = tuple('%')+tuple('@')+tuple('23456789')+tuple('\n')+tuple(gismu)+tuple(fuhivla)+tuple(cmavo)
+DELIM_ZOI = 0 #% is a placeholder for our uncompressable-text
+DELIM_LUJ = 1 #@ is a placeholder for a rafsi
+DELIM_NEWLINE = 10 #\n is the placeholder for newlines
+#23456789 makes the newline #10 so that if there's a trailing newline in input, nobody notices.
+
+WORDLIST_LEN = len(words)
+WORDLIST_HASH = hash(words)
+if WORDLIST_LEN >= 2**16:
+  raise Exception("Too many words!")
+
+
+for gism in gismu:
+  r2g[gism] = gism
+  r2g[gism[:-1]] = gism
+
+def decompress(src):
+  while 1:
+    try:
+      id = next(src)
+    except StopIteration:
+      break
+    if id == DELIM_ZOI:
+      ords = []
+      while 1:
+        id = next(src)
+        if id == DELIM_ZOI:
+          break
+        ords.append(id)
+      print(''.join(chr(_) for _ in ords), end=' ')
+    elif id == DELIM_NEWLINE:
+      print()
+    elif id == DELIM_LUJ:
+      rafs = []
+      while 1:
+        id = next(src)
+        if id == DELIM_LUJ:
+          break
+        if id < WORDLIST_LEN:
+          rafs.append(g2r[words[id]][0])
+        else:
+          raise Exception("unknown word ID %r" % id)
+      
+      #XXX TODO TODO TODO TODO: Output a real lujvo
+      print(''.join(rafs), end=' ')
+    else:
+      try:
+        print(words[id], end=' ')
+      except IndexError:
+        raise Exception("Unknown word ID %r"%id)
+
+def compress(valsi_stream):
+  #Yield a bunch of integers; starting from 0
+  for valsi in valsi_stream:
+    if isinstance(valsi, tokens.IGNORABLE):
+      if valsi.value == '\n':
+        yield DELIM_NEWLINE
+      continue
+    if valsi.ve_lujvo_rafsi:
+      yield DELIM_LUJ
+      for raf in valsi.ve_lujvo_rafsi:
+        gim = r2g[raf]
+        if gim in words:
+          yield words.index(gim)
+        else:
+          yield DELIM_ZOI
+          for _ in gim: #This shouldn't happen!
+            o = ord(_)
+            if o in (DELIM_LUJ, DELIM_ZOI):
+              raise Exception("That's messed up, man")
+            yield o
+          yield DELIM_ZOI
+      yield DELIM_LUJ
+    else:
+      if valsi.value in words:
+        yield words.index(valsi.value)
+      else:
+        yield DELIM_ZOI
+        for _ in valsi.value:
+          o = ord(_)
+          if o in (DELIM_LUJ, DELIM_ZOI):
+            raise Exception("That's messed up, man")
+          yield o
+        yield DELIM_ZOI
+        
+#l = iter(list(compress()))
+#decompress(l)
+if '--compress' in sys.argv:
+  savings = '--show-savings' in sys.argv
+  if savings:
+    stdin = sys.stdin.read()
+    orig = len(stdin)
+    stdin = io.StringIO(stdin)
+    final = 0
+  else:
+    stdin = sys.stdin
+  comp = compress(morphology.Stream(config.Configuration(stdin=stdin, args=[])))
+  if not('--force' in sys.argv) and sys.stdout.isatty():
+    #print("Writing decimals instead of encoded data, because output is a TTY.", file=sys.stderr)
+    for H in comp:
+      if savings:
+        final += 1
+      if '--decimal' in sys.argv:
+        print(H)
+  else:
+    out = array.array(ARRAY_TYPE, comp).tostring()
+    if savings:
+      final = len(out)
+    sys.stdout.buffer.write(out)
+  if savings:
+    diff = orig - final
+    percent = round(((orig/final)-1)*100)
+    print("Original: {0} chars\nCompressed: {1} chars\nSavings: {2}%\n-------------------".format(orig, final, percent), file=sys.stderr)
+elif '--decompress' in sys.argv:
+  try:
+    a = array.array(ARRAY_TYPE, sys.stdin.buffer.read())
+  except Exception as e:
+    raise SystemExit("Unable to decompress: {0}".format(e))
+  decompress(iter(a))
+  pass
+else:
+  print("""Usage:
+  ./tools/panje --compress
+      Sends compressed data to non-tty stdout
+  Other options valid for --compress:
+      --show-savings
+          Show how much it improved
+      --decimal
+          Print out decimals if output isn't being redirected
+      --force
+          Print stdout will be written to tty anyways
+
+  ./tools/panje --decompress
+      Reads compressed data from stdin
+
+If typing from stdin, you have to hit EOF twice because python3 is weird
+Doesn't do proper lujvo recovery yet
+""")
