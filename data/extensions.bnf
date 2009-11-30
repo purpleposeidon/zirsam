@@ -1,22 +1,58 @@
-; The amazing, the incredible
-
+; The amazing, the incredible...
+;
 ; ▛▀▘   ▐          ▌         ▛▀▖▙ ▌▛▀▘
 ; ▙▄ ▚▗▘▜▀ ▞▀▖▛▀▖▞▀▌▄▄▖▞▀▖▄▄▖▙▄▘▌▌▌▙▄
 ; ▌  ▗▚ ▐ ▖▛▀ ▌ ▌▌ ▌   ▌ ▌   ▌ ▌▌▝▌▌
 ; ▀▀▘▘ ▘ ▀ ▝▀▘▘ ▘▝▀▘   ▝▀    ▀▀ ▘ ▘▘
 ;
 ;                       /brought to you by Trader Joe's/
-
+;
 ; These rules are appended onto the end of lojban.bnf when it is built
-; It would be a good idea to prepend all these rules with x.
+; It would be a good idea to prepend additions with "x-"
 
 
-; needs modification to
+; The following rules are from lojban.bnf, but modified to integrate with the thaumatology pre-processor
 lerfu-word =
     BY
-    | BU ;  Originally, any-word BU, but thaumatology converts this itself
+    | BU ;Originally any-word BU
     | LAU lerfu-word
     | TEI lerfu-string FOI  
+
+sumti-6 =
+    (LAhE # | NAhE BO #) [relative-clauses] sumti /LUhU#/
+    | KOhA #
+    | lerfu-string /BOI#/
+    | LA # [relative-clauses] CMENE ... #
+    | (LA | LE) # sumti-tail /KU#/
+    | LI # mex /LOhO#/
+    | ZO # ; ZO any-word #
+    | LU text /LIhU#/ ;(grammatical quote)
+    | LOhU LEhU # ;originally LOhU any-word ... LEhU #. The processor keeps (should XXX?) the LEhU
+    | ZOI # ; originally ZOI any-word anything any-word #
+
+tanru-unit-2 =
+    BRIVLA #
+    | GOhA [RAhO] #
+    | KE # selbri-3 /KEhE#/
+    | ME # sumti /MEhU#/ [MOI #]
+    | (number | lerfu-string) MOI #
+    | NUhA # mex-operator
+    | SE # tanru-unit-2
+    | JAI # [tag] tanru-unit-2
+;    | any-word (ZEI any-word) ...  ; Preprocessor converts ZEI to SELBRI
+    | NAhE # tanru-unit-2
+    | NU [NAI] # [joik-jek NU [NAI] #] ... subsentence /KEI#/
+
+lerfu-word =
+    BY
+    | BU ;originally any-word BU
+    | LAU lerfu-word
+    | TEI lerfu-string FOI
+
+
+
+
+
 
 x-parse-root =
   text
@@ -25,15 +61,17 @@ x-parse-root =
   ;[CMENE ... # | (indicators & free ...)]
 ;[CMENE ... # | (indicators & free ...)]
 
+x-parse-root =
+  x-sub
 
-example =
+x-sub =
+  ((PA ...) GISMU) | COI
+
+x-example =
   a b c
+;TODO: Stored as "Concat(Concat(a, b), c)". Should be done as Concat(a, Concat(b, c))
 
-
-;text =
-;    [NAI ...] [CMENE ... # | (indicators & free ...)] [joik-jek]
-    ;text-1
-
+;
 ;               The following rules are non-formal:
 ;word =
 ;   [BAhE] any-word [indicators]
@@ -46,5 +84,9 @@ example =
 ;    | utterance SA
 ;    | text SU
 
-; LI(li) FUhA(fu'a) PA(bi) BOI(boi) PA(ci) BOI(boi) VUhU(gei) GOhA(du) LI(li) PA(vo)
-
+;Checklist:
+  ; word: just uses any-word
+  ; any-word: CHECK
+  ; anything: CHECK
+  ; null: Uh, not present at all. Erased words are taken care of by thaumatology.
+ui

@@ -49,6 +49,11 @@ class BnfObjectBase:
   def __lshift__(self, other): #|
     return XOr(self, other)
 
+  def match(self, tracker):
+    ret = self.test(tracker)
+    #tracker.config.debug
+    print("{0} --> {1}".format(self, ret))
+    return ret
 
 
 class Term(BnfObjectBase):
@@ -65,14 +70,16 @@ class Term(BnfObjectBase):
 
 
 
+
+
 class Terminal(BnfObjectBase):
   def __repr__(self):
     return str(self.selmaho)
   def __init__(self, selmaho):
     self.selmaho = selmaho
-    self.hit_count = 0
-  def match(self, tracker):
-    self.hit_count += 1
+    #self.hit_count = 0
+  def test(self, tracker):
+    #self.hit_count += 1
     #if self.hit_count > 10:
       #raise Exception
     try:
@@ -90,24 +97,20 @@ class Terminal(BnfObjectBase):
       return NoMatch
 
 class Rule(BnfObjectBase):
-  def match(self, tracker):
-    #print("**** Entering Rule", self)
-    #debug("Rule:", "entering", self)
+  def test(self, tracker):
+    print("**** Entering Rule", self)
+    debug("Rule:", "entering", self)
     
     target = BNF[self]
     child_tracker = tracker.append_rule(self)
     result = target.match(child_tracker)
-    ##print(self, result, target)
     #if repr(self) == 'selbri_3':
-      #print("~!!!! selbri_3 RESULT:", result)
-    #print(self, result)
-    debug("Rule:", self, result)
     if result == Match:
-      #print("**** Exiting Rule", self, ": ACCEPT", "with", result, 'from', target)
+      print("**** Exiting Rule", self, ": ACCEPT", "with", result, 'from', target)
       tracker.accept_rule()
       return result
     else:
-      #print("**** Exiting Rule", self, ": FAILURE")
+      print("**** Exiting Rule", self, ": FAILURE")
       child_tracker.fail()
       return NoMatch
     
@@ -134,15 +137,14 @@ class Condition(BnfObjectBase):
   def __init__(self, *terms):
     self.terms = terms
 
-  def match(self, tracker):
+  def test(self, tracker):
     raise Exception(NotImplemented)
 
 
 class AndOr(Condition):
-  def match(self, tracker):
+  def test(self, tracker):
     A = self.terms[0].match(tracker)
     B = self.terms[1].match(tracker)
-    ##print(self, A, B)
     if A == Match or B == Match:
       return Match
     elif A == NoFill or B == NoFill:
@@ -150,52 +152,44 @@ class AndOr(Condition):
     else:
       return NoMatch
 
-class XOr(Condition): #Bad name, should be "Alternation"
+class XOr(Condition): #Bad name, should be "Alternation" XXX
   #def __repr__(self):
     #return " {0}\n  |{1}".format(*self.terms)
-  def match(self, tracker):
+  def test(self, tracker):
+    tracker.checkin()
     a = self.terms[0].match(tracker)
-    if a:
-      debug('|', self.terms[0], a)
+    if a == Match:
+      tracker.commit()
       return Match
-    
+    tracker.checkout()
+    tracker.checkin()
     b = self.terms[1].match(tracker)
     
     if b:
-      debug('|', self.terms[1], b)
+      tracker.commit()
       return Match
+    tracker.checkout()
     return NoMatch
 
 class Concat(Condition):
-  def match(self, tracker):
+  def test(self, tracker):
     a = self.terms[0].match(tracker)
     tracker.checkin()
     if not a:
-      ##print(self, '@', self.terms, a)
       tracker.checkout() #A
       return NoMatch
     b = self.terms[1].match(tracker)
     if b:
-      debug('+', self.terms[0], a, '+', self.terms[1], b)
       tracker.commit()
       return Match
-    ##print(self, '@', self.terms, b)
     
     tracker.checkout()
-    '''
-    if 'A(e)' in str(tracker):
-      import code
-      ic = code.InteractiveConsole(locals())
-      tracker.checkout()
-      tracker.checkin()
-      #ic.interact()
-    '''
     return b
     
   
 
 class Repeat(Condition):
-  def match(self, tracker):
+  def test(self, tracker):
     """
     Return either NoRepat or Match.
     If it matches more than once, return Match
@@ -218,8 +212,7 @@ class Repeat(Condition):
     return once
 
 class Elidable(Condition):
-  def match(self, tracker):
-    #print("!Careful!", self)
+  def test(self, tracker):
     term = self.terms[0]
     if term.match(tracker):
       return Match
@@ -230,21 +223,16 @@ class Elidable(Condition):
     #return r
 
 class Optional(Condition):
-  def match(self, tracker):
+  def test(self, tracker):
     term = self.terms[0]
     ocv = tracker.current_valsi
     tracker.checkin()
     r = term.match(tracker)
-    #print("Original cv", ocv, 'present cv', tracker.current_valsi, 'parent cv', tracker.parent.current_valsi)
     if r:
       tracker.commit()
       return Match
     else:
       tracker.checkout()
-      #print(tracker)
-      #print("&&&& I am not getting rid of my crap!")
-      #print("Got", r)
-      #print("vvv There should be a console down here soon")
       
       #if 'A(e)' in str(tracker):
         #import code

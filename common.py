@@ -50,7 +50,19 @@ class Buffer:
       iterable = iter(iterable)
     else:
       self.orig = iterable
-    self.iterable = iterable
+    if conf.full_buffer:
+      foo = []
+      e = False
+      conf.debug("{0} filling buffer".format(self))
+      try:
+        for i in iterable:
+          foo.append(i)
+      except EOFError as err:
+        e = err
+      conf.debug("{0} got {1}\n--------------".format(self, foo))
+      self.iterable = iter(foo)
+    else:
+      self.iterable = iterable
     self.buffer = []
     self.EOF = False
     self.config = conf

@@ -47,6 +47,7 @@ class QuoteStream:
   def __iter__(self):
     while 1:
       if self.valsi[0].type == selmaho.ZOI: #Non-lojban qiuote
+        
         if self.config.raw_zoi:
           #XXX TODO ATM, doesn't work, very hacky too
           print("filter status", self.config.filter_zoi)
@@ -209,7 +210,7 @@ class ErasureStream:
         s1 = backlog.pop(0)
         s2 = self.valsi.pop(0)
         zei.content = [s1, s2]
-        zei.type = tokens.SELBRI
+        zei.type = tokens.SELBRI #The BNF uses ZEI, so it's just going unused.
         backlog.append(zei)
       elif self.valsi[0].type == selmaho.BU:
         bu = self.valsi.pop(0)

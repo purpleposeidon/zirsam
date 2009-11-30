@@ -23,6 +23,7 @@ Jbobau to parse is read from standard input. Parsed text is sent to stdout, erro
 If an error prevents the text from being fully parsed, a non-zero value is returned.
 
 Arguments:"""
+  #Err... you could just use a list of tuples or something...
   __help = {'help':"Shows this message", \
   'quiet':"Don't print warnings", \
   'err2out':"Write what would normally go to stderr to stdout", \
@@ -36,6 +37,7 @@ Arguments:"""
   'raw zoi':"Don't use the chosen alphabet to convert the contents of the zoi. Latin deliminators must be used.", \
   
   'debug':"(DEBUG OPTION) Print information from parsing", \
+  'full buffer':"(DEBUG OPTION) Completly buffer text (cripples ZOI)", \
   'token error':"(DEBUG OPTION) Raise an Exception when the first token is made, which prints a backtrace", \
   'hate token':"(DEBUG OPTION) Raise an exception when that text is encountered", \
   'do exit':"(DEBUG OPTION) Exit without parsing", \
@@ -44,7 +46,7 @@ Arguments:"""
   'no space':"(NOT IMPLEMENTED) Convert input to not use spaces", \
   
   } #XXX TODO look at --raw-zoi
-  __help_order = 'help, quiet, err2out, no readline, alphabet, raw zoi, no dotside, forbid warn, strict, debug, token error, hate token, do exit, print tokens, no space'.split(', ') #Help, Parsing configuration, Debug, unimplemented
+  __help_order = 'help, quiet, err2out, no readline, alphabet, raw zoi, no dotside, forbid warn, strict, debug, full buffer, token error, hate token, do exit, print tokens, no space'.split(', ') #Help, Parsing configuration, Debug, unimplemented
   for val in __help:
     if val not in __help_order:
       raise Exception("Command option %r is not present in Configuration.__help_order"%val)
@@ -131,6 +133,9 @@ Arguments:"""
       self.permit_readline = False
     if arg("raw zoi"):
       self.raw_zoi = True
+    if arg("full buffer"):
+      self.full_buffer = True
+      self.raw_zoi = False
     _ = valued_arg("alphabet", alphabets.GlyphTable.tables)
     if _: self.glyph_table = _
     _ = valued_arg("hate token")
@@ -208,9 +213,6 @@ Arguments:"""
     """
     if args == None:
       args = sys.argv[1:]
-    self._strict = False
-    self._quiet = False
-    self._debug = False
     if stdin == None:
       stdin = sys.stdin
     if stdout == None:
@@ -221,17 +223,31 @@ Arguments:"""
     self.stdout = stdout
     self.stderr = stderr
     
+    
     #XXX TODO - organize these variables by parsing layer
+    #general stuff....
+    self._strict = False
+    self._quiet = False
+    self._debug = False
+    self.full_buffer = False
+    
+    
+    #orthographic
+    self.ascii_only = False #XXX Still used?
+    self.glyph_table = alphabets.GlyphTable.tables['latin']
+    self.permit_readline = True
+    
+    #morphic
     self.print_tokens = False
     self.dotside = True
-    self.ascii_only = False
+    
     self.token_error = False
     self.do_exit = False
-    self.glyph_table = alphabets.GlyphTable.tables['latin']
+    
     self.forbid_warn = False
     self.output_no_space = False
     self.hate_token = None #If we see this token, raise Exception
-    self.permit_readline = True
+    
     
     self.__check_options(args)
     self.has_warnings = False
@@ -246,6 +262,7 @@ Arguments:"""
     self.raw_zoi = False
     self.end_on_faho = True #Treat FAhO as EOT, or uhm... don't yield it...?
     self.position = common.Position()
+    
     
     if self.do_exit:
       raise SystemExit

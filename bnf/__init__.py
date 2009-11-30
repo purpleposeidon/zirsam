@@ -48,11 +48,21 @@ except:
 import sys
 sys.path.append('')
 import magic_bnf
+
+class BnfWrapper:
+  def __init__(self, b):
+    self.b = b
+  
+  def __getitem__(self, val):
+    if type(val) == str:
+      val = val.replace('-', '_')
+    return self.b[val]
+
 try:
   import bnf_data
   magic_bnf.BNF = bnf_data.BNF
-  BNF = bnf_data.BNF
-except:
+  BNF = BnfWrapper(bnf_data.BNF)
+except Exception as e:
   raise SystemExit("Unable to load BNF data. Some possible causes: Not being run from the correct directory, bad regexp applied to lojban.bnf, missing lojban.bnf, incorrect syntax in lojban.bnf")
 __all__ = ['BNF']
 

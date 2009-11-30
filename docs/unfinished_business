@@ -2,7 +2,8 @@
 Or, in other words, "TODO"
 Items marked "-" aren't as important as items marked "+"?
 
-
+###### Next
+ + Fix that issue with the BNF. A ... | B
 
 ###### Soon
  - Implement everything according to http://www.lojban.org/tiki/Magic+Words
@@ -19,6 +20,7 @@ Items marked "-" aren't as important as items marked "+"?
  - Have a config option for zoi to be filtered by the alphabet, or just from what we get
  + Check that the BNF is being intepreted properly
  - Don't use "config" for the config.Configuration() object, use "conf"
+ - Test more aspects of morphology, and also for the other modules
  + Debug mode for dendrography
  + Ah HA! I've figured out how to handle ZOI: Keep a copy of the old crap. Well, ah, we only need to start when we hit a ZOI, but ohh.. Okay, so EVERYTHING must be copied. AH HA! Okay, that is beautiful love. Hit ZOI. Get delim. Get delim offset. Read shit from morphology, until we hit next delim. Get offset. Suck out stuff between the delim's in the old buffer! :D
 
@@ -40,7 +42,6 @@ Items marked "-" aren't as important as items marked "+"?
  - Move lujvo/fuhivla sorting crap in morphology?
 
 ###### Much Later
-
  - (Have error messages in lojban?)
  - Emulate output of jbofihe and camxes? (And other parsers?)
  - Semantics engine and supporting stuff
@@ -79,7 +80,6 @@ Items marked "-" aren't as important as items marked "+"?
 Ortohgraphy - what happens to capitalized letters with strict ortho?
     * they are garbage
   Resolve recursive import failures
-    * done
  + Put stdin into Configuration. Probably the best way to deal with quotes
  + lerfu!  (It is done, right?)
  + EncodingTable vs. GlyphTable! !??!

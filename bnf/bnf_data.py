@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 #automatically generated
-#on Wed Nov 25 21:35:06 2009
+#on Mon Nov 30 00:22:49 2009
 #by poseidon@skami
 
 from magic_bnf import *
@@ -191,10 +191,20 @@ Rule('indicator'):
     (Terminal(UI)<<Terminal(CAI))*Optional(Terminal(NAI))<<Terminal(Y)<<Terminal(DAhO)<<Terminal(FUhO),
 Rule('lerfu_word'):
     Terminal(BY)<<Terminal(BU)<<Terminal(LAU)*Rule('lerfu_word')<<Terminal(TEI)*Rule('lerfu_string')*Terminal(FOI),
+Rule('sumti_6'):
+    (Terminal(LAhE)*Optional(Rule('free')**"REPEAT")<<Terminal(NAhE)*Terminal(BO)*Optional(Rule('free')**"REPEAT"))*Optional(Rule('relative_clauses'))*Rule('sumti')*Elidable(Terminal(LUhU)*Optional(Rule('free')**"REPEAT"))<<Terminal(KOhA)*Optional(Rule('free')**"REPEAT")<<Rule('lerfu_string')*Elidable(Terminal(BOI)*Optional(Rule('free')**"REPEAT"))<<Terminal(LA)*Optional(Rule('free')**"REPEAT")*Optional(Rule('relative_clauses'))*Terminal(CMENE)**"REPEAT"*Optional(Rule('free')**"REPEAT")<<(Terminal(LA)<<Terminal(LE))*Optional(Rule('free')**"REPEAT")*Rule('sumti_tail')*Elidable(Terminal(KU)*Optional(Rule('free')**"REPEAT"))<<Terminal(LI)*Optional(Rule('free')**"REPEAT")*Rule('mex')*Elidable(Terminal(LOhO)*Optional(Rule('free')**"REPEAT"))<<Terminal(ZO)*Optional(Rule('free')**"REPEAT")<<Terminal(LU)*Rule('text')*Elidable(Terminal(LIhU)*Optional(Rule('free')**"REPEAT"))<<Terminal(LOhU)*Terminal(LEhU)*Optional(Rule('free')**"REPEAT")<<Terminal(ZOI)*Optional(Rule('free')**"REPEAT"),
+Rule('tanru_unit_2'):
+    Terminal(BRIVLA)*Optional(Rule('free')**"REPEAT")<<Terminal(GOhA)*Optional(Terminal(RAhO))*Optional(Rule('free')**"REPEAT")<<Terminal(KE)*Optional(Rule('free')**"REPEAT")*Rule('selbri_3')*Elidable(Terminal(KEhE)*Optional(Rule('free')**"REPEAT"))<<Terminal(ME)*Optional(Rule('free')**"REPEAT")*Rule('sumti')*Elidable(Terminal(MEhU)*Optional(Rule('free')**"REPEAT"))*Optional(Terminal(MOI)*Optional(Rule('free')**"REPEAT"))<<(Rule('number')<<Rule('lerfu_string'))*Terminal(MOI)*Optional(Rule('free')**"REPEAT")<<Terminal(NUhA)*Optional(Rule('free')**"REPEAT")*Rule('mex_operator')<<Terminal(SE)*Optional(Rule('free')**"REPEAT")*Rule('tanru_unit_2')<<Terminal(JAI)*Optional(Rule('free')**"REPEAT")*Optional(Rule('tag'))*Rule('tanru_unit_2')<<Terminal(NAhE)*Optional(Rule('free')**"REPEAT")*Rule('tanru_unit_2')<<Terminal(NU)*Optional(Terminal(NAI))*Optional(Rule('free')**"REPEAT")*Optional(Rule('joik_jek')*Terminal(NU)*Optional(Terminal(NAI))*Optional(Rule('free')**"REPEAT"))**"REPEAT"*Rule('subsentence')*Elidable(Terminal(KEI)*Optional(Rule('free')**"REPEAT")),
+Rule('lerfu_word'):
+    Terminal(BY)<<Terminal(BU)<<Terminal(LAU)*Rule('lerfu_word')<<Terminal(TEI)*Rule('lerfu_string')*Terminal(FOI),
 Rule('x_parse_root'):
     Rule('text'),
-Rule('example'):
-    Rule('a')*Rule('b')*Rule('c')
+Rule('x_parse_root'):
+    Rule('x_sub'),
+Rule('x_sub'):
+    ((Terminal(PA)**"REPEAT")*Terminal(GISMU))<<Terminal(COI),
+Rule('x_example'):
+    Rule('a')*Rule('b')*Rule('c')*Rule('ui')
 }
 
 BNF['any_word'] = any_word()
