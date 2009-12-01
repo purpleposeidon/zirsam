@@ -6,6 +6,8 @@
 #python code!
 #Relacing and magic!
 
+DISABLE_HASH = False #A little experiment
+
 import re
 import sys
 import time, os
@@ -38,7 +40,10 @@ bnf = bnf.replace('  ', ' ').replace('\n\n', '\n').strip() #Cleanup again
 
 
 bnf = bnf.replace('#', " #").replace('  ', ' ') #Fix /foo#/ to be /foo #/
-bnf = bnf.replace('#', '[free...]') #expand the #
+if DISABLE_HASH:
+  bnf = bnf.replace('#', ' ').replace('  ', '')
+else:
+  bnf = bnf.replace('#', '[free...]') #expand the #
 #bnf = bnf.replace('#', 'x-free') #expand the # XXX Bah, don't do it? Blargles. :(
 
 
@@ -88,7 +93,7 @@ if 1: #You'll never be able to read it again!
 
 #Format it to look like a dictionary
 bnf = bnf.replace('\n', ';\n')
-bnf = bnf.replace('=', ':\n    ')
+bnf = bnf.replace('=', ':  ')
 bnf = '\n'+bnf
 bnf = bnf.replace('\nTerm', '\n  Term')
 bnf = bnf.replace('\n\n', '\n')

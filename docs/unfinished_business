@@ -3,12 +3,14 @@ Or, in other words, "TODO"
 Items marked "-" aren't as important as items marked "+"?
 
 ###### Next
- + Fix that issue with the BNF. A ... | B
+ + Re-do the magic_bnf objects, carefully defining what each one should return in each case.
+ - Need to re-enable # -> [free...] ???
 
 ###### Soon
  - Implement everything according to http://www.lojban.org/tiki/Magic+Words
     * Make sure that everything interacts properly
  - More error checking and recovery
+ - What about that old '*' on TrackerMatch? Uhm.
  - Make the helper code nicer
  - Make --token-error print a backtrace on each token instead of dieing?
  + Check your dotside!

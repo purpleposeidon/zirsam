@@ -12,16 +12,60 @@ from bnf import BNF
 import magic_bnf
 
 
+def pprint(wut, first=True):
+  """More complex than the one below"""
+  if isinstance(wut, MatchTracker):
+    head = str(wut.rule)
+    if head[-1] in '1234567890' and not wut.config._debug:
+      head = ''
+      for v in wut.value:
+        head += pprint(v, first=False)
+      while '  \n' in head:
+        head = head.replace('  \n', ' \n')
+      head = head.replace(' \n', '')
+      return head+''
+    head += ':'
+    for v in wut.value:
+      for line in pprint(v, first=False).split('\n'):
+        head += '\n  '+line
+    head += '\n'
+    if first:
+      while ' \n' in head: head = head.replace(' \n', '\n')
+      while '\n\n' in head: head = head.replace('\n\n', '\n')
+      return head.strip()
+    return head
+  return str(wut)+'\n'
+
+'''
+def __alt_pprint(wut):
+  src = repr(wut)
+  r = ''
+  indent = 0
+  tab = '  '
+  src = src.replace(', ', ',').replace(':', '')
+  for c in src:
+    if c == '{':
+      indent += 1
+      r += '\n'+tab*indent
+    elif c == '}':
+      indent -= 1
+    elif c == ',':
+      r += '\n'+tab*indent
+    else:
+      r += c
+  return r
+'''
 
 class MatchTracker:
   """
   A node in the parse tree. Each node coresponds to a rule. Each node keeps a list of accepted valsi
   """
+
   def __repr__(self):
     #if str(self.rule)[-1] in '1234567890' and self.accepted:
     if not self.config._debug and (len(self.value) == 1 and type(self.value[0]) == MatchTracker):
       return repr(self.value)[1:-1]
-    r = str(self.rule)+':'+repr(self.value)+"*"*(not self.accepted)
+    r = str(self.rule)+':{'+repr(self.value)[1:-1]+'}' #+"*"*(not self.accepted) #XXX self.accepted is probably something horrible
     #if self.stack:
     #  r += '<'+str(self.stack)[1:-1]+'>'
     return r
@@ -48,12 +92,12 @@ class MatchTracker:
     assert self.value
     self.accepted = True
     self.current_valsi = self.value[-1].current_valsi  #+ 1
-    print('ACCEPT', self)
+    #self.config.debug('ACCEPT', self)
   def fail(self):
     #A rule failed
     if self.parent:
       #if self.value:
-      print("@@@ FAILING", self)
+      #self.config.debug("@@@ FAILING", self)
       self.parent.value.pop(self.parent.value.index(self))
       #self.parent.value.pop(self.start)
     else:
@@ -68,17 +112,16 @@ class MatchTracker:
     """
     Append the current state onto a stack. This is for a rule's structure.
     """
-    print("checkin")
+    #self.config.debug("checkin")
     self.stack.append((self.current_valsi, list(self.value)))
-    print('---', self.stack[-1])
+    #self.config.debug('---', self.stack[-1])
   def checkout(self):
     """
     Something failed. Restore an old state from the stack
     """
-    print("popping", self.stack)
+    #self.config.debug("popping", self.stack)
     old_state = self.stack.pop()
     (self.current_valsi, self.value ) = old_state
-    #print("checkout")
   def commit(self):
     """
     Something succeeded. Remove from stack
@@ -95,7 +138,6 @@ class GrammarParser:
   def __iter__(self):
     #yield ROOT_TOKENs
     while 1:
-      #root = magic_bnf.Rule(self.config.parsing_unit) #BNF[self.config.parsing_unit]
       root_rule = magic_bnf.Rule(self.config.parsing_unit)
       root_value = BNF[root_rule]
       tracker = MatchTracker(self.valsi, root_rule, conf=self.config)
@@ -103,23 +145,9 @@ class GrammarParser:
         v = root_value.match(tracker)
       except (EOFError, StopIteration) as e:
         raise e
-      #except Exception as e:
-        #print("Exception:", str(e), repr(e), type(e))
-        #raise Exception
       
-      #tracker.accept_rule()
       tracker.finalize()
       yield tracker
-      ###if tracker.matches:
-        ###print(tracker)
-        ###for matcher in tracker.matches:
-          ###print("Filling up", matcher)
-          ###matcher.fill(self.valsi)
-        ###yield tracker.matches
-      ###else:
-        ###matcher = Tracker.Match(BNF['unmatched'], 0, 1)
-        ###matcher.fill(self.valsi)
-        ###yield matcher
       #XXX Only do one for now
       break
 
@@ -130,8 +158,11 @@ def parse(string):
 def Stream(conf=None):
   if conf == None:
     conf = Configuration()
+  de_debug = conf._debug
+  conf._debug = False
   valsibuff = thaumatology.Stream(conf)
   treebuff = GrammarParser(valsibuff, conf)
+  conf._debug = de_debug
   return Buffer(treebuff, conf)
 
 def main(_stream):
@@ -140,11 +171,12 @@ def main(_stream):
   if not r:
     print(r, '(empty)')
   for i in r:
-    print(i)
-  return len(str(i)) < 33 #For testing. Didn't get much text.
-    
+    print(pprint(i))
+    #print(i)
+  #if len(str(i)) < 33: #For testing. Didn't get much text.
+    #raise SystemExit(1)
+  return r[0]
 
 
 if __name__ == '__main__':
-  if main(Stream()):
-    raise SystemExit(1)
+  r = main(Stream())
