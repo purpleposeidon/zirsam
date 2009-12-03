@@ -1,6 +1,6 @@
 
 Or, in other words, "TODO"
-Items marked "-" aren't as important as items marked "+"?
+Items marked "-" aren't as important as items marked "+"
 
 ###### Next
  + Re-do the magic_bnf objects, carefully defining what each one should return in each case.
@@ -13,18 +13,15 @@ Items marked "-" aren't as important as items marked "+"?
  - What about that old '*' on TrackerMatch? Uhm.
  - Make the helper code nicer
  - Make --token-error print a backtrace on each token instead of dieing?
- + Check your dotside!
+ - Check your dotside!
  - Do more garbage checking (For example, try {kláma} with default settings)
  - make word_end in morphology.py indexed from 0 instead of 1
  + Test IPA and other alphabets
  - Check the bottom of the BNF. Are there unimplemented non-formal rules?
  - Study and meditate upon lojban grammar, make grammar parser (In progress! :D)
- - Have a config option for zoi to be filtered by the alphabet, or just from what we get
  + Check that the BNF is being intepreted properly
- - Don't use "config" for the config.Configuration() object, use "conf"
+ - Don't use "config" for the config.Configuration() object, use "conf"?
  - Test more aspects of morphology, and also for the other modules
- + Debug mode for dendrography
- + Ah HA! I've figured out how to handle ZOI: Keep a copy of the old crap. Well, ah, we only need to start when we hit a ZOI, but ohh.. Okay, so EVERYTHING must be copied. AH HA! Okay, that is beautiful love. Hit ZOI. Get delim. Get delim offset. Read shit from morphology, until we hit next delim. Get offset. Suck out stuff between the delim's in the old buffer! :D
 
 ###### Later
  - Check that each marker in brkwords is properly implemented and documented
@@ -41,12 +38,13 @@ Items marked "-" aren't as important as items marked "+"?
  + Make GlyphTable handle multi-length input characters
  - CLI argument to read stdin from a file
  - It could be faster! Instead of Xor(Xor(...), A) do Xor(A, Xor(...). Because that would make it faster? Only if the most common forms are listed first in the BNF.
- - Move lujvo/fuhivla sorting crap in morphology?
+ - Move lujvo/fuhivla sorting crap in morphology
+ - Have a config option for zoi to be filtered by the alphabet, or just from what we get
 
 ###### Much Later
  - (Have error messages in lojban?)
  - Emulate output of jbofihe and camxes? (And other parsers?)
- - Semantics engine and supporting stuff
+ - Semantics engine and supporting stuff (Nope. Seperate project.)
  - Jbovlaste integration
  + Oh, also, learn how to speak lojban. Jeeze.
  - Make option for output to be spaceless
@@ -89,3 +87,6 @@ Ortohgraphy - what happens to capitalized letters with strict ortho?
  + sumti-6 in the BNF isn't being loaded correctly
  - Check that I am parsing the BNF correctly. For example, the &s in "simple-tense-modal" (I don't know for certain that the way it parses is correct)
  - I think that morphology hack in orthography isn't needed anymore
+ + Ah HA! I've figured out how to handle ZOI: Keep a copy of the old crap. Well, ah, we only need to start when we hit a ZOI, but ohh.. Okay, so EVERYTHING must be copied. AH HA! Okay, that is beautiful love. Hit ZOI. Get delim. Get delim offset. Read shit from morphology, until we hit next delim. Get offset. Suck out stuff between the delim's in the old buffer! :D
+ - Fold whitespace/boring into the following token!
+ + Debug mode for dendrography (Sorta. I have debugging output for it now.)

@@ -14,6 +14,7 @@ class GlyphTable(dict):
     #Return a list of retrieved characters. If at EOF, the list is empty.
     while 1:
       c = config.stdin.read(1)
+      config.old_chars += c
       
       if c in self:
         val = self[c]

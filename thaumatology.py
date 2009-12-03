@@ -3,6 +3,7 @@
 
 #thaumatology - handles (in the CLL's words) filtering, termination, and absorbtion
 #For reference, see http://www.lojban.org/tiki/Magic+Words
+#That URL is assumed to be the canonical description for magic-word handling
 # XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX
 # XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX
 # XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX
@@ -12,6 +13,13 @@
 # XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX
 
 #Don't read, http://www.lojban.org/tiki/Magic+Words+Alternatives it is full of darkness and evil and LIES.
+
+"""
+Observation.
+
+Magic+Words says that {lo'u fu le'u} is treated as one word. Yet, {sa le'u} would erase the le'u which is rather awkward.
+"""
+
 
 import sys, io
 
@@ -25,8 +33,8 @@ import morphology
 class InterestStream:
   """
   Does pre-processing for the magic bits.
-  <token> BU is
   XXX TODO Thought - Make this a Buffer object instead!
+  It doesn't do very much
   """
   def __init__(self, valsi_iter, conf):
     self.valsi = valsi_iter
@@ -34,12 +42,16 @@ class InterestStream:
 
   def __iter__(self):
     while 1:
+      boring = []
       while isinstance(self.valsi[0], tokens.IGNORABLE):
-        self.valsi.pop()
-      yield self.valsi.pop()
+        boring.append(self.valsi.pop())
+      v = self.valsi.pop()
+      v.whitespace = boring
+      boring = []
+      yield v
 
 class QuoteStream:
-  #It seems like QuoteParser handles things that go to the right, and ErasureParser handles things that go to the left
+  #Especially things that go forwards
   def __init__(self, valsi_iter, conf):
     self.valsi = valsi_iter
     self.config = conf
@@ -47,60 +59,41 @@ class QuoteStream:
   def __iter__(self):
     while 1:
       if self.valsi[0].type == selmaho.ZOI: #Non-lojban qiuote
+        zoi = self.valsi.pop()
+        delim_start = self.valsi.pop()
+        if delim_start.type in (selmaho.SI, selmaho.SA, selmaho.SU, selmaho.ZO, selmaho.BU, selmaho.ZEI, selmaho.FAhO):
+          self.config.message("This ZOI deliminator (%r) could be confusing" % (delim_start.value), delim_start.position)
+        quote_tokens = []
         
-        if self.config.raw_zoi:
-          #XXX TODO ATM, doesn't work, very hacky too
-          print("filter status", self.config.filter_zoi)
-          stdin = self.config.stdin
-          self.config.stdin = io.StringIO("")
-          
-            
-          zoi = self.valsi.pop()
-          delim = self.valsi.pop()
-          targets = '.'+delim.value, ' '+delim.value
-          if delim.type in (selmaho.SI, selmaho.SA, selmaho.SU):
-            self.config.warn("{0!r} is a strange choice for a zoi deliminator".format(delim.value), delim.position)
-          quote = ''
-          while 1:
-            if stdin:
-              c = stdin.read(1)
+        while self.valsi[0].value != delim_start.value:
+          try:
+            next = self.valsi.pop()
+            quote_tokens.append(next)
+          except (EOFError, StopIteration):
+            self.config.error("End of File reached in open ZOI quote (close it off with {0!r})".format(delim_start.value), delim_start.position)
+        delim_end = self.valsi.pop()
+        zoi.end = delim_end
+        
+        start = delim_start.position.offset+len(delim_start.value)
+        end = delim_end.position.offset-1
+        
+        if len(quote_tokens) > 1:
+          if isinstance(quote_tokens[0], tokens.PERIOD):
+            #Started with a pause, so we'll need to crop out the ending pause
+            if isinstance(quote_tokens[-1], tokens.PERIOD):
+              end = quote_tokens[-1].position.offset
             else:
-              chars = self.config.glyph_table.get_char(self.config)
-              c = ''
-              for _ in chars: c += _.value
-
-            if c == '':
-              print(quote, ':', c)
-              self.config.error("End of File reached in open ZOI quote (close it off with {0!r})".format(delim.value), delim.position)
-            quote += c 
-            for target in targets:
-              if target and quote.endswith(target):
-                break
-              target = False
-            if target:
-              quote = quote[:-len(target)]
-              self.config.debug("Found deliminator for ZOI, the quote is "+repr(quote),)
-              break
-
-          self.config.stdin = stdin
-          zoi.content = quote.strip()
-          yield zoi
-        else: #Non-raw zoi, much easier, but the content is looked at by the morphology parser
-          zoi = self.valsi.pop()
-          delim = self.valsi.pop()
-          content = []
-          while self.valsi[0].value != delim.value:
-            try:
-              content.append(self.valsi.pop())
-            except (EOFError, StopIteration):
-              self.config.error("End of File reached in open ZOI quote (close it off with {0!r})".format(delim.value), delim.position)
-          end = self.valsi.pop()
-          #zoi.end = end XXX Not until raw implements something similiar, say I!
-          zoi.content = content
-          yield zoi
+              self.config.warn("This zoi started with a pause, it should certainly end with one.", delim_end.position)
+        zoi.content = self.config.old_chars[start:end]
+        #else:
+          #zoi.content = ''
+        yield zoi
       elif self.valsi[0].type == selmaho.ZO: #1-word quote
         zo = self.valsi.pop()
-        zo.content = self.valsi.pop()
+        try:
+          zo.content = self.valsi.pop()
+        except:
+          self.config.warn("ZO should have something to be quoted", zo.position)
         yield zo
       elif self.valsi[0].type == selmaho.LOhU: #Error quote
         lohu = self.valsi.pop()
@@ -116,10 +109,16 @@ class QuoteStream:
             break
           jbo_tokens.append(vla)
         lohu.content = jbo_tokens
-        #lohu.end = end_delim -- Nope, the LEhU is a seperate token
+        lohu.end = lehu #I'd rather yield lehu
         yield lohu
-        yield lehu
       else:
+        '''if isinstance(self.valsi[0], tokens.HESITATION) and (and self.valsi[1].type == selmaho.BU):
+          y = self.valsi.pop()
+          bu = self.valsi.pop()
+          bu.content = y
+          yield bu
+        else:
+          '''
         yield self.valsi.pop()
         
 
@@ -132,6 +131,7 @@ class QuoteStream:
 """
 
 class ErasureStream:
+  #Especially things that go backwards
   def __init__(self, valsi_iter, conf):
     self.valsi = valsi_iter
     self.config = conf
@@ -156,7 +156,11 @@ class ErasureStream:
       if isinstance(self.valsi[0], tokens.HESITATION):
         # XXX NOTE XXX http://dag.github.com/cll/21/1/ says this should be handled AFTER si/sa/su, BUT nobody likes that.
         #{do .yyy si mi} would be {do mi}
-        backlog[-1].modifiers.append(self.valsi.pop()) #If converting to set: use .add()
+        y = self.valsi.pop()
+        if backlog:
+          backlog[-1].modifiers.append(y) #If converting to set: use .add()
+        else:
+          backlog.append(y)
       elif self.valsi[0].type == selmaho.SI:
         #I agree with camxes, it should be ((zo si) si), not jbofihe's (zo (si si) si). It also says so in the CLL, http://dag.github.com/cll/21/1/
         #(BPFK seems silent on the issue)
@@ -180,6 +184,7 @@ class ErasureStream:
           backlog = []
           break
         target_type = orig.type
+        
         if isinstance(orig, tokens.SELBRI):
           target_type = tokens.SELBRI
         found = False
@@ -188,23 +193,35 @@ class ErasureStream:
             self.config.message("No backlog for SA")
             break
           b = backlog.pop(-1)
-          if b.type == target_type or (isinstance(b, tokens.SELBRI) and target_type == tokens.SELBRI):
+          LOHU_CASE = (target_type == selmaho.LEhU and b.type == selmaho.LOhU)
+          if b.type == target_type or (isinstance(b, tokens.SELBRI) and target_type == tokens.SELBRI) \
+            or LOHU_CASE:
             count_back -= 1
             if count_back == 0:
               found = True
+              if LOHU_CASE:
+                b.end = orig
+                backlog.append(b)
+                self.config.message("This lojbanist thinks SA LEhU is stupid.")
               break
         if not found and stuff_behind:
           self.config.error("Erasure buffer is not large enough for this SA", sa.position)
-        if orig:
+        if orig and not LOHU_CASE:
           backlog.append(orig)
       elif self.valsi[0].type == selmaho.SU:
-        # XXX XXX TODO '"su" erases back to the previous word of selma'o NIhO, LU, TUhE, or TO'
-        #Which this doesn't do properly
         su = self.valsi.pop()
         if not self.config.handle_su:
           self.config.error("SU are not enabled", su.position)
         else:
-          backlog = []
+          su_stoppers = selmaho.NIhO, selmaho.LU, selmaho.TUhE, selmaho.TO
+          while backlog:
+            backlog.pop(-1)
+            if backlog[-1].type in su_stoppers:
+              backlog.pop(-1) #XXX I suppose they are supposed to be erased.
+              break
+          if backlog == [] and stuff_behind:
+            self.config.error("Erasure buffer is not large enough for this SU", su.position)
+          #backlog = []
       elif self.valsi[0].type == selmaho.ZEI:
         zei = self.valsi.pop(0)
         s1 = backlog.pop(0)
@@ -215,7 +232,12 @@ class ErasureStream:
       elif self.valsi[0].type == selmaho.BU:
         bu = self.valsi.pop(0)
         if not bu.content:
-          bu.content = backlog.pop()
+          try:
+            bu.content = backlog.pop()
+          except (IndexError):
+            self.config.warn("BU must have something to quote!", bu.position)
+        else:
+          raise Exception("So, how'd that bu get a content already???")
         backlog.append(bu)
       else:
         # XXX TODO Here is where you would release some ammount of backlog, either "before the I" or "keep at least 5 words" or "per each NIhO" or something
@@ -226,7 +248,7 @@ class ErasureStream:
 class AbsorptionStream:
   def __init__(self, valsi, conf):
     self.valsi = valsi
-    self.conf = conf
+    self.config = conf
   
   def __iter__(self):
     word = None
@@ -235,52 +257,56 @@ class AbsorptionStream:
         word = self.valsi.pop()
         if word.type == selmaho.FAhO:
           break
-        next = self.valsi[0]
+        
         #Ignore ZEI in http://dag.github.com/cll/21/1/
-        if word.type == selmaho.BAhE:
-          next.modifiers.append(word)
-          continue
-        else:
-          while 1:
-            """
-            d. If selma'o NAI occurs immediately following any of tokens UI or CAI, absorb the NAI into the previous token.
-            e. Absorb all members of selma'o DAhO, FUhO, FUhE, UI, Y, and CAI into the previous token. All of these null grammar tokens are permitted following any word of the grammar, without interfering with that word’s grammatical function, or causing any effect on the grammatical interpretation of any other token in the text. Indicators at the beginning of text are explicitly handled by the grammar.
-            """
-            if next.type in (selmaho.UI, selmaho.CAI):
-              try:
-                if self.valsi[1].type == selmaho.NAI:
-                  nai = self.valsi.pop(1)
-                  next.modifiers.append(nai)
-                  continue
-              except (EOFError, StopIteration):
-                pass
-            if next.type in (selmaho.DAhO, selmaho.FUhO, selmaho.FUhE, selmaho.UI, selmaho.CAI) or isinstance(next, tokens.HESITATION):
-              word.modifiers.append(self.valsi.pop())
-              next = self.valsi[0]
-            else:
-              break
-            
-                
-            '''
-            #Possible cases:
-            #valsi ui[nai]
-            #valsi nai
-            #ui[nai]
-            #nai[ui]
-            if next.type == selmaho.UI:
-              word.modifiers.append(self.valsi.pop())
-            elif next.type in (selmaho.CAI, selmaho.NAI):
-              if word.modifiers[-1].type == selmaho.UI:
-                word.modifiers[-1].modifiers.append(self.valsi.pop())
-              else:
-                self.config.warn("Some may think differently, but IMHO having a CAI/NAI when there isn't a UI in front is weird.", next.position) #Well, okay, CAI I can see. But NAI? C'mon.
-                word.modifiers.append(self.valsi.pop())
-            elif next.type in (selmaho.DAhO, selmaho.FUhE, selmaho.FUhO):
-              word.modifiers.append(self.valsi.pop())
-            else:
-              break
+        try:
+          if word.type == selmaho.BAhE:
+            self.valsi[0].modifiers.append(word)
+            continue
+        except (StopIteration, EOFError):
+          self.config.warn("BAhE needs something to emphasize", word.position)
+          
+        next = self.valsi[0]
+        while 1:
+          """
+          d. If selma'o NAI occurs immediately following any of tokens UI or CAI, absorb the NAI into the previous token.
+          e. Absorb all members of selma'o DAhO, FUhO, FUhE, UI, Y, and CAI into the previous token. All of these null grammar tokens are permitted following any word of the grammar, without interfering with that word’s grammatical function, or causing any effect on the grammatical interpretation of any other token in the text. Indicators at the beginning of text are explicitly handled by the grammar.
+          """
+          if next.type in (selmaho.UI, selmaho.CAI):
+            try:
+              if self.valsi[1].type == selmaho.NAI:
+                nai = self.valsi.pop(1)
+                next.modifiers.append(nai)
+                continue
+            except (EOFError, StopIteration):
+              pass
+          if next.type in (selmaho.DAhO, selmaho.FUhO, selmaho.FUhE, selmaho.UI, selmaho.CAI) or isinstance(next, tokens.HESITATION):
+            word.modifiers.append(self.valsi.pop())
             next = self.valsi[0]
-            '''
+          else:
+            break
+          
+              
+          '''
+          #Possible cases:
+          #valsi ui[nai]
+          #valsi nai
+          #ui[nai]
+          #nai[ui]
+          if next.type == selmaho.UI:
+            word.modifiers.append(self.valsi.pop())
+          elif next.type in (selmaho.CAI, selmaho.NAI):
+            if word.modifiers[-1].type == selmaho.UI:
+              word.modifiers[-1].modifiers.append(self.valsi.pop())
+            else:
+              self.config.warn("Some may think differently, but IMHO having a CAI/NAI when there isn't a UI in front is weird.", next.position) #Well, okay, CAI I can see. But NAI? C'mon.
+              word.modifiers.append(self.valsi.pop())
+          elif next.type in (selmaho.DAhO, selmaho.FUhE, selmaho.FUhO):
+            word.modifiers.append(self.valsi.pop())
+          else:
+            break
+          next = self.valsi[0]
+          '''
         yield word
     except (EOFError, StopIteration):
       assert self.valsi.buffer == []

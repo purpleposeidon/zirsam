@@ -99,6 +99,7 @@ class Token:
     self.classify(config)
     self.content = None
     self.modifiers = [] #Emphasis and such.
+    self.whitespace = [] #Whitespace and pauses that occur BEFORE the token.
     self.end = None #Acceptable types: None, Token
     if config.hate_token and config.hate_token == self.value:
       #Be hatin' - for morphology debugging

@@ -34,10 +34,9 @@ Arguments:"""
   'no dotside':"Don't require a pause following cmene-markers (XXX CHECKME)", \
   'forbid warn':"Treat warnings as errors", \
   'strict':"Count warnings as errors", \
-  'raw zoi':"Don't use the chosen alphabet to convert the contents of the zoi. Latin deliminators must be used.", \
   
   'debug':"(DEBUG OPTION) Print information from parsing", \
-  'full buffer':"(DEBUG OPTION) Completly buffer text (cripples ZOI)", \
+  'full buffer':"(DEBUG OPTION) Completly buffer text", \
   'token error':"(DEBUG OPTION) Raise an Exception when the first token is made, which prints a backtrace", \
   'hate token':"(DEBUG OPTION) Raise an exception when that text is encountered", \
   'do exit':"(DEBUG OPTION) Exit without parsing", \
@@ -45,8 +44,8 @@ Arguments:"""
   
   'no space':"(NOT IMPLEMENTED) Convert input to not use spaces", \
   
-  } #XXX TODO look at --raw-zoi
-  __help_order = 'help, quiet, err2out, no readline, alphabet, raw zoi, no dotside, forbid warn, strict, debug, full buffer, token error, hate token, do exit, print tokens, no space'.split(', ') #Help, Parsing configuration, Debug, unimplemented
+  }
+  __help_order = 'help, quiet, err2out, no readline, alphabet, no dotside, forbid warn, strict, debug, full buffer, token error, hate token, do exit, print tokens, no space'.split(', ') #Help, Parsing configuration, Debug, unimplemented
   for val in __help:
     if val not in __help_order:
       raise Exception("Command option %r is not present in Configuration.__help_order"%val)
@@ -131,11 +130,8 @@ Arguments:"""
       self.output_no_space = True
     if arg("no readline"):
       self.permit_readline = False
-    if arg("raw zoi"):
-      self.raw_zoi = True
     if arg("full buffer"):
       self.full_buffer = True
-      self.raw_zoi = False
     _ = valued_arg("alphabet", alphabets.GlyphTable.tables)
     if _: self.glyph_table = _
     _ = valued_arg("hate token")
@@ -230,7 +226,7 @@ Arguments:"""
     self._quiet = False
     self._debug = False
     self.full_buffer = False
-    
+    self.old_chars = ""
     
     #orthographic
     self.ascii_only = False #XXX Still used?
@@ -259,7 +255,6 @@ Arguments:"""
     self.handle_su = True #Don't flush until EOT in case we find a su
     self.handle_sa = True #Don't flush for a sentence?
     self.flush_on = None #I or NIhO?
-    self.raw_zoi = False
     self.end_on_faho = True #Treat FAhO as EOT, or uhm... don't yield it...?
     self.position = common.Position()
     

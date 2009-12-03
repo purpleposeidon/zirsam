@@ -788,11 +788,9 @@ we: {4}""".format(self.bit.buffer, cc_location, cc, ps, word_end))
           return self.tokenize(i, CMAVO)
 
     self.config.debug("Buffer:"+str(self.bit.buffer))
-    self.config.error("Nothing happened!", self.bit[0].position)
-      
-    if not self.bit.EOF:
-      return self.tokenize(1, GARBAGE) #What is this nonsense?
-    #else we have reached the EOF, and so will return None.
+    self.config.warn("Nothing happened!", self.bit[0].position)
+    return self.tokenize(1, GARBAGE)
+    #Could potentially do some other checks?
 
 
 

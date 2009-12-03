@@ -243,6 +243,8 @@ class __NiceStdin:
   #Use the input() function to get data; this allows the use of GNU readline to edit the text
   def __init__(self):
     self.chars = ''
+  def isatty(self):
+    return False
   def read(self, i=1):
     if len(self.chars) == 0:
       if 1: #not self.EOF or 1:
