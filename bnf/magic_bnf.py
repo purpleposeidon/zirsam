@@ -3,9 +3,9 @@
 
 
 DEBUG = True
-def debug(*args):
+def debug(*args, **kwargs):
   if DEBUG:
-    print(*args)
+    print(*args, **kwargs)
 
 """
 Match:
@@ -36,8 +36,6 @@ BNF = None  #This will be set by bnf/__init__.py; it is used by the Rule.
 class BnfObjectBase:
   #All bnf items will need these methods
   def __mul__(self, other): #sepearted by whitespace
-    #Rule('a')*Rule('b')*Rule('c')
-    #"Concat(Concat(a, b), c)" --> "Concat(a, Concat(b, c))"
     return Concat(self, other)
 
   def __pow__(self, other): #...
@@ -52,9 +50,13 @@ class BnfObjectBase:
     return XOr(self, other)
 
   def match(self, tracker):
+    #A debug-hookie thing.
     ret = self.test(tracker)
-    #
-    tracker.config.debug("{0} --> {1}".format(self, ret))
+    #tracker.config.debug
+    try:
+      v = tracker.valsi[tracker.current_valsi]
+    except: v = ''
+    debug(' '*(tracker.depth-1),v ,':', "{0} --> {1}".format(self, ret), sep='')
     return ret
 
 
@@ -100,18 +102,19 @@ class Terminal(BnfObjectBase):
 
 class Rule(BnfObjectBase):
   def test(self, tracker):
-    tracker.config.debug("**** Entering Rule "+str(self))
+    debug(' '*tracker.depth, '*', self, '*', sep='')
+    #debug("Rule:", "entering", self)
     
     target = BNF[self]
     child_tracker = tracker.append_rule(self)
     result = target.match(child_tracker)
     #if repr(self) == 'selbri_3':
     if result == Match:
-      tracker.config.debug("**** Exiting Rule "+str(self)+": ACCEPT with "+str(result)+' from '+str(target))
+      #debug("**** Exiting Rule", self, ": ACCEPT", "with", result, 'from', target)
       tracker.accept_rule()
       return result
     else:
-      tracker.config.debug("**** Exiting Rule "+str(self)+": FAILURE")
+      #debug("**** Exiting Rule", self, ": FAILURE")
       child_tracker.fail()
       return NoMatch
     
@@ -174,33 +177,25 @@ class XOr(Condition): #Bad name, should be "Alternation" XXX
 
 class Concat(Condition):
   def test(self, tracker):
-    """
-    Possibilities:
-        a; b->   Match   NoFill  NoMatch
-        Match    Match   NoFill  NoMatch
-        NoFill   NoFill  NoFill  NoMatch
-        NoMatch  NoMatch NoMatch NoMatch
-    If a is NoMatch, we know for sure there is NoMatch. Otherwise, we MUST test b.
-    """
     a = self.terms[0].match(tracker)
     tracker.checkin()
-    
-    if a == NoMatch: #3,1; 3,2; 3,3 -> NoMatch
-      tracker.config.debug("a"+repr(a))
+    if not a:
       tracker.checkout() #A
       return NoMatch
     b = self.terms[1].match(tracker)
-    tracker.config.debug("a"+repr(a))
-    tracker.config.debug("b"+repr(b))
-    if b == NoMatch: #1,3; 2,3 -> NoMatch
-      tracker.checkout()
-      return NoMatch
+    if b:
+      tracker.commit()
+      if a == b:
+        return a
+      #So, return the best value....
+      if Match in (a, b):
+        return Match
+      if NoFill in (a, b):
+        return NoFill
+      return b
     
-    tracker.commit()
-    if a == b == Match: #1,1 -> Match
-      return Match
-    else: #1,2; 2,2; 2,1 -> NoFill
-      return NoFill
+    tracker.checkout()
+    return b
     
   
 
@@ -229,6 +224,7 @@ class Repeat(Condition):
 
 class Elidable(Condition):
   def test(self, tracker):
+    print("XXX HELL!")
     term = self.terms[0]
     if term.match(tracker):
       return Match
