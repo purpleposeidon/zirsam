@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 
-DEBUG = True
+DEBUG = False
 def debug(*args, **kwargs):
   if DEBUG:
     print(*args, **kwargs)
@@ -53,10 +53,11 @@ class BnfObjectBase:
     #A debug-hookie thing.
     ret = self.test(tracker)
     #tracker.config.debug
+    _self = '{0}'.format(self)
     try:
       v = tracker.valsi[tracker.current_valsi]
     except: v = ''
-    debug(' '*(tracker.depth-1),v ,':', "{0} --> {1}".format(self, ret), sep='')
+    debug(' '*(tracker.depth-1),v ,':', "{0} --> {1}".format(_self, ret), sep='')
     return ret
 
 
@@ -89,6 +90,7 @@ class Terminal(BnfObjectBase):
     try:
       a = tracker.valsi[tracker.current_valsi] #.type
     except (EOFError, StopIteration) as e:
+      #print("EOF :(")
       return NoMatch
     
     if a.type == self.selmaho:
@@ -181,6 +183,7 @@ class Concat(Condition):
     tracker.checkin()
     if not a:
       tracker.checkout() #A
+      #print('aww')
       return NoMatch
     b = self.terms[1].match(tracker)
     if b:
@@ -224,9 +227,27 @@ class Repeat(Condition):
 
 class Elidable(Condition):
   def test(self, tracker):
+    term = self.terms[0]
+    v = term.match(tracker)
+    #if v == Match:
+      #input("...")
+      #raise Exception("Terminated")
+    return Match
+    raise Exception
     print("XXX HELL!")
     term = self.terms[0]
-    if term.match(tracker):
+    print('==========')
+    v = term.match(tracker)
+    print(term)
+    print("Got", v)
+    c = input("We've hit an elidable. Wtf do we do? M = match, N = NoFill, X = NoMatch: ").lower()
+    if c == 'M':
+      return Match
+    elif c == 'N':
+      return NoFill
+    else:
+      return NoMatch
+    if v:
       return Match
     else:
       return NoFill

@@ -13,6 +13,7 @@ import sys
 import time, os
 
 sys.stdout = open('bnf_data.py', 'w')
+bnf = ''
 bnf = open('../data/lojban.bnf').read()
 bnf += '\n'
 bnf += open('../data/extensions.bnf').read()
@@ -24,14 +25,16 @@ bnf += open('../data/extensions.bnf').read()
 #bnf = re.sub(pattern, rep, bnf)
 
 #Remove comments
-bnf = re.sub(r"(?m)(;.*?$)", '', bnf) #m == MULTILINE
-
+bnf = re.sub(r"(?m)(\w*;.*?$)", '', bnf) #m == MULTILINE
 
 ''' ### This now dealt with in dehtml_bnf.py
 #Get rid of the subscripts -- only 1 number at the end!
 bnf = re.sub(r"([\w-]\d)\d*", r"\1", bnf) #foo-bar-123 -> foo-bar-1
 '''
 while '  ' in bnf: bnf = bnf.replace("  ", ' ') #Kill extra spaces
+while ' \n' in bnf: bnf = bnf.replace(' \n', '\n')
+while '\n\n' in bnf: bnf = bnf.replace('\n\n', '\n')
+#sys.stderr.write(bnf.replace('\n', '\\n\n'))
 
 bnf = re.sub(r"([\w\d-]*) =", r";\n\1 = ", bnf).strip(';') +';' #Add ; after rules and at the end
 bnf = bnf.replace('\n', '') #destroy newlines!
@@ -68,7 +71,6 @@ bnf = bnf.replace('[', "Optional(").replace(']', ")") #Fix []
 
 
 while ' \n' in bnf: bnf = bnf.replace(' \n', '\n')
-
 
 
 """

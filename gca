@@ -1,4 +1,0 @@
-#!/bin/sh
-
-./clean
-git commit

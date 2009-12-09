@@ -53,45 +53,51 @@ lerfu-word =
 
 
 
-
 x-parse-root =
-  sentence
-  ;x-sentence
-  ;x-parse-test
-  ;text
+  ;
+  ;x-test-elide
+  ;tail-terms
+  ;bridi-tail
   ;sentence
+  text
+  ;x-test
+  
 
 
-x-sentence =
-  [CMENE ... # | (indicators & free ...)] sentence
-
-;Concat(Optional(XOr(Concat(Repeat(<class 'tokens.CMENE'>,), Optional(Repeat(free,),)), AndOr(indicators, Repeat(free,))),), sentence) --> NoMatch
-
-x-parse-test =
-  ;ui ko'a klama
- ;[NAI ...] [CMENE ... #           | (indicators & free ...)] [joik-jek] sentence
-  [NAI ...] [CMENE ... [x-free...] | (UI & x-free ...)] x-foo
 
 
-;First, does concat return NoFill?
-;Secondly, does optional return NoFill?
-
-x-free =
-  SEI
-  | XI
-
-x-foo =
-  KOhA GISMU
 
 
-; Unedited copies
-indicators =
-    [FUhE] indicator ...
-indicator =
-    (UI | CAI) [NAI]
-    | Y
-    | DAhO
-    | FUhO
+
+a =
+  COI
+b =
+  CMENE
+
+x-test-cat =
+  ;coi bab
+  a b
+
+x-test-xor =
+  ;coi
+  ;bab
+  a | b
+
+x-test-and =
+  ;coi bab; bab; coi
+  a & b
+
+x-test-elide =
+  ;lo broda broda selbri; lo broda broda cu selbri; lo broda pa; ko'a selbri; ko'a pa
+  x-te1 [x-te2]
+  ;Does it actually work? No. Idea.
+
+x-te1 =
+  (LE SELBRI ...) | KOhA
+
+x-te2 =
+  (/CU/ SELBRI) | PA
+
 
 
 ;x-example =

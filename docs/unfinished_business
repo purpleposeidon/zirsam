@@ -1,9 +1,14 @@
+Why doesn't broda match bridi_tail?
+
+Remember, you fucked up...
+tail-terms =
+    [terms] /VAU#/
+
 
 Or, in other words, "TODO"
 Items marked "-" aren't as important as items marked "+"
 
 ###### Next
- + Re-do the magic_bnf objects, carefully defining what each one should return in each case.
  - Need to re-enable # -> [free...] ???
 
 ###### Soon
@@ -20,7 +25,7 @@ Items marked "-" aren't as important as items marked "+"
  - Check the bottom of the BNF. Are there unimplemented non-formal rules?
  - Study and meditate upon lojban grammar, make grammar parser (In progress! :D)
  + Check that the BNF is being intepreted properly
- - Don't use "config" for the config.Configuration() object, use "conf"?
+ - Don't use "config" for the config.Configuration() object, use "conf"? Or rename config.py to conf.py
  - Test more aspects of morphology, and also for the other modules
 
 ###### Later
@@ -70,6 +75,7 @@ Items marked "-" aren't as important as items marked "+"
     Conclusion:
       We can put off checking optionals so long as the optional isn't the same as the next part, and I doubt the BNF has anything like that. But this will prolly need more investigation.
  - Have an option for inputting by letter type (like CVCCV), would have been good for debugging morphology but might not be so useful now
+ - Go through everything I checked off, make sure it really is.
 
 ###### Some things I've completed, to make me feel special
  + Use GNU readline! Not being able to edit lines in jbofihe is /so/ annoying
@@ -90,3 +96,4 @@ Ortohgraphy - what happens to capitalized letters with strict ortho?
  + Ah HA! I've figured out how to handle ZOI: Keep a copy of the old crap. Well, ah, we only need to start when we hit a ZOI, but ohh.. Okay, so EVERYTHING must be copied. AH HA! Okay, that is beautiful love. Hit ZOI. Get delim. Get delim offset. Read shit from morphology, until we hit next delim. Get offset. Suck out stuff between the delim's in the old buffer! :D
  - Fold whitespace/boring into the following token!
  + Debug mode for dendrography (Sorta. I have debugging output for it now.)
+ X Re-do the magic_bnf objects, carefully defining what each one should return in each case. -- I decided it'd be better to just make what already almost works instead of starting from scratch

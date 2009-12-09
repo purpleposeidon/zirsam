@@ -80,6 +80,7 @@ class QuoteStream:
         if len(quote_tokens) > 1:
           if isinstance(quote_tokens[0], tokens.PERIOD):
             #Started with a pause, so we'll need to crop out the ending pause
+            #XXX TODO make this actually work. Starting with that non-working if
             if isinstance(quote_tokens[-1], tokens.PERIOD):
               end = quote_tokens[-1].position.offset
             else:
