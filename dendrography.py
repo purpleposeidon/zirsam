@@ -1,8 +1,8 @@
 #!/usr/bin/python3.0
 # -*- coding: utf-8 -*-
 
-#import sys
-#sys.setrecursionlimit(100)
+import sys
+sys.setrecursionlimit(2000)
 import io
 
 from config import Configuration

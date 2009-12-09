@@ -53,11 +53,10 @@ For the first item, I can use token.class. "document_root"? Uhm. Whatever, just 
 
 unknown = UnknownSelmaho()
 
-#I count 123 selma'o
+#I count 122 selma'o
 #Everything below is more data than code
 #Generated using data from cmavo.txt - if you want to regen, take note: spaces/periods in front of cmavo, some selmaho are really weird, like UIa, or UI3. Also, there are combined forms like UI*, don't use those.
 BE = selmaho('BE', ['be'])
-UIb = selmaho('UIb', ["ji'a", "ku'i", "mi'u", "po'o", "si'a"])
 SEhU = selmaho('SEhU', ["se'u"])
 BO = selmaho('BO', ['bo'])
 BOI = selmaho('BOI', ['boi'])
@@ -111,7 +110,7 @@ TUhU = selmaho('TUhU', ["tu'u"])
 NAhU = selmaho('NAhU', ["na'u"])
 LEhU = selmaho('LEhU', ["le'u"])
 MOI = selmaho('MOI', ["cu'o", 'mei', 'moi', "si'e", "va'e"])
-UI = selmaho('UI', ["a'a", "a'e", "a'i", "a'o", "a'u", 'ai', 'au', "ba'a", "ba'u", "be'u", "bu'o", "ca'e", "da'i", 'dai', "do'a", "e'a", "e'e", "e'i", "e'o", "e'u", 'ei', "fu'i", "ga'i", "ge'e", "i'a", "i'e", "i'i", "i'o", "i'u", 'ia', 'ie', 'ii', 'io', 'iu', "ja'o", "je'u", "ju'a", "ju'o", "ka'u", "ke'u", "ki'a", "la'a", "le'o", "li'a", "mu'a", "o'a", "o'e", "o'i", "o'o", "o'u", 'oi', "pa'e", "pe'i", "ra'u", "re'e", "ri'e", "ro'a", "ro'e", "ro'i", "ro'o", "ro'u", "ru'a", "sa'e", "sa'u", "se'a", "se'i", "se'o", "su'a", "ta'o", "ti'e", "to'u", "u'a", "u'e", "u'i", "u'o", "u'u", 'ua', 'ue', 'ui', 'uo', 'uu', "va'i", "vu'e", 'xu', "za'a", "zo'o", "zu'u", "bi'u", "jo'a", 'kau', "li'o", "na'i", 'pau', "sa'a", "ta'u", "pe'a"])
+UI = selmaho('UI', ["a'a", "a'e", "a'i", "a'o", "a'u", 'ai', 'au', "ba'a", "ba'u", "be'u", "bu'o", "ca'e", "da'i", 'dai', "do'a", "e'a", "e'e", "e'i", "e'o", "e'u", 'ei', "fu'i", "ga'i", "ge'e", "i'a", "i'e", "i'i", "i'o", "i'u", 'ia', 'ie', 'ii', 'io', 'iu', "ja'o", "je'u", "ju'a", "ju'o", "ka'u", "ke'u", "ki'a", "la'a", "le'o", "li'a", "mu'a", "o'a", "o'e", "o'i", "o'o", "o'u", 'oi', "pa'e", "pe'i", "ra'u", "re'e", "ri'e", "ro'a", "ro'e", "ro'i", "ro'o", "ro'u", "ru'a", "sa'e", "sa'u", "se'a", "se'i", "se'o", "su'a", "ta'o", "ti'e", "to'u", "u'a", "u'e", "u'i", "u'o", "u'u", 'ua', 'ue', 'ui', 'uo', 'uu', "va'i", "vu'e", 'xu', "za'a", "zo'o", "zu'u", "bi'u", "jo'a", 'kau', "li'o", "na'i", 'pau', "sa'a", "ta'u", "pe'a", "ji'a", "ku'i", "mi'u", "po'o", "si'a"])
 ZIhE = selmaho('ZIhE', ["zi'e"])
 TUhE = selmaho('TUhE', ["tu'e"])
 NAhE = selmaho('NAhE', ["je'a", "na'e", "no'e", "to'e"])

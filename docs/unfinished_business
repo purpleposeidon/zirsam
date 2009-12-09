@@ -45,6 +45,7 @@ Items marked "-" aren't as important as items marked "+"
  - It could be faster! Instead of Xor(Xor(...), A) do Xor(A, Xor(...). Because that would make it faster? Only if the most common forms are listed first in the BNF.
  - Move lujvo/fuhivla sorting crap in morphology
  - Have a config option for zoi to be filtered by the alphabet, or just from what we get
+ + could optimize by first parsing sentences and ignoring content? (Well, not reaaaaly an optimization. But better for streaming.) "--flat-parse". Parse in units of the selma'o I. x-parse-root might be, "NIhO | I | sentence"?]
 
 ###### Much Later
  - (Have error messages in lojban?)
