@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 
-DEBUG = False
+DEBUG = True
 def debug(*args, **kwargs):
   if DEBUG:
     print(*args, **kwargs)
@@ -57,7 +57,8 @@ class BnfObjectBase:
     try:
       v = tracker.valsi[tracker.current_valsi]
     except: v = ''
-    debug(' '*(tracker.depth-1),v ,':', "{0} --> {1}".format(_self, ret), sep='')
+    #debug(' '*(tracker.depth-1),v ,':', "{0} --> {1}".format(_self, ret), sep='')
+    debug(' '*(tracker.depth-1), "{0} --> {1}".format(_self, ret), sep='')
     return ret
 
 
@@ -179,6 +180,16 @@ class XOr(Condition): #Bad name, should be "Alternation" XXX
 
 class Concat(Condition):
   def test(self, tracker):
+    """
+    Used to be, Match NoFill (e.g, "Match NoMatch...") would get 'Match'. But that isn't working with a bit in sumti-6, so it should be NoFill? NO! That doesn't work! Why doesn't that work? It is quite likely that I will need to implement Yet Another LogicValue....
+    Okay, let's try this. BIAS. Yes, sir, biased against Repeat.
+    Nope, that didn't work either. Bah. Okay, so....
+    let's try having a special Repeat. This will involve haxxing up the BNF, sadly.
+    
+    Okay, so, perhaps then Repeat must require 1 or more matches! Ahhmmmm...
+    
+    XXX - Delete this stupid talking-to-self when fixed
+    """
     a = self.terms[0].match(tracker)
     tracker.checkin()
     if not a:
@@ -190,11 +201,15 @@ class Concat(Condition):
       tracker.commit()
       if a == b:
         return a
-      #So, return the best value....
+      
+      
+      #So, return the best value...
       if Match in (a, b):
         return Match
       if NoFill in (a, b):
         return NoFill
+      
+      
       return b
     
     tracker.checkout()
@@ -205,7 +220,7 @@ class Concat(Condition):
 class Repeat(Condition):
   def test(self, tracker):
     """
-    Return either NoRepat or Match.
+    Return either NoFill or Match.
     If it matches more than once, return Match
     
     """
@@ -221,36 +236,17 @@ class Repeat(Condition):
           raise Exception("A repeat of more than {0} items is ridiculous. (in {1})".format(i, self)) #For debugging
       return Match
     else:
+      #XXX - Changed my mind.
+      return NoMatch
       #Didn't match even once, but it is still matches
       return NoFill
-    return once
+    raise Exception
 
 class Elidable(Condition):
   def test(self, tracker):
     term = self.terms[0]
     v = term.match(tracker)
-    #if v == Match:
-      #input("...")
-      #raise Exception("Terminated")
     return Match
-    raise Exception
-    print("XXX HELL!")
-    term = self.terms[0]
-    print('==========')
-    v = term.match(tracker)
-    print(term)
-    print("Got", v)
-    c = input("We've hit an elidable. Wtf do we do? M = match, N = NoFill, X = NoMatch: ").lower()
-    if c == 'M':
-      return Match
-    elif c == 'N':
-      return NoFill
-    else:
-      return NoMatch
-    if v:
-      return Match
-    else:
-      return NoFill
   #def __repr__(self):
     #r = "/%s/" % self.terms
     #return r

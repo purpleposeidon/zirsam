@@ -289,13 +289,30 @@ def Stream(conf=None):
     conf = config.Configuration()
   
   
-  if conf.stdin.isatty() and conf.permit_readline: #Should we enable GNU readline?
-    try:
-      import readline
-      #If this succeeds, then it is enabled for the input() function
-      conf.stdin = __NiceStdin()
-    except ImportError:
-      pass
+  if conf.stdin.isatty():
+    if conf.permit_readline: #Should we enable GNU readline?
+      try:
+        import readline
+        #If this succeeds, then it is enabled for the input() function
+        conf.stdin = __NiceStdin()
+      except ImportError:
+        pass
+    elif conf.cbreak:
+      raise Exception("--cbreak not implemented.")
+      ##import curses
+      ##scr = curses.initscr()
+      
+      ###Mess up terminal
+      ###import tty
+      ###tty.cbreak(1)
+      ###print('raw')
+      ###import sys, tty, termios
+      ###fd = sys.stdin.fileno()
+      ###old_settings = termios.tcgetattr(fd)
+      ###tty.setraw(sys.stdin.fileno())
+      ###import atexit
+      ###atexit.register(termios.tcsetattr, fd, termios.TCSADRAIN, old_settings)
+      ####tty.setraw(1)
   charbuf = common.Buffer(stream_char(conf), conf)
   bitbuf = common.Buffer(stream_bit(charbuf), conf)
   return bitbuf

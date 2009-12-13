@@ -166,12 +166,20 @@ class Token:
       i += 1
     return rafsi
   def _add_rafsi(self, chars, i):
+    #Semi-hackish: remove y
     rafsi = ''
     while i > 0:
       c = chars.pop(0)
       rafsi = rafsi + c.value
       i -= 1
+    if rafsi[-1] == 'y':
+      y = 'y'
+      rafsi = rafsi[:-1]
+    else:
+      y = None
     self.ve_lujvo_rafsi.append(rafsi)
+    if y:
+      self.ve_lujvo_rafsi.append(y)
     return chars
 
   def _lujvo_analyze(self, value):

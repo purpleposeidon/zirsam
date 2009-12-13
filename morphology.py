@@ -759,7 +759,7 @@ we: {4}""".format(self.bit.buffer, cc_location, cc, ps, word_end))
             if self.bit[3].has_V: #zo'o, la'oi
               return self.tokenize(4, CMAVO)
             else:
-              self.config.error("huh")
+              self.config.error("huh", self.bit[0].position)
           else:
             return self.tokenize(2, CMAVO)
         #else:

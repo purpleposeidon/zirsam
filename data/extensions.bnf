@@ -18,18 +18,6 @@ lerfu-word =
     | LAU lerfu-word
     | TEI lerfu-string FOI  
 
-sumti-6 =
-    (LAhE # | NAhE BO #) [relative-clauses] sumti /LUhU#/
-    | KOhA #
-    | lerfu-string /BOI#/
-    | LA # [relative-clauses] CMENE ... #
-    | (LA | LE) # sumti-tail /KU#/
-    | LI # mex /LOhO#/
-    | ZO # ; ZO any-word #
-    | LU text /LIhU#/ ;(grammatical quote)
-    | LOhU LEhU # ;originally LOhU any-word ... LEhU #. The processor keeps (should XXX?) the LEhU
-    | ZOI # ; originally ZOI any-word anything any-word #
-
 tanru-unit-2 =
     BRIVLA #
     | GOhA [RAhO] #
@@ -39,7 +27,7 @@ tanru-unit-2 =
     | NUhA # mex-operator
     | SE # tanru-unit-2
     | JAI # [tag] tanru-unit-2
-;    | any-word (ZEI any-word) ...  ; Preprocessor converts ZEI to SELBRI
+;    | any-word (ZEI any-word) ...  ; Preprocessor converts ZEI to BRIVLA
     | NAhE # tanru-unit-2
     | NU [NAI] # [joik-jek NU [NAI] #] ... subsentence /KEI#/
 
@@ -49,24 +37,42 @@ lerfu-word =
     | LAU lerfu-word
     | TEI lerfu-string FOI
 
+;Full of issues
+sumti-6 =
+    (LAhE # | NAhE BO #) [relative-clauses] sumti /LUhU#/
+    | KOhA #
+    | lerfu-string /BOI#/
+    | LA # [relative-clauses] CMENE ... # 
+    | (LA | LE) # sumti-tail /KU#/
+    | LI # mex /LOhO#/
+    | ZO # ; ZO any-word #
+    | LU text /LIhU#/ ;(grammatical quote)
+    | LOhU LEhU # ;originally LOhU any-word ... LEhU #. The processor keeps the LEhU
+    | ZOI # ; originally ZOI any-word anything any-word #
 
 
 
 
 x-parse-root =
-  ;
+  ;;;; This is the default starting point
+  ;;;; This should refer to a single rule.
+  ;;;; (An old bug, haven't tested recently TODO)
   ;x-test-elide
   ;tail-terms
   ;bridi-tail
   ;sentence
   text
+  ;x-test-issue-1
+  ;sumti
   ;x-test
-  
+  ;la-broda
+  ;sumti-6
 
 
 
-
-
+x-test-issue-1 =
+  LA CMENE ...
+  | LA SELBRI
 
 
 a =
@@ -74,9 +80,14 @@ a =
 b =
   CMENE
 
+
+
 x-test-cat =
   ;coi bab
   a b
+
+x-test-cat-2 =
+  a b ...
 
 x-test-xor =
   ;coi

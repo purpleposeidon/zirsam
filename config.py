@@ -28,6 +28,7 @@ Arguments:"""
   'quiet':"Don't print warnings", \
   'err2out':"Write what would normally go to stderr to stdout", \
   'no readline':"Don't use GNU Readline for input", \
+  'cbreak':"Disable line buffering (may damage your terminal)", \
   
   'alphabet':"Select alphabet. --alphabet=? lists available values. The default is 'latin'", \
   
@@ -45,7 +46,7 @@ Arguments:"""
   'no space':"(NOT IMPLEMENTED) Convert input to not use spaces", \
   
   }
-  __help_order = 'help, quiet, err2out, no readline, alphabet, no dotside, forbid warn, strict, debug, full buffer, token error, hate token, do exit, print tokens, no space'.split(', ') #Help, Parsing configuration, Debug, unimplemented
+  __help_order = 'help, quiet, err2out, no readline, alphabet, no dotside, forbid warn, strict, debug, full buffer, cbreak, token error, hate token, do exit, print tokens, no space'.split(', ') #Help, Parsing configuration, Debug, unimplemented
   for val in __help:
     if val not in __help_order:
       raise Exception("Command option %r is not present in Configuration.__help_order"%val)
@@ -108,7 +109,6 @@ Arguments:"""
     if arg('strict'):
       self._strict = True
       self.forbid_warn = True
-      self.ascii_only = True
     if arg("quiet"):
       self._quiet = True
     if arg("debug"):
@@ -132,6 +132,9 @@ Arguments:"""
       self.permit_readline = False
     if arg("full buffer"):
       self.full_buffer = True
+    if arg('cbreak'):
+      self.cbreak = True
+      self.permit_readline = False
     _ = valued_arg("alphabet", alphabets.GlyphTable.tables)
     if _: self.glyph_table = _
     _ = valued_arg("hate token")
@@ -160,9 +163,10 @@ Arguments:"""
     return r
   
   
-  def error(self, msg, position):
+  def error(self, msg, position=None):
     print('ERROR: ', position, ': ', msg, sep='', file=self.stderr)
     if self._debug:
+      input("HEY! There's no position argument given! Okay? ")
       raise Exception
     raise SystemExit(1)
   
@@ -170,10 +174,9 @@ Arguments:"""
     self.has_warnings = True
     if not self._quiet or self.forbid_warn:
       print('WARN: ', position, ': ', msg, sep='', file=self.stderr)
+    elif self.forbid_warn:
+      self.error(msg, position)
     
-    if self.forbid_warn:
-      raise SystemExit(1)
-  
   def message(self, msg, position=None):
     #Discussion: Should position be required?
     if not self._quiet:
@@ -226,10 +229,10 @@ Arguments:"""
     self._quiet = False
     self._debug = False
     self.full_buffer = False
+    self.cbreak = False
     self.old_chars = ""
     
     #orthographic
-    self.ascii_only = False #XXX Still used?
     self.glyph_table = alphabets.GlyphTable.tables['latin']
     self.permit_readline = True
     
