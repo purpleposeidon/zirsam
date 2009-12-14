@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 
-DEBUG = True
+DEBUG = False
 def debug(*args, **kwargs):
   if DEBUG:
     print(*args, **kwargs)
@@ -27,8 +27,9 @@ class LogicValue:
   def __xor__(self, other): return bool(self) ^ bool(other)
   def __rxor__(self, other): return bool(self) ^ bool(other)
 Match = LogicValue('Match', True)
-NoFill = LogicValue('NoFill', True) #For empty repeats and elidable terminators
 NoMatch = LogicValue('NoMatch', False)
+NoTake = LogicValue('NoTake', True) #A relative of NoFill? This is for Optional
+
 
 
 BNF = None  #This will be set by bnf/__init__.py; it is used by the Rule.
@@ -154,8 +155,6 @@ class AndOr(Condition):
     B = self.terms[1].match(tracker)
     if A == Match or B == Match:
       return Match
-    elif A == NoFill or B == NoFill:
-      return NoFill
     else:
       return NoMatch
 
@@ -192,28 +191,19 @@ class Concat(Condition):
     """
     a = self.terms[0].match(tracker)
     tracker.checkin()
-    if not a:
+    if a == NoMatch:
       tracker.checkout() #A
       #print('aww')
       return NoMatch
     b = self.terms[1].match(tracker)
-    if b:
-      tracker.commit()
-      if a == b:
-        return a
-      
-      
-      #So, return the best value...
-      if Match in (a, b):
-        return Match
-      if NoFill in (a, b):
-        return NoFill
-      
-      
+    if b == NoMatch:
+      tracker.checkout()
       return b
+    #if b == Match:
+    tracker.commit()
+    return Match
     
-    tracker.checkout()
-    return b
+    
     
   
 
@@ -232,18 +222,17 @@ class Repeat(Condition):
       while term.match(tracker) == Match:
         #Continue matching; only stop if something is obviously broken.
         i += 1
-        if i == 2000:
+        if i == 100:
           raise Exception("A repeat of more than {0} items is ridiculous. (in {1})".format(i, self)) #For debugging
       return Match
     else:
-      #XXX - Changed my mind.
+      if t1 == NoTake:
+        return Match
       return NoMatch
-      #Didn't match even once, but it is still matches
-      return NoFill
-    raise Exception
 
 class Elidable(Condition):
   def test(self, tracker):
+    #XXX Maybe I'll have to do some tracking here? This could probably use some testing
     term = self.terms[0]
     v = term.match(tracker)
     return Match
@@ -267,7 +256,7 @@ class Optional(Condition):
         #import code
         #ic = code.InteractiveConsole(locals())
         #ic.interact()
-      return NoFill
+      return NoTake #XXXXXXXXXX I'm not so sure about killing this one now. :/
   #def __repr__(self):
     #r = "[%s]" % self.terms
     #return r

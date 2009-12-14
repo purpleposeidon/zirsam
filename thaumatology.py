@@ -189,6 +189,7 @@ class ErasureStream:
         if isinstance(orig, tokens.SELBRI):
           target_type = tokens.SELBRI
         found = False
+        LOHU_CASE = False #XXX I'm saying this at 2:54 am, check at some point please.
         while 1:
           if not backlog:
             self.config.message("No backlog for SA")
@@ -327,6 +328,9 @@ def Stream(conf=None):
   erased = ErasureStream(Buffer(quoted, conf), conf)
   #return Buffer(erased, conf)
   absorbed = AbsorptionStream(Buffer(erased, conf), conf)
+  if conf.show_progress:
+    absorbed = list(absorbed)
+    print("Total valsi:", len(absorbed))
   return Buffer(absorbed, conf)
 
 if __name__ == '__main__':

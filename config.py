@@ -26,6 +26,7 @@ Arguments:"""
   #Err... you could just use a list of tuples or something...
   __help = {'help':"Shows this message", \
   'quiet':"Don't print warnings", \
+  'show progress':"Give a live report on number of parsed tokens", \
   'err2out':"Write what would normally go to stderr to stdout", \
   'no readline':"Don't use GNU Readline for input", \
   'cbreak':"Disable line buffering (may damage your terminal)", \
@@ -46,7 +47,7 @@ Arguments:"""
   'no space':"(NOT IMPLEMENTED) Convert input to not use spaces", \
   
   }
-  __help_order = 'help, quiet, err2out, no readline, alphabet, no dotside, forbid warn, strict, debug, full buffer, cbreak, token error, hate token, do exit, print tokens, no space'.split(', ') #Help, Parsing configuration, Debug, unimplemented
+  __help_order = 'help, quiet, show progress, err2out, no readline, alphabet, no dotside, forbid warn, strict, debug, full buffer, cbreak, token error, hate token, do exit, print tokens, no space'.split(', ') #Help, Parsing configuration, Debug, unimplemented
   for val in __help:
     if val not in __help_order:
       raise Exception("Command option %r is not present in Configuration.__help_order"%val)
@@ -116,6 +117,8 @@ Arguments:"""
       self.print_tokens = True
     if arg("print tokens"): #Print tokens as they are parsed
       self.print_tokens = True
+    if arg("show progress"):
+      self.show_progress = True
     if arg("token error"): #Error on first token
       self.token_error = True
     if arg("no dotside"):
@@ -177,13 +180,13 @@ Arguments:"""
     elif self.forbid_warn:
       self.error(msg, position)
     
-  def message(self, msg, position=None):
+  def message(self, *msg, position=None, **kwargs):
     #Discussion: Should position be required?
     if not self._quiet:
       if position:
-        print(position, ': ', msg, sep='', file=self.stderr)
+        print(position, ': ', *msg, sep='', file=self.stderr, **kwargs)
       else:
-        print(msg, file=self.stderr)
+        print(*msg, file=self.stderr, **kwargs)
   
   def debug(self, msg, position=None, end='\n'):
     if self._debug:
@@ -248,10 +251,11 @@ Arguments:"""
     self.hate_token = None #If we see this token, raise Exception
     
     
-    self.__check_options(args)
+    
     self.has_warnings = False
     self.parsing_unit = 'x_parse_root' #'sumti' #'term' #"sentence" #'quantifier' #"sentence" #'subsentence' #"sumti" #terms
     self.parsing_unit = self.parsing_unit.replace('-', '_')
+    self.show_progress = False
 
     #magic-words stuff
     self.si_depth = 5 #Store always at least 5 words for si erasure
@@ -262,6 +266,7 @@ Arguments:"""
     self.position = common.Position()
     
     
+    self.__check_options(args)
     if self.do_exit:
       raise SystemExit
 

@@ -2,7 +2,8 @@
 # -*- coding: utf-8 -*-
 
 import sys
-sys.setrecursionlimit(2000)
+#sys.setrecursionlimit(2000)
+sys.setrecursionlimit(1000) #The default on my system
 import io
 
 from config import Configuration
@@ -121,6 +122,8 @@ class MatchTracker:
     """
     #self.config.debug("checkin")
     self.stack.append((self.current_valsi, list(self.value)))
+    if self.config.show_progress:
+      self.config.message("Parser location:", self.current_valsi, end='\r')
     #self.config.debug('---', self.stack[-1])
   def checkout(self):
     """
@@ -186,9 +189,9 @@ def main(_stream):
   r = []
   #r = 
   #print('='*70)
-  
   for i in _stream:
     #print('*************************\n', pprint(i), '\n-------------------------')
+    print()
     print(pprint(i))
     r.append(i)
     #print(i)

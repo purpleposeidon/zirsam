@@ -11,6 +11,7 @@ Items marked "-" aren't as important as items marked "+"
 ###### Next
  * Make grammar parsing work!
  - Need to re-enable # -> [free...] ???
+ - Minimal parse tree printout
 
 ###### Soon
  - Implement everything according to http://www.lojban.org/tiki/Magic+Words
@@ -28,6 +29,7 @@ Items marked "-" aren't as important as items marked "+"
  + Check that the BNF is being intepreted properly
  - Don't use "config" for the config.Configuration() object, use "conf"? Or rename config.py to conf.py
  - Test more aspects of morphology, and also for the other modules
+ - Add option for progress bar, and maybe auto-detect if you might want progress info. Say... 3 seconds or so
 
 ###### Later
  - Check that each marker in brkwords is properly implemented and documented
@@ -46,6 +48,7 @@ Items marked "-" aren't as important as items marked "+"
  - It could be faster! Instead of Xor(Xor(...), A) do Xor(A, Xor(...). Because that would make it faster? Only if the most common forms are listed first in the BNF.
  - Move lujvo/fuhivla sorting crap in morphology
  - Have a config option for zoi to be filtered by the alphabet, or just from what we get
+ + Make ZOI period-delims behave properly.
  + could optimize by first parsing sentences and ignoring content? (Well, not reaaaaly an optimization. But better for streaming.) "--flat-parse". Parse in units of the selma'o I. x-parse-root might be, "NIhO | I | sentence"?]
 
 ###### Much Later

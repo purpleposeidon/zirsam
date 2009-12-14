@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 #automatically generated
-#on Sun Dec 13 00:57:17 2009
+#on Sun Dec 13 19:38:59 2009
 #by poseidon@skami
 
 from magic_bnf import *
@@ -106,16 +106,25 @@ Rule('tanru_unit_2'):  Terminal(BRIVLA)*Optional(Rule('free')**"REPEAT")<<Termin
 Rule('lerfu_word'):  Terminal(BY)<<Terminal(BU)<<Terminal(LAU)*Rule('lerfu_word')<<Terminal(TEI)*Rule('lerfu_string')*Terminal(FOI),
 Rule('sumti_6'):  (Terminal(LAhE)*Optional(Rule('free')**"REPEAT")<<Terminal(NAhE)*Terminal(BO)*Optional(Rule('free')**"REPEAT"))*Optional(Rule('relative_clauses'))*Rule('sumti')*Elidable(Terminal(LUhU)*Optional(Rule('free')**"REPEAT"))<<Terminal(KOhA)*Optional(Rule('free')**"REPEAT")<<Rule('lerfu_string')*Elidable(Terminal(BOI)*Optional(Rule('free')**"REPEAT"))<<Terminal(LA)*Optional(Rule('free')**"REPEAT")*Optional(Rule('relative_clauses'))*Terminal(CMENE)**"REPEAT"*Optional(Rule('free')**"REPEAT")<<(Terminal(LA)<<Terminal(LE))*Optional(Rule('free')**"REPEAT")*Rule('sumti_tail')*Elidable(Terminal(KU)*Optional(Rule('free')**"REPEAT"))<<Terminal(LI)*Optional(Rule('free')**"REPEAT")*Rule('mex')*Elidable(Terminal(LOhO)*Optional(Rule('free')**"REPEAT"))<<Terminal(ZO)*Optional(Rule('free')**"REPEAT")<<Terminal(LU)*Rule('text')*Elidable(Terminal(LIhU)*Optional(Rule('free')**"REPEAT"))<<Terminal(LOhU)*Terminal(LEhU)*Optional(Rule('free')**"REPEAT")<<Terminal(ZOI)*Optional(Rule('free')**"REPEAT"),
 Rule('x_parse_root'):  Rule('text'),
+Rule('x_test'):  Rule('x_test_issue_3'),
 Rule('x_test_issue_1'):  Terminal(LA)*Terminal(CMENE)**"REPEAT"<<Terminal(LA)*Terminal(SELBRI),
-Rule('a'):  Terminal(COI),
+Rule('x_test_issue_2'):  Rule('a')*Optional(Rule('b'))**"REPEAT",
+Rule('x_test_issue_3'):  Rule('x_test_issue_3_bit_1')*Terminal(KOhA),
+Rule('x_test_issue_3_bit_1'):  Terminal(LAhE)*Rule('x_test_issue_3_bit_2')*Elidable(Terminal(LUhU)*Optional(Rule('free')**"REPEAT")),
+Rule('x_test_issue_3_bit_2'):  Terminal(KOhA)<<Rule('x_test_issue_3_bit_1'),
+Rule('a'):  Terminal(A),
 Rule('b'):  Terminal(CMENE),
 Rule('x_test_cat'):  Rule('a')*Rule('b'),
 Rule('x_test_cat_2'):  Rule('a')*Rule('b')**"REPEAT",
 Rule('x_test_xor'):  Rule('a')<<Rule('b'),
 Rule('x_test_and'):  Rule('a')+Rule('b'),
-Rule('x_test_elide'):  Rule('x_te1')*Optional(Rule('x_te2')),
-Rule('x_te1'):  (Terminal(LE)*Terminal(SELBRI)**"REPEAT")<<Terminal(KOhA),
-Rule('x_te2'):  (Elidable(Terminal(CU))*Terminal(SELBRI))<<Terminal(PA)
+Rule('x_test_optional_1'):  Rule('a')*Optional(Rule('b')),
+Rule('x_test_optional_2'):  Optional(Rule('b'))*Rule('a'),
+Rule('x_test_optional_3'):  Rule('a')*Optional(Rule('x_test_optional_3_bit'))*Rule('a'),
+Rule('x_test_optional_3_bit'):  Optional(Rule('b')),
+Rule('x_test_elide'):  Rule('x_test_elide_bit_1')*Optional(Rule('x_test_elide_bit_2')),
+Rule('x_test_elide_bit_1'):  (Terminal(LE)*Terminal(SELBRI)**"REPEAT")<<Terminal(KOhA),
+Rule('x_test_elide_bit_2'):  (Elidable(Terminal(CU))*Terminal(SELBRI))<<Terminal(PA)
 }
 
 BNF['any_word'] = any_word()

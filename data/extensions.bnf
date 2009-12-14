@@ -57,26 +57,51 @@ x-parse-root =
   ;;;; This is the default starting point
   ;;;; This should refer to a single rule.
   ;;;; (An old bug, haven't tested recently TODO)
-  ;x-test-elide
   ;tail-terms
   ;bridi-tail
   ;sentence
   text
-  ;x-test-issue-1
-  ;sumti
+  ;sumti-2
   ;x-test
-  ;la-broda
   ;sumti-6
 
-
+x-test =
+  ;;;; All my BNF tests
+  ;x-test-issue-1
+  ;x-test-issue-2
+  x-test-issue-3
+  ;x-test-cat
+  ;x-test-cat-2
+  ;x-test-xor
+  ;x-test-and
+  ;x-test-optional-1
+  ;x-test-optional-2
+  ;x-test-optional-3
+  ;x-test-elide
 
 x-test-issue-1 =
   LA CMENE ...
   | LA SELBRI
 
+x-test-issue-2 =
+    a [b] ...
+
+
+
+x-test-issue-3 =
+  x-test-issue-3-bit-1 KOhA
+
+x-test-issue-3-bit-1 =
+    LAhE x-test-issue-3-bit-2 /LUhU#/
+
+x-test-issue-3-bit-2 =
+  KOhA
+  | x-test-issue-3-bit-1
+
+
 
 a =
-  COI
+  A
 b =
   CMENE
 
@@ -98,15 +123,25 @@ x-test-and =
   ;coi bab; bab; coi
   a & b
 
+x-test-optional-1 =
+  a [b]
+
+x-test-optional-2 =
+  [b] a
+
+x-test-optional-3 =
+  a [x-test-optional-3-bit] a
+x-test-optional-3-bit = [b]
+
 x-test-elide =
   ;lo broda broda selbri; lo broda broda cu selbri; lo broda pa; ko'a selbri; ko'a pa
-  x-te1 [x-te2]
+  x-test-elide-bit-1 [x-test-elide-bit-2]
   ;Does it actually work? No. Idea.
 
-x-te1 =
+x-test-elide-bit-1 =
   (LE SELBRI ...) | KOhA
 
-x-te2 =
+x-test-elide-bit-2 =
   (/CU/ SELBRI) | PA
 
 
