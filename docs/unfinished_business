@@ -9,7 +9,6 @@ Or, in other words, "TODO"
 Items marked "-" aren't as important as items marked "+"
 
 ###### Next
- * Make grammar parsing work!
  - Need to re-enable # -> [free...] ???
  - Minimal parse tree printout
 
@@ -34,7 +33,7 @@ Items marked "-" aren't as important as items marked "+"
 ###### Later
  - Check that each marker in brkwords is properly implemented and documented
  - Add an "--abusive" option zo'o
- - $ grep -C 2 "XXX\|TODO" *.py */*.py
+ - $ grep -C 2 "XXX\|TODO" *.py */*.py */*.bnf
  - Check for TODO, XXX, and ... in code
  - Check for weird/odd/wrong comments
  - Make sure I didn't accidentally change/deleting anything in BRKWORDS.txt
@@ -62,8 +61,6 @@ Items marked "-" aren't as important as items marked "+"
  - If there is demand: xml output
  - look into proper distribution methods, see the distutils module http://docs.python.org/distutils/
      "package_data" for setup.py
- - Optimize the parser by re-structuring the BNF tree so that what we check first comes first, instead of last.
-    "example = a b c" becomes  Concat(Concat(a, b), c), ought to be Concat(a, Concat(b, c)
  - Optimize the parser by not checking optionals until after we know the item following doesn't match?
     - Is this... valid?
       - If what follows doesn't match, then it could never match!?

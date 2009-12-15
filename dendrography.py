@@ -107,15 +107,14 @@ class MatchTracker:
     else:
       raise Exception("Tried to fail root node")
   def finalize(self):
-    #Kill the valsi???
-    #return
-    try:
-      while self.current_valsi > 0:
-        #print(self.current_valsi)
-        self.current_valsi -= 1
-        #print("Losing", self.valsi.pop())
-    except (EOFError, StopIteration):
-      return
+    #Remove those valsi
+    i = self.current_valsi
+    #print(i)
+    while i > 0:
+      v = self.valsi.pop()
+      #print("Losing", v)
+      i -= 1
+    return
   def checkin(self):
     """
     Append the current state onto a stack. This is for a rule's structure.
@@ -144,6 +143,7 @@ class GrammarParser:
   def __init__(self, token_iter, config):
     self.valsi = token_iter
     self.config = config
+    self.good_parse = False
 
   def __iter__(self):
     #yield ROOT_TOKENs
@@ -165,10 +165,22 @@ class GrammarParser:
       else:
         break
       
+      if tracker.current_valsi == 0:
+        #Pretty much fail. Try, uh, try getting rid of that token maybe there's something good behind it
+        try:
+          self.valsi.pop(0)
+        except (EOFError, StopIteration):
+          break
+        continue
       
       yield tracker
       #XXX Only do one for now
-      break
+      try:
+        self.valsi[0]
+      except (EOFError, StopIteration):
+        self.good_parse = True
+        break
+    
 
 
 
@@ -186,6 +198,7 @@ def Stream(conf=None):
   return Buffer(treebuff, conf)
 
 def main(_stream):
+  #Returns, Was_A_Satisfactory_Parse, Parsed_Texts
   r = []
   #r = 
   #print('='*70)
@@ -199,10 +212,12 @@ def main(_stream):
     print(r, '(empty)')
   #if len(str(i)) < 33: #For testing. Didn't get much text.
     #raise SystemExit(1)
-  if r:
-    return r[0]
-  
+  return _stream.orig.good_parse and len(r) == 1, r
 
 
 if __name__ == '__main__':
-  r = main(Stream())
+  val, r = main(Stream())
+  #print('--->', val)
+  raise SystemExit(not val)
+  #if r:
+    #return True

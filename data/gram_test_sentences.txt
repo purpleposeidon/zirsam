@@ -2,6 +2,7 @@
 ######### -- BAD
 ## By-Hand test cases. -- BAD
 ######### -- BAD
+mi tavla do
 li fu'a biboi ciboi panoboi ge'a gei du li re sa fu'a bi boi ci boi gei du li vo
 li pa vu'u re du li sa pi'i ci du li ci
 li pa su'i pa du sa re du li ci

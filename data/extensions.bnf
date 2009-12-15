@@ -27,7 +27,7 @@ tanru-unit-2 =
     | NUhA # mex-operator
     | SE # tanru-unit-2
     | JAI # [tag] tanru-unit-2
-;    | any-word (ZEI any-word) ...  ; Preprocessor converts ZEI to BRIVLA
+;| any-word (ZEI any-word) ...  ; Preprocessor converts ZEI to BRIVLA, so not needed
     | NAhE # tanru-unit-2
     | NU [NAI] # [joik-jek NU [NAI] #] ... subsentence /KEI#/
 
@@ -46,9 +46,9 @@ sumti-6 =
     | (LA | LE) # sumti-tail /KU#/
     | LI # mex /LOhO#/
     | ZO # ; ZO any-word #
-    | LU text /LIhU#/ ;(grammatical quote)
-    | LOhU LEhU # ;originally LOhU any-word ... LEhU #. The processor keeps the LEhU
-    | ZOI # ; originally ZOI any-word anything any-word #
+    | LU text /LIhU#/
+    | LOhU LEhU # ;originally "LOhU any-word ... LEhU #". Thaumatology keeps the LEhU
+    | ZOI # ; originally "ZOI any-word anything any-word #"
 
 
 
@@ -57,13 +57,9 @@ x-parse-root =
   ;;;; This is the default starting point
   ;;;; This should refer to a single rule.
   ;;;; (An old bug, haven't tested recently TODO)
-  ;tail-terms
-  ;bridi-tail
   ;sentence
   text
-  ;sumti-2
   ;x-test
-  ;sumti-6
 
 x-test =
   ;;;; All my BNF tests
@@ -85,8 +81,6 @@ x-test-issue-1 =
 
 x-test-issue-2 =
     a [b] ...
-
-
 
 x-test-issue-3 =
   x-test-issue-3-bit-1 KOhA
@@ -144,12 +138,17 @@ x-test-elide-bit-1 =
 x-test-elide-bit-2 =
   (/CU/ SELBRI) | PA
 
+x-inefficiency-example =
+  a b c
+;TODO: Stored as "Concat(Concat(a, b), c)". It would be better to be done as Concat(a, Concat(b, c))
 
 
-;x-example =
-;  a b c
-;TODO: Stored as "Concat(Concat(a, b), c)". It would be more efficient to be done as Concat(a, Concat(b, c))
-
+;;;;Non-Formal Rules Checklist:
+;       word: just uses any-word, thaumatology folds the BAhE into it
+;       any-word: CHECK
+;       anything: CHECK
+;       null: Uh, not present at all. Erased words are taken care of by thaumatology.
+;       ui: I guess it's okay
 ;
 ;               The following rules are non-formal:
 ;word =
@@ -162,10 +161,3 @@ x-test-elide-bit-2 =
 ;   any-word SI
 ;    | utterance SA
 ;    | text SU
-
-;Checklist:
-  ; word: just uses any-word
-  ; any-word: CHECK
-  ; anything: CHECK
-  ; null: Uh, not present at all. Erased words are taken care of by thaumatology.
-  ; ui: I guess it's okay

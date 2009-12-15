@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 #automatically generated
-#on Sun Dec 13 19:38:59 2009
+#on Sun Dec 13 20:27:59 2009
 #by poseidon@skami
 
 from magic_bnf import *
@@ -124,7 +124,8 @@ Rule('x_test_optional_3'):  Rule('a')*Optional(Rule('x_test_optional_3_bit'))*Ru
 Rule('x_test_optional_3_bit'):  Optional(Rule('b')),
 Rule('x_test_elide'):  Rule('x_test_elide_bit_1')*Optional(Rule('x_test_elide_bit_2')),
 Rule('x_test_elide_bit_1'):  (Terminal(LE)*Terminal(SELBRI)**"REPEAT")<<Terminal(KOhA),
-Rule('x_test_elide_bit_2'):  (Elidable(Terminal(CU))*Terminal(SELBRI))<<Terminal(PA)
+Rule('x_test_elide_bit_2'):  (Elidable(Terminal(CU))*Terminal(SELBRI))<<Terminal(PA),
+Rule('x_inefficiency_example'):  Rule('a')*Rule('b')*Rule('c')
 }
 
 BNF['any_word'] = any_word()
