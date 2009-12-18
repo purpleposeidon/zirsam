@@ -1,0 +1,76 @@
+First, need to de pro-valsi. "Verbosify"?
+Zerothly, need to turn those tokens into objects or something.
+Maaaaybe, not verbosify.
+Okaay.
+Ah, soo
+We descend through the parse tree, picking up Abstractions. And if we encounter something like "lo nu mi viska lo do mamta kei goi ko'a", we assign that to our KOhA table for that ni'o/paragraph/text... Also need to think about KI. And SOI. 
+AbstractionTable:
+Name     Type   Description
+ID       Int    The primary key, not unique.
+selbri   Int    A number corresponding to a gismu
+Place    Int    The place-number of the selbri
+terbri   Int    This would be like, "lo klama", "lo se klama". The first integer is the gismu, the second integer is the place
+
+ID = 0, selbri = #"tavla", place = 1, terbri = "mi"
+ID = 0, selbri = #"tavla", place = 2, terbri = "do"
+ID = 0, selbri = #"tavla", place = 3, terbri = Abstraction:1
+ID = 1, selbri = #"klama", place = 2, terbri = "lo tcadu"
+ID = 2, selbri = #is_you , place = 1
+
+
+
+Entity... Okay, by entitiy....
+An EntityTable would have:
+    ID
+    ... and I can't think of anything else. Maybe a comment. There'd be some extra-special ID's. Well, there would be ONE extra-special ID, 0, for "myself", (meaning the computer)
+        Which makes me wonder. What part of the computer is "me"? Zirsam? The summation of running software? The entire thing? Where does it end?
+      Let us say... zirsam. We'd want it to be like.. okay. So, well, the thing connected to the database. If someone does something to extend the database, then that also becomes "mi". Although, there's the actual definition of "mi". So, "mi" are the database, and clients to the database. Two zirsam-db clients refer to eachother with "me".
+    So, basically... "x1 (number) is the assertion of existence of some identity/entity."
+    {mi <entity>}
+
+
+
+
+ni'o
+.ua, the computer can also listen to a conversation between others. "doi djonri"
+
+.ua, okay, so things like "mi" and "do" and "the other guy" can be stored as abstractions! No need for... anything else. "mi me zoi sy.ENTITY.sy"
+
+******Another day later*************
+I reconsider. Maybe it should be like
+EVENT   TERM-TYPE    VALUE
+1       klama        do
+1       se klama     lo zdani
+1    <according-to>  do
+1       time-stated  Thu Dec 17 21:37:03 PST 2009
+1       tense        pu
+1     true-by        ti'e - "I hear (hearsay)"
+1   according-to     la djeims
+1       truth-value  ja'a
+2       <exists>     mi
+2     true-by        se'o - "I know internally"
+2       truth-value  ja'a
+
+.ua, Okay, for this 'true-by' bit we can use... UI2?
+
+
+I don't like this tense bit. :/
+Using simply a PU to describe the tense?
+Well, we've got to use something.
+
+Now then, what about quantifiers
+okay. uhm. The sumti, "pa lo re remna"
+3   inner-quant   pa
+3   outer-quant   re
+3   remna         ke'a
+So, let's try... "pa lo re remna cu tavla"
+4   tavla   #3
+"no lo ro rozgu cu blanu"
+5   outer-quant no
+5   inner-quant ro
+5   rozgu       ke'a
+6   blanu       #5
+"lo rozgu cu na blanu"
+7   rozgu       ke'a
+8   blanu       #7  (So, when refering to #something, we mean... what do we mean. "lo broda")
+8   truth-value na
