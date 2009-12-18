@@ -10,12 +10,15 @@ Items marked "-" aren't as important as items marked "+"
 
 ###### Next
  - Need to re-enable # -> [free...] ???
- - Minimal parse tree printout
 
 ###### Soon
+ - Minimal parse tree printout
  - Implement everything according to http://www.lojban.org/tiki/Magic+Words
     * Make sure that everything interacts properly
  - More error checking and recovery
+    - lai & friends in cmene
+    - invalid consonant clusters in words
+ - examine {miklAmalozdAnibelomAmtabelatimos}
  - What about that old '*' on TrackerMatch? Uhm.
  - Make the helper code nicer
  - Make --token-error print a backtrace on each token instead of dieing?
@@ -29,6 +32,7 @@ Items marked "-" aren't as important as items marked "+"
  - Don't use "config" for the config.Configuration() object, use "conf"? Or rename config.py to conf.py
  - Test more aspects of morphology, and also for the other modules
  - Add option for progress bar, and maybe auto-detect if you might want progress info. Say... 3 seconds or so
+ - Link to python3, not python3.0. (You actually have 3.1 installed...)
 
 ###### Later
  - Check that each marker in brkwords is properly implemented and documented
@@ -45,15 +49,18 @@ Items marked "-" aren't as important as items marked "+"
  + Make GlyphTable handle multi-length input characters
  - CLI argument to read stdin from a file (import tty)
  - It could be faster! Instead of Xor(Xor(...), A) do Xor(A, Xor(...). Because that would make it faster? Only if the most common forms are listed first in the BNF.
- - Move lujvo/fuhivla sorting crap in morphology
+ - Another way to make it faster would be to merge Concat(A, Concat(B, C)) into Concat(A, B, C), at the cost of increased code complexity.
+ + Move lujvo/fuhivla sorting crap in morphology
  - Have a config option for zoi to be filtered by the alphabet, or just from what we get
  + Make ZOI period-delims behave properly.
  + could optimize by first parsing sentences and ignoring content? (Well, not reaaaaly an optimization. But better for streaming.) "--flat-parse". Parse in units of the selma'o I. x-parse-root might be, "NIhO | I | sentence"?]
+ - Convert to python3.1
+ - have switches that toggle between various aspects of the BNF.
 
 ###### Much Later
  - (Have error messages in lojban?)
  - Emulate output of jbofihe and camxes? (And other parsers?)
- - Semantics engine and supporting stuff (Nope. Seperate project.)
+ - Semantics engine and supporting stuff (Nope. Seperate project.) (Well, maybe not all of it)
  - Jbovlaste integration
  + Oh, also, learn how to speak lojban. Jeeze.
  - Make option for output to be spaceless

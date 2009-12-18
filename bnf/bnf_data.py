@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 #automatically generated
-#on Sun Dec 13 20:27:59 2009
+#on Fri Dec 18 00:50:52 2009
 #by poseidon@skami
 
 from magic_bnf import *
@@ -106,12 +106,15 @@ Rule('tanru_unit_2'):  Terminal(BRIVLA)*Optional(Rule('free')**"REPEAT")<<Termin
 Rule('lerfu_word'):  Terminal(BY)<<Terminal(BU)<<Terminal(LAU)*Rule('lerfu_word')<<Terminal(TEI)*Rule('lerfu_string')*Terminal(FOI),
 Rule('sumti_6'):  (Terminal(LAhE)*Optional(Rule('free')**"REPEAT")<<Terminal(NAhE)*Terminal(BO)*Optional(Rule('free')**"REPEAT"))*Optional(Rule('relative_clauses'))*Rule('sumti')*Elidable(Terminal(LUhU)*Optional(Rule('free')**"REPEAT"))<<Terminal(KOhA)*Optional(Rule('free')**"REPEAT")<<Rule('lerfu_string')*Elidable(Terminal(BOI)*Optional(Rule('free')**"REPEAT"))<<Terminal(LA)*Optional(Rule('free')**"REPEAT")*Optional(Rule('relative_clauses'))*Terminal(CMENE)**"REPEAT"*Optional(Rule('free')**"REPEAT")<<(Terminal(LA)<<Terminal(LE))*Optional(Rule('free')**"REPEAT")*Rule('sumti_tail')*Elidable(Terminal(KU)*Optional(Rule('free')**"REPEAT"))<<Terminal(LI)*Optional(Rule('free')**"REPEAT")*Rule('mex')*Elidable(Terminal(LOhO)*Optional(Rule('free')**"REPEAT"))<<Terminal(ZO)*Optional(Rule('free')**"REPEAT")<<Terminal(LU)*Rule('text')*Elidable(Terminal(LIhU)*Optional(Rule('free')**"REPEAT"))<<Terminal(LOhU)*Terminal(LEhU)*Optional(Rule('free')**"REPEAT")<<Terminal(ZOI)*Optional(Rule('free')**"REPEAT"),
 Rule('x_parse_root'):  Rule('text'),
-Rule('x_test'):  Rule('x_test_issue_3'),
+Rule('x_test'):  Rule('x_test_undermatch'),
 Rule('x_test_issue_1'):  Terminal(LA)*Terminal(CMENE)**"REPEAT"<<Terminal(LA)*Terminal(SELBRI),
 Rule('x_test_issue_2'):  Rule('a')*Optional(Rule('b'))**"REPEAT",
 Rule('x_test_issue_3'):  Rule('x_test_issue_3_bit_1')*Terminal(KOhA),
 Rule('x_test_issue_3_bit_1'):  Terminal(LAhE)*Rule('x_test_issue_3_bit_2')*Elidable(Terminal(LUhU)*Optional(Rule('free')**"REPEAT")),
 Rule('x_test_issue_3_bit_2'):  Terminal(KOhA)<<Rule('x_test_issue_3_bit_1'),
+Rule('x_test_undermatch'):  Rule('x_short')<<Rule('x_long'),
+Rule('x_short'):  Terminal(PA),
+Rule('x_long'):  Optional(Terminal(PA))*Terminal(LE)*Terminal(SELBRI),
 Rule('a'):  Terminal(A),
 Rule('b'):  Terminal(CMENE),
 Rule('x_test_cat'):  Rule('a')*Rule('b'),

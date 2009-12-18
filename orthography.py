@@ -320,9 +320,9 @@ def Stream(conf=None):
 if __name__ == '__main__':
   print("Shows the grouping of letter clusters", file=sys.stderr)
   bitbuf = Stream()
-  i = []
+  r = []
   for bit in bitbuf:
-    i.append(bit)
+    r.append(bit)
     if bitbuf.config._debug:
       print(bit.position, ": ", repr(bit), sep='')
     else:

@@ -59,18 +59,19 @@ class QuoteStream:
   def __iter__(self):
     while 1:
       if self.valsi[0].type == selmaho.ZOI: #Non-lojban qiuote
+        #TODO: It'd be nice to turn off warnings and messages in here
         zoi = self.valsi.pop()
         delim_start = self.valsi.pop()
         if delim_start.type in (selmaho.SI, selmaho.SA, selmaho.SU, selmaho.ZO, selmaho.BU, selmaho.ZEI, selmaho.FAhO):
           self.config.message("This ZOI deliminator (%r) could be confusing" % (delim_start.value), delim_start.position)
         quote_tokens = []
         
-        while self.valsi[0].value != delim_start.value:
-          try:
+        try:
+          while self.valsi[0].value != delim_start.value:
             next = self.valsi.pop()
             quote_tokens.append(next)
-          except (EOFError, StopIteration):
-            self.config.error("End of File reached in open ZOI quote (close it off with {0!r})".format(delim_start.value), delim_start.position)
+        except (EOFError, StopIteration):
+          self.config.error("End of File reached in open ZOI quote (close it off with {0!r})".format(delim_start.value), delim_start.position)
         delim_end = self.valsi.pop()
         zoi.end = delim_end
         
@@ -155,10 +156,14 @@ class ErasureStream:
         break
       
       if isinstance(self.valsi[0], tokens.HESITATION):
-        # XXX NOTE XXX http://dag.github.com/cll/21/1/ says this should be handled AFTER si/sa/su, BUT nobody likes that.
+        # XXX NOTE XXX http://dag.github.com/cll/21/1/ says this should be handled AFTER si/sa/su, BUT nobody likes that. 
         #{do .yyy si mi} would be {do mi}
         y = self.valsi.pop()
-        if backlog:
+        try:
+          maybu = self.valsi[0].type == selmaho.BU
+        except (EOFError, IndexError):
+          maybu = False
+        if backlog and not maybu:
           backlog[-1].modifiers.append(y) #If converting to set: use .add()
         else:
           backlog.append(y)
@@ -226,10 +231,17 @@ class ErasureStream:
           #backlog = []
       elif self.valsi[0].type == selmaho.ZEI:
         zei = self.valsi.pop(0)
-        s1 = backlog.pop(0)
-        s2 = self.valsi.pop(0)
+        try:
+          s1 = backlog.pop(0)
+        except IndexError:
+          self.config.error("There is nothing for ZEI to bind on the left", zei.position)
+        try:
+          s2 = self.valsi.pop(0)
+        except (StopIteration, EOFError):
+          self.config.error("There is nothing for ZEI to bind on the right", zei.position)
         zei.content = [s1, s2]
-        zei.type = tokens.SELBRI #The BNF uses ZEI, so it's just going unused.
+        
+        zei.type = tokens.LUJVO #The BNF uses ZEI, so it's just going unused.
         backlog.append(zei)
       elif self.valsi[0].type == selmaho.BU:
         bu = self.valsi.pop(0)

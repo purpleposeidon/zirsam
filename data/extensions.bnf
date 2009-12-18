@@ -65,9 +65,10 @@ x-test =
   ;;;; All my BNF tests
   ;x-test-issue-1
   ;x-test-issue-2
-  x-test-issue-3
+  ;x-test-issue-3
   ;x-test-cat
   ;x-test-cat-2
+  x-test-undermatch
   ;x-test-xor
   ;x-test-and
   ;x-test-optional-1
@@ -92,7 +93,9 @@ x-test-issue-3-bit-2 =
   KOhA
   | x-test-issue-3-bit-1
 
-
+x-test-undermatch = x-short | x-long
+x-short = PA
+x-long = [PA] LE SELBRI
 
 a =
   A

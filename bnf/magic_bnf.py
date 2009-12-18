@@ -158,13 +158,53 @@ class AndOr(Condition):
     else:
       return NoMatch
 
-class XOr(Condition): #Bad name, should be "Alternation" XXX
+class XOr(Condition): #Bad name, it belies its' true function, should be "Alternation" TODO, tho shortness is nice.
   #def __repr__(self):
     #return " {0}\n  |{1}".format(*self.terms)
   def test(self, tracker):
+    #XXX And for NoTake?
+    """
+    Okay, so.
+    Check A.
+    Success?
+      Check B.
+      Use the MatchTracker of the longest.
+    No?
+      Check B.
+    
+    Since both children may match, we'll have to pick our favorite based on valsi matched. If our second child is shorter, we'll have to discard that match data and use the first's. So
+    """
     tracker.checkin()
+    O_state = tracker.get_state()
     a = self.terms[0].match(tracker)
     if a == Match:
+      A_state = tracker.get_state()
+      #Got to check B
+      tracker.restore_state(O_state)
+      b = self.terms[1].match(tracker)
+      ##B_state = tracker.get_state() #XXX may rm later
+      if b == Match:
+        if tracker.current_valsi == A_state[0]:
+          #We are SERIOUSLY FUCKED. Which one do we use? Let's shit our pants, and make extra-certain the user catches it.
+          msg = """***********Ah, well, this is a somewhat disconcerting situation in lojbanistan**********\nThe item: {}\nThe rulelette: {}\nThe state: {}\n\nThe grammar is ambigious or something! (Sorry for being so noisy about it, I think this is really really important)\nPlease report this issue.\n  -- zirsam/bnf/magic_bnf.py""".format(tracker.valsi, self, tracker.get_state())
+          import sys, os
+          try:
+            print(msg, file=sys.stderr)
+          except: pass
+          if not self.tracker.conf.debug:
+            try:
+              print(msg, file=sys.stdout)
+            except: pass
+            try:
+              open('/tmp/README_IN_THE_NAME_OF_CEVNI_________________________________.txt', 'wa').write(msg+'\n')
+            except: pass
+            os.system("xmessage \"Please look in /tmp/ for a horrible zirsam error\" &")
+            os.system("beep; beep; beep; beep; beep; beep; beep; beep")
+          raise Exception(msg)
+        if A_state[0] > tracker.current_valsi:
+          tracker.restore_state(A_state)
+      else:
+        tracker.restore_state(A_state)
       tracker.commit()
       return Match
     tracker.checkout()

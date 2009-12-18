@@ -36,6 +36,7 @@ Arguments:"""
   'no dotside':"Don't require a pause following cmene-markers (XXX CHECKME)", \
   'forbid warn':"Treat warnings as errors", \
   'strict':"Count warnings as errors", \
+  'all error':"Treat all messages as errors", \
   
   'debug':"(DEBUG OPTION) Print information from parsing", \
   'full buffer':"(DEBUG OPTION) Completly buffer text", \
@@ -47,7 +48,8 @@ Arguments:"""
   'no space':"(NOT IMPLEMENTED) Convert input to not use spaces", \
   
   }
-  __help_order = 'help, quiet, show progress, err2out, no readline, alphabet, no dotside, forbid warn, strict, debug, full buffer, cbreak, token error, hate token, do exit, print tokens, no space'.split(', ') #Help, Parsing configuration, Debug, unimplemented
+  #Why don't you just be smart and use two tupples, or something?
+  __help_order = 'help, quiet, show progress, err2out, no readline, alphabet, no dotside, forbid warn, strict, all error, debug, full buffer, cbreak, token error, hate token, do exit, print tokens, no space'.split(', ') #Help, Parsing configuration, Debug, unimplemented
   for val in __help:
     if val not in __help_order:
       raise Exception("Command option %r is not present in Configuration.__help_order"%val)
@@ -127,6 +129,8 @@ Arguments:"""
       self.do_exit = True
     if arg("forbid warn"):
       self.forbid_warn = True
+    if arg("all error"):
+      self.all_error = True
     if arg("err2out"):
       self.stderr = self.stdout # XXX Make this Configuration's output
     if arg("no space"):
@@ -179,6 +183,9 @@ Arguments:"""
       print('WARN: ', position, ': ', msg, sep='', file=self.stderr)
     elif self.forbid_warn:
       self.error(msg, position)
+    if self.all_error:
+      print("Exiting with failure", file=self.stderr)
+      raise SystemExit(2)
     
   def message(self, *msg, position=None, **kwargs):
     #Discussion: Should position be required?
@@ -187,6 +194,9 @@ Arguments:"""
         print(position, ': ', *msg, sep='', file=self.stderr, **kwargs)
       else:
         print(*msg, file=self.stderr, **kwargs)
+    if self.all_error:
+      print("Exiting with failure", file=self.stderr)
+      raise SystemExit(2)
   
   def debug(self, msg, position=None, end='\n'):
     if self._debug:
@@ -201,6 +211,10 @@ Arguments:"""
         print('STRICT:', position, ': ', msg, sep='', file=self.stderr)
       else:
         print('STRICT: ', msg, file=self.stderr)
+      raise SystemExit(1)
+    if self.all_error:
+      print("Exiting with failure", file=self.stderr)
+      raise SystemExit(2)
   
   def __init__(self, args=None, stdin=None, stdout=None, stderr=None):
     """
@@ -245,7 +259,7 @@ Arguments:"""
     
     self.token_error = False
     self.do_exit = False
-    
+    self.all_error = False
     self.forbid_warn = False
     self.output_no_space = False
     self.hate_token = None #If we see this token, raise Exception

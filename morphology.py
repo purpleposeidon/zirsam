@@ -753,8 +753,13 @@ we: {4}""".format(self.bit.buffer, cc_location, cc, ps, word_end))
         #i ue u'i
         return self.tokenize(1, CMAVO)
       elif self.bit[0].C:
-        #doi do zo'o
-        if self.bit[1].has_V:
+        #doi do zo'o la'oi
+        if self.bit[1].has_V: #doi do zo'o la'oi
+          if self.bit[2].has_V: #la'oi
+            return self.tokenize(3, CMAVO)
+          else:
+            return self.tokenize(2, CMAVO)
+          '''
           if self.bit[2].h:
             if self.bit[3].has_V: #zo'o, la'oi
               return self.tokenize(4, CMAVO)
@@ -762,6 +767,7 @@ we: {4}""".format(self.bit.buffer, cc_location, cc, ps, word_end))
               self.config.error("huh", self.bit[0].position)
           else:
             return self.tokenize(2, CMAVO)
+            '''
         #else:
           #raise Exception("What?")
     else:

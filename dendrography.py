@@ -14,7 +14,11 @@ import magic_bnf
 
 
 def pprint(wut, first=True):
-  """More complex than the one below"""
+  """More complex than the one below.
+  We can output in a few different ways:
+    * Print the entire parse tree, including sub-rules like "sumti_6"
+    * Don't print sub-rules, but print everything
+    * Print only nodes that don't have 2 branches"""
   
   if isinstance(wut, MatchTracker):
     head = str(wut.rule)
@@ -61,14 +65,15 @@ def __alt_pprint(wut):
 
 class MatchTracker:
   """
-  A node in the parse tree. Each node coresponds to a rule. Each node keeps a list of accepted valsi
+  A node in the parse tree. Each node coresponds to a rule. Each node keeps a list of accepted valsi and sub-nodes
   """
 
   def __repr__(self):
     #if str(self.rule)[-1] in '1234567890' and self.accepted:
-    if not self.config._debug and (len(self.value) == 1 and type(self.value[0]) == MatchTracker):
-      return repr(self.value)[1:-1]
-    r = str(self.rule)+':{'+repr(self.value)[1:-1]+'}' #+"*"*(not self.accepted) #XXX self.accepted is probably something horrible
+    #if not self.config._debug and (len(self.value) == 1 and type(self.value[0]) == MatchTracker):
+    #if not self.config._debug and (len(self.value) == 1 and type(self.value[0]) == MatchTracker):
+    #  return repr(self.value)[1:-1]
+    r = str(self.rule)+':{'+repr(self.value)[1:-1]+'}'+"*"*(not self.accepted) #XXX That self.accepted isn't always the same is probably indicative of a horrifying bug
     #if self.stack:
     #  r += '<'+str(self.stack)[1:-1]+'>'
     return r
@@ -80,7 +85,7 @@ class MatchTracker:
     self.start = current_valsi
     self.current_valsi = self.start
     self.parent = parent
-    self.depth = depth
+    self.depth = depth # TODO: Might I wish to abort at some depth?
     self.rule = rule
     self.accepted = False
     self.stack = [] #For inner-rule grammarstuffins
@@ -129,15 +134,35 @@ class MatchTracker:
     Something failed. Restore an old state from the stack
     """
     #self.config.debug("popping", self.stack)
-    old_state = self.stack.pop()
-    (self.current_valsi, self.value ) = old_state
+    old_valsi_state = self.stack.pop()
+    (self.current_valsi, self.value ) = old_valsi_state
   def commit(self):
     """
     Something succeeded. Remove from stack
     """
     #print("commit")
     self.stack.pop()
+  def get_state(self):
+    """For exploring the length of branches in bnf.magic_bnf.XOr. Important to note is the fact that the first item in the tuple is the current_valsi"""
+    return self.current_valsi, list(self.value), self.accepted, list(self.stack)
+  def restore_state(self, state):
+    
+    self.current_valsi, self.value, self.accepted, self.stack = state
 
+'''
+      def get_state(self):
+    """For exploring the length of branches in bnf.magic_bnf.XOr. Important to note is the fact that the first item in the tuple is the current_valsi"""
+    
+    if self.parent:
+      papa = self.parent.get_state()
+    else: papa = None
+    #return self.current_valsi, self.value, self.accepted, self.stack, papa
+    return self.current_valsi, self.accepted, self.stack, papa
+  def restore_state(self, state):
+    #self.current_valsi, self.value, self.accepted, self.stack, papa = state
+    self.current_valsi, self.accepted, self.stack, papa = state
+    if self.parent:
+      self.parent.restore_state(papa)'''
 
 class GrammarParser:
   def __init__(self, token_iter, config):
@@ -174,13 +199,13 @@ class GrammarParser:
         continue
       
       yield tracker
-      #XXX Only do one for now
+      
       try:
         self.valsi[0]
       except (EOFError, StopIteration):
         self.good_parse = True
         break
-    
+      break #XXX Only do one for now
 
 
 

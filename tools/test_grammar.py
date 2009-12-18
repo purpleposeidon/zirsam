@@ -21,14 +21,17 @@ def compare_jbofihe(line):
   return gso("echo %r | jbofihe" % (line))[0] == 0
 
 def compare_zirsam(line):
-  r = gso("echo %r | ~/sync/Development/JBOPARSER/dendrography.py")[0]
+  r = gso("echo %r | ~/sync/Development/JBOPARSER/dendrography.py --all-error" % line)[0]
   return r == 0
 
 def run_line(line):
-  if '--' in line:
+  if line.count('--') == 1:
+    '''
+    if '--' in line:
     #We've been told what we should expect
     if line.count('--') > 1:
       line = line[:line.find('--')].strip()
+      '''
     try:
       line, expect = line.split('--')
     except Exception as e:
@@ -62,10 +65,19 @@ def run_line(line):
       #They match? Then jbofihe is wrong.
     
 
-IGNORE = [6709]
+
 
 def run_test():
-  src = open("data/gram_test_sentences.txt", errors='ignore')
+  IGNORE = []
+  if 0:
+    import io
+    src = io.StringIO("""zomimi klama -- GOOD""")
+  elif 0:
+    src = open("data/gram_test_sentences.txt", errors='ignore')
+    IGNORE = [6709] #Because jbofihe chokes up when it sees a paren
+    print("This is going to take forever. Seriously. Like, a couple hours. Sorry.\n\n")
+  else:
+    src = open("data/failed_gram_tests.txt")
   i = 0
   failed_tests = 0
   for line in src:
@@ -85,7 +97,6 @@ def run_test():
     result = run_line(line)
     if not result:
       print(line)
-      print(i)
       failed_tests += 1
       #raise SystemExit
   print("Total tests:", i, "Failed tests:", failed_tests)
