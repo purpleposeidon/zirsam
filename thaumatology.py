@@ -59,7 +59,7 @@ class QuoteStream:
   def __iter__(self):
     while 1:
       if self.valsi[0].type == selmaho.ZOI: #Non-lojban qiuote
-        #TODO: It'd be nice to turn off warnings and messages in here
+        #TODO: It'd be nice to turn off warnings and messages from morphology in here
         zoi = self.valsi.pop()
         delim_start = self.valsi.pop()
         if delim_start.type in (selmaho.SI, selmaho.SA, selmaho.SU, selmaho.ZO, selmaho.BU, selmaho.ZEI, selmaho.FAhO):
@@ -74,21 +74,39 @@ class QuoteStream:
           self.config.error("End of File reached in open ZOI quote (close it off with {0!r})".format(delim_start.value), delim_start.position)
         delim_end = self.valsi.pop()
         zoi.end = delim_end
+        zoi.start = delim_start
+        zoi.zoi_tokens = quote_tokens
         
         start = delim_start.position.offset+len(delim_start.value)
         end = delim_end.position.offset-1
         
-        if len(quote_tokens) > 1:
-          if isinstance(quote_tokens[0], tokens.PERIOD):
-            #Started with a pause, so we'll need to crop out the ending pause
-            #XXX TODO make this actually work. Starting with that non-working if
-            if isinstance(quote_tokens[-1], tokens.PERIOD):
-              end = quote_tokens[-1].position.offset
-            else:
-              self.config.warn("This zoi started with a pause, it should certainly end with one.", delim_end.position)
-        zoi.content = self.config.old_chars[start:end]
-        #else:
-          #zoi.content = ''
+        if len(quote_tokens) >= 1:
+          """
+          How to trim the data...
+          "zoi ", "zoi. ", "zoi."
+          " zoi", " .zoi", ".zoi"
+          """
+          trim_space = 0
+          trim_pause = False
+          for token in zoi.zoi_tokens[0].whitespace:
+            if isinstance(token, tokens.PERIOD):
+              trim_pause = True
+            if isinstance(token, tokens.WHITESPACE):
+              trim_space += 1
+            start = zoi.zoi_tokens[0].position.offset-1
+          white = list(zoi.end.whitespace)
+          
+          white.reverse()
+          for token in white:
+            end = token.position.offset - 1
+            if isinstance(token, tokens.PERIOD):
+              if not trim_pause:
+                break
+              trim_pause = False
+            elif isinstance(token, tokens.WHITESPACE):
+              if trim_space == 0:
+                break
+              trim_space -= 1
         yield zoi
       elif self.valsi[0].type == selmaho.ZO: #1-word quote
         zo = self.valsi.pop()

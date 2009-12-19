@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 #automatically generated
-#on Fri Dec 18 00:50:52 2009
+#on Fri Dec 18 12:28:51 2009
 #by poseidon@skami
 
 from magic_bnf import *

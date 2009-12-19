@@ -1,9 +1,9 @@
 #!/usr/bin/python3.0
 # -*- coding: utf-8 -*-
 
-#After you have copied and pasted the *formal* bnf from the CLL to src_bnf.bnf,
-#Run this program. It will utilize string handling and malmakfa to convert it into
-#python code!
+#After you have put the *formal rules* of the CLL's BNF to data/lojban.bnf,
+#run this program. It will utilize string handling and malmakfa to convert it into
+#a python dictionary.
 #Relacing and magic!
 
 DISABLE_HASH = False #A little experiment

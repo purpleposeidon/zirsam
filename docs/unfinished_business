@@ -1,15 +1,8 @@
-Why doesn't broda match bridi_tail?
-
-Remember, you fucked up...
-tail-terms =
-    [terms] /VAU#/
-
-
 Or, in other words, "TODO"
 Items marked "-" aren't as important as items marked "+"
 
-###### Next
- - Need to re-enable # -> [free...] ???
+###### Release
+ - bnf/convert_bnf.py: DISABLE_HASH = False
 
 ###### Soon
  - Minimal parse tree printout
@@ -18,27 +11,20 @@ Items marked "-" aren't as important as items marked "+"
  - More error checking and recovery
     - lai & friends in cmene
     - invalid consonant clusters in words
- - examine {miklAmalozdAnibelomAmtabelatimos}
  - What about that old '*' on TrackerMatch? Uhm.
- - Make the helper code nicer
- - Make --token-error print a backtrace on each token instead of dieing?
  - Check your dotside!
  - Do more garbage checking (For example, try {kláma} with default settings)
- - make word_end in morphology.py indexed from 0 instead of 1
+ - make word_end in morphology.py indexed from 0 instead of 1?
  + Test IPA and other alphabets
- - Check the bottom of the BNF. Are there unimplemented non-formal rules?
- - Study and meditate upon lojban grammar, make grammar parser (In progress! :D)
- + Check that the BNF is being intepreted properly
  - Don't use "config" for the config.Configuration() object, use "conf"? Or rename config.py to conf.py
- - Test more aspects of morphology, and also for the other modules
  - Add option for progress bar, and maybe auto-detect if you might want progress info. Say... 3 seconds or so
  - Link to python3, not python3.0. (You actually have 3.1 installed...)
+ - Put in GPL licensing or something and other legalese stuff in files that need it (Not lojban.bnf)
 
 ###### Later
  - Check that each marker in brkwords is properly implemented and documented
  - Add an "--abusive" option zo'o
- - $ grep -C 2 "XXX\|TODO" *.py */*.py */*.bnf
- - Check for TODO, XXX, and ... in code
+ - $ grep -C 2 "XXX\|TODO" */*.bnf *.py */*.py
  - Check for weird/odd/wrong comments
  - Make sure I didn't accidentally change/deleting anything in BRKWORDS.txt
  - (seperate out the configuration options for each section?)
@@ -52,10 +38,9 @@ Items marked "-" aren't as important as items marked "+"
  - Another way to make it faster would be to merge Concat(A, Concat(B, C)) into Concat(A, B, C), at the cost of increased code complexity.
  + Move lujvo/fuhivla sorting crap in morphology
  - Have a config option for zoi to be filtered by the alphabet, or just from what we get
- + Make ZOI period-delims behave properly.
  + could optimize by first parsing sentences and ignoring content? (Well, not reaaaaly an optimization. But better for streaming.) "--flat-parse". Parse in units of the selma'o I. x-parse-root might be, "NIhO | I | sentence"?]
  - Convert to python3.1
- - have switches that toggle between various aspects of the BNF.
+ - have switches that enable or disable certain parts of the BNF to allow for grammars designed for other situations
 
 ###### Much Later
  - (Have error messages in lojban?)
@@ -83,8 +68,13 @@ Items marked "-" aren't as important as items marked "+"
             It is quite likely that the BNF doesn't have stuff in the form [FOO] FOO.
     Conclusion:
       We can put off checking optionals so long as the optional isn't the same as the next part, and I doubt the BNF has anything like that. But this will prolly need more investigation.
- - Have an option for inputting by letter type (like CVCCV), would have been good for debugging morphology but might not be so useful now
+ - Have an option for inputting by letter type (like CVCCV), which would have been good for debugging morphology but might not be so useful now
  - Go through everything I checked off, make sure it really is.
+
+###### Wtf is this?
+ - Test more aspects of morphology, and also for the other modules
+ - Make the helper code nicer
+
 
 ###### Some things I've completed, to make me feel special
  + Use GNU readline! Not being able to edit lines in jbofihe is /so/ annoying
@@ -106,3 +96,9 @@ Ortohgraphy - what happens to capitalized letters with strict ortho?
  - Fold whitespace/boring into the following token!
  + Debug mode for dendrography (Sorta. I have debugging output for it now.)
  X Re-do the magic_bnf objects, carefully defining what each one should return in each case. -- I decided it'd be better to just make what already almost works instead of starting from scratch
+ - examine {miklAmalozdAnibelomAmtabelatimos} (Was a morphology issue, Tokens needed another anti-morphology-tokenization variable)
+ - Make --token-error print a backtrace on each token instead of dieing? (traceback.print_stack())
+ - Check the bottom of the BNF. Are there unimplemented non-formal rules?
+ - Study and meditate upon lojban grammar, make grammar parser
+ + Check that the BNF is being intepreted properly (The BNF being parsed wrong hasn't been an issue in forever)
+ + Make ZOI period-delims behave properly.

@@ -11,6 +11,7 @@ __author__ = "djeims.roistn <purpleposeidon@gmail.com>"
 import io
 import sys
 import inspect
+import traceback
 
 from common import Buffer
 import orthography
@@ -220,7 +221,8 @@ class ValsiParser:
     if self.config.token_error or self.config.print_tokens:
       self.config.message("TOKEN {0} {1}".format(t_type.__name__, v))
     if self.config.token_error:
-      raise Exception("Token Call Backtrace")
+      traceback.print_stack()
+      #raise Exception("Token Call Backtrace")
     
     if t_type == GARBAGE:
       self.config.strict("Garbage token: {0}".format(v), v[0].position)

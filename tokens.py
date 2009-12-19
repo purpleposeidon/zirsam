@@ -17,6 +17,7 @@ class Token:
   h = False
   y = False
   counts_CC = False
+  has_V = False
 
   def __getname(self):
     if self.type == ...:
