@@ -24,14 +24,15 @@ class Token:
     if not len(bits):
       self.config.error("Trying to tokenize nothing!")
     self.position = self.bits[0].position
-    self.value = self.calculate_value()
     self.type = ...
-    self.ve_lujvo_rafsi = []
-    self.classify()
     self.content = None
+    self.ve_lujvo_rafsi = []
     self.modifiers = [] #BAhE and UI such.
     self.whitespace = [] #Whitespace and pauses that occur BEFORE the token.
     self.end = None #Acceptable types: None, Token
+    self.value = self.calculate_value()
+
+    self.classify()
     if self.config.hate_token and self.config.hate_token == self.value:
       #Be hatin' - for morphology debugging
       raise Exception("Tokenization Backtrace")
@@ -83,8 +84,31 @@ class Token:
     if self.type == FUHIVLA:
       self._test_slinkuhi()
 
+    if self.type == CMENE:
+      self._test_laiv()
+
   def __eq__(self, other):
     return isinstance(other, Token) and (self.type == other.type) and (self.value == other.value)
+
+  def _test_laiv(self):
+    """
+    members of forbidden may not appear in a cmene, unless proceeded by a consonant.
+    """
+    if self.config.dotside:
+      return
+    forbidden = 'la', 'lai', 'doi' #Odd that la'i isn't forbidden, despite being LA
+    for forbid in forbidden:
+      i = 0
+      while i != -1:
+        i = self.value.find(forbid, i+1)
+        if i > 0:
+          #Possibility of being valid
+          if not (self.value[i] in 'aeiou'):
+            #Isn't a vowel, you're safe
+            continue
+          #Now you're in trouble!
+          self.config.strict("")
+  
   def _test_slinkuhi(self):
     test_word = 'pa'
     test = test_word+self.value
@@ -241,6 +265,10 @@ class Token:
 
   def __str__(self):
     val = str(self.value)
+    try:
+      self.content
+    except:
+      help(self) #XXX
     if self.content:
       val += ', content=' + str(self.content)
     if self.end:

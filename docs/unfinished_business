@@ -1,7 +1,7 @@
 Or, in other words, "TODO"
 Items marked "-" aren't as important as items marked "+"
 ###### Next
- - what happened with ZOI?
+
 ###### Release
  - bnf/convert_bnf.py: DISABLE_HASH = False
 
@@ -32,14 +32,14 @@ Items marked "-" aren't as important as items marked "+"
  - How do I like Position? Does it match up with vi, kate, and other editors?
  - Do I like how the Configuration object is propagated? Is there a way to make it more... uhmm
    - Don't use self.config, use self.buffer.config? (the way it is now is more flexible)
- + Make GlyphTable handle multi-length input characters
- - CLI argument to read stdin from a file (import tty)
- - It could be faster! Instead of Xor(Xor(...), A) do Xor(A, Xor(...). Because that would make it faster? Only if the most common forms are listed first in the BNF.
- - Another way to make it faster would be to merge Concat(A, Concat(B, C)) into Concat(A, B, C), at the cost of increased code complexity.
+ + Make GlyphTable handle multi-length input characters (sampa: {l=?dZEim=s} should be {la.djeims})
+ - CLI argument to read stdin from a file
+ - Print out tokenization immediatly on input (import tty)
+ - It could be faster! Instead of Xor(Xor(...), A) do Xor(A, Xor(...). Because that would make it faster? Only if the most common forms are listed first in the BNF. Well, at least the old method might not be faster, but the current one would be faster because it has to run more XOr tests.
+ - Another way to make it faster would be to merge Concat(A, Concat(B, C)) into Concat(A, B, C), at the cost of increased code complexity. (Or, perhaps Concat(A, Concat(B, Concat(C, D))) into Concat(Concat(A, B), Concat(C, D)), without adding more code?)
  + Move lujvo/fuhivla sorting crap in morphology
  - Have a config option for zoi to be filtered by the alphabet, or just from what we get
- + could optimize by first parsing sentences and ignoring content? (Well, not reaaaaly an optimization. But better for streaming.) "--flat-parse". Parse in units of the selma'o I. x-parse-root might be, "NIhO | I | sentence"?]
- - Convert to python3.1
+ + could optimize by first parsing sentences and ignoring content? (Well, not reaaaaly an optimization. But better for streaming.) "--flat-parse". Parse in units of the selma'o I. x-sentence-parse-root might be, "NIhO | I | sentence"]
  - have switches that enable or disable certain parts of the BNF to allow for grammars designed for other situations
 
 ###### Much Later
@@ -71,7 +71,7 @@ Items marked "-" aren't as important as items marked "+"
  - Have an option for inputting by letter type (like CVCCV), which would have been good for debugging morphology but might not be so useful now
  - Go through everything I checked off, make sure it really is.
 
-###### Wtf is this?
+###### I don't know what I was writing
  - Test more aspects of morphology, and also for the other modules
  - Make the helper code nicer
 
@@ -104,3 +104,4 @@ Ortohgraphy - what happens to capitalized letters with strict ortho?
  + Make ZOI period-delims behave properly.
  - slinku'i test
  - Do more garbage checking (For example, try {kláma} with default settings) (Those are now a sub-selma'o of SELBRI, called CIZYSELBRI)
+ - what happened with ZOI? (oops, forgot to put the zoi.content...)

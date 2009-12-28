@@ -110,6 +110,7 @@ class ValsiParser:
     self.bit = bit_iter
     self.config = conf
     self.EOF = False
+    self.dot_sided = False #If we've hit a period recently enough
   
   def __iter__(self):
     while 1:
@@ -203,8 +204,10 @@ class ValsiParser:
     
   
   def tokenize(self, count, t_type, start=0):
-    #Pops count letters (1-indexed) from ValsiParser.bit, and creates a Token object (as given by t_type). The token is returned.
+    #Pops count letters (1-indexed) from ValsiParser.bit, and creates a Token object (as given by t_type).
+    #The token is returned.
     #If --token-error is given as a config value, it will raise an error.
+    #If the token isn't whitespace, then self.dot_sided is reset.
     v = []
     assert count > 0
     assert start >= 0
@@ -226,6 +229,8 @@ class ValsiParser:
     
     if t_type == GARBAGE:
       self.config.strict("Garbage token: {0}".format(v), v[0].position)
+    if not(the_token.type in (WHITESPACE, PERIOD)):
+      self.dot_sided = False
     return the_token
   
   
@@ -576,19 +581,22 @@ we: {4}""".format(self.bit.buffer, cc_location, cc, ps, word_end))
     """
     This is the function that figures out what to do. It has many different possible return values:
       A Token instance: this is the Token it found
-      A list of Token instances: multiple tokens needed to be handled at once, or the word breaking algorithm suggested to return multiple items
-      An Ellipsis (notated as ...): this indicates that something happened behind the scenes, but it isn't ready to return a Token yet
-      None: A token could not be created. It has probably reached the EOF.
+      A list of Token instances: multiple tokens needed to be handled at once,
+      or the word breaking algorithm suggested to return multiple items
+      An Ellipsis (notated as ...): this indicates that something happened behind the scenes,
+      but it isn't ready to return a Token yet
+      None: A token could not be created. It has reached the EOF.
     """
     if isinstance(self.bit[0], Token):
-      #Something has already been tokenized, either upstream (perhaps the text is pre-parsed?),
-      # or something that happened in this parser
+      #Something has already been tokenized, either upstream (perhaps we're being fed actual tokens?),
+      #or something that happened in this parser, especially with lerfu
       self.config.debug("Returning pre-parsed token {0}".format(self.bit[0]), self.bit[0].position)
+      self.dot_sided = False
       return self.bit.pop(0)
     
     if self.bit[0].garbage:
-      self.config.strict("Found garbage")
-      return self.tokenize(1, GARBAGE)
+      self.config.strict("Unknown letters")
+      return self.tokenize(1, GARBAGE) #What is this garbage?
     
     if self.bit[0].whitespace:
       #{2.C.1)b)}
@@ -596,7 +604,6 @@ we: {4}""".format(self.bit.buffer, cc_location, cc, ps, word_end))
       return r
     
     if self.bit[0].comma:
-      #{None}
       self.config.warn("This comma is probably nonsensical", self.bit[0].position)
       return self.tokenize(1, GARBAGE)
     
@@ -608,52 +615,58 @@ we: {4}""".format(self.bit.buffer, cc_location, cc, ps, word_end))
     #if self.config.dotside and self.bit[0].period:
     #if self.bit[0].period:
       #word_end += self.word(word_end+1)
+    
     if self.bit[0].period:
+      self.dot_sided = True
       return self.tokenize(1, PERIOD)
-    if self.bit[word_end-1].has_C or (self.bit[word_end-1].period and (word_end >= 2 and self.bit[word_end-2].has_C)): #It's a cmene! OMG!
+    if self.bit[word_end-1].has_C: #It's a cmene! OMG!
       #{2.A.1)}
-      
       #The cmene must have a pause in front unless (not DOTSIDE and) there is a marker
-      if not 'broken' and self.bit[0].period: #XXX if enabled, .i.a'odoklAmatidoidjan
-        return self.tokenize(1, PERIOD), self.tokenize(word_end-1, CMENE)
-      else:
-        if self.config.dotside:
-          self.config.strict("Dotside requires a period in front of cmene", self.bit[0].position)
-        
-        #{2.A.1)a)}
-        #Requires a cmene marker: la, lai, la'i, doi
-        i = word_end - 2 #We're looking for two bits, so we have to have space for two bits when we start
-        found_vocative = False
-        while i >= 0:
-          if self.bit[i].value == 'l' and self.bit[i+1].value in ('a', 'ai', "a'i"):
-            found_vocative = True
-            #return self.tokenize(2, CMAVO), self.tokenize(word_end-2, CMENE)
-          elif self.bit[i].value == 'd' and self.bit[i+1].value == 'oi':
-            found_vocative = True
-            #return self.tokenize(2, CMAVO), self.tokenize(word_end-2, CMENE)
-          
-          if found_vocative:
+      if self.config.dotside and not self.dot_sided:
+        self.config.strict("Dotside requires a period in front of cmene", self.bit[0].position) #And beep angrily .u'i zo'oru'e
+
+      # NOTE: dotside pretty much sends this bit of BRKWORDS to hell, uhm... let's just use a big IF.
+      #(dotside is the default)
+      if self.config.dotside:
+        #mi'e .las.
+        #So, what we're going to do is just reach back until the next wordsep?
+        return self.tokenize(word_end, CMENE) #This is a lot easier.
+      #else: (Doesn't need another indentation [you may have noticed, I don't like large indents])
+      
+      #{2.A.1)a)}
+      #Requires a cmene marker: la, lai, la'i, doi
+      i = word_end - 2 #We're looking for two bits, so we have to have space for two bits when we start
+      found_vocative = False
+      while i >= 0:
+        if self.bit[i].value == 'l' and self.bit[i+1].value in ('a', 'ai', "a'i"):
+          found_vocative = True
+          #return self.tokenize(2, CMAVO), self.tokenize(word_end-2, CMENE)
+        elif self.bit[i].value == 'd' and self.bit[i+1].value == 'oi':
+          found_vocative = True
+          #return self.tokenize(2, CMAVO), self.tokenize(word_end-2, CMENE)
+
+        if found_vocative:
+          #{2.A.1)b)}
+          if i == 0: #ladjan
+            return self.tokenize(2, CMAVO), self.tokenize(word_end-2, CMENE)
+          if i > 0 and self.bit[i-1].has_V: #miviskaladjan
             #{2.A.1)b)}
-            if i == 0: #ladjan
-              return self.tokenize(2, CMAVO), self.tokenize(word_end-2, CMENE)
-            if i > 0 and self.bit[i-1].has_V: #miviskaladjan
-              #{2.A.1)b)}
-              #Push this content up so that it may be handled later
-              # XXX camxes says that miviskaladjan is a single cmene
-              # Brkwords disagrees (morph_test:muSTElaVIson)
-              marker = self.tokenize(2, CMAVO, start=i)
-              name = self.tokenize(word_end-i-2, CMENE, start=i)
-              
-              #name = self.tokenize(word_end-i-1, CMENE, start=i+1)
-              #marker = self.tokenize(2, CMAVO, start=i)
-              self.bit.insert(i, marker)
-              self.bit.insert(i+1, name)
-              return ...
-            #{2.A.1)c)}
-          i -= 1
-        
-        #Didn't find a marker! Okay, so, let's just say the whole thing is a name?
-        return self.tokenize(word_end, CMENE)
+            #Push this content up so that it may be handled later
+            # XXX camxes says that miviskaladjan is a single cmene
+            # Brkwords disagrees (morph_test:muSTElaVIson)
+            marker = self.tokenize(2, CMAVO, start=i)
+            name = self.tokenize(word_end-i-2, CMENE, start=i)
+
+            #name = self.tokenize(word_end-i-1, CMENE, start=i+1)
+            #marker = self.tokenize(2, CMAVO, start=i)
+            self.bit.insert(i, marker)
+            self.bit.insert(i+1, name)
+            return ...
+          #{2.A.1)c)}
+        i -= 1
+
+      #Didn't find a marker! Okay, so, let's just say the whole thing is a name?
+      return self.tokenize(word_end, CMENE)
     
     
     

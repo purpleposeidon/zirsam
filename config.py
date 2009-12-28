@@ -54,9 +54,12 @@ Arguments:"""
     if val not in __help_order:
       raise Exception("Command option %r is not present in Configuration.__help_order"%val)
   def __check_options(self, argv):
+    #This function is only called if there are arguments,
+    #so default values should be defined in __init__.
     argv = list(argv) #Use a copy
     possible_args = list(Configuration.__help.keys())
 
+    #{
     def valued_arg(name, val_dict=None):
       if name not in Configuration.__help:
         raise Exception("No help defined for argument {0!r}".format(name))
@@ -102,7 +105,7 @@ Arguments:"""
       while what in argv:
         argv.pop(argv.index(what))
         return True
-      
+    #}
     if arg('help'):
       print(Configuration.__help_header, file=self.stderr)
       #for cmd in Configuration.__help:
@@ -145,8 +148,11 @@ Arguments:"""
     _ = valued_arg("alphabet", alphabets.GlyphTable.tables)
     if _: self.glyph_table = _
     _ = valued_arg("hate token")
+
+    
     if _: self.hate_token = _
     if possible_args:
+      #To let that developer fellow if an argument doesn't have documentation
       print("The following arguments have documentation, but no implementation:", file=self.stderr)
       for p in possible_args:
         print('\t', format_arg(p), file=self.stderr)
@@ -158,7 +164,7 @@ Arguments:"""
       for a in argv:
         self.message('\t{0}'.format(a))
       
-      raise SystemExit
+      raise SystemExit(3)
     
   def __str__(self):
     r = ''
@@ -173,7 +179,7 @@ Arguments:"""
   def error(self, msg, position=None):
     print('ERROR: ', position, ': ', msg, sep='', file=self.stderr)
     if self._debug:
-      input("HEY! There's no position argument given! Okay? ")
+      input("HEY! There's no position argument given! Okay?")
       raise Exception
     raise SystemExit(1)
   
@@ -212,6 +218,8 @@ Arguments:"""
       else:
         print('STRICT: ', msg, file=self.stderr)
       raise SystemExit(1)
+    else:
+      self.message(msg, position)
     if self.all_error:
       print("Exiting with failure", file=self.stderr)
       raise SystemExit(2)
@@ -279,8 +287,8 @@ Arguments:"""
     self.end_on_faho = True #Treat FAhO as EOT, or uhm... don't yield it...?
     self.position = common.Position()
     
-    
-    self.__check_options(args)
+    if args:
+      self.__check_options(args)
     if self.do_exit:
-      raise SystemExit
+      raise SystemExit(0)
 

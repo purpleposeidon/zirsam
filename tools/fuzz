@@ -3,7 +3,16 @@
 import sys
 import random
 import time
-seed = time.time()
+Usage = SystemExit("Usage: ./tools/fuzz [seed]")
+if len(sys.argv) == 2:
+  try:
+    seed = int(sys.argv[1])
+  except:
+    raise Usage
+elif len(sys.argv) != 1:
+  raise Usage
+else:
+  seed = int(time.time()*1000)
 print("Seed is", seed, file=sys.stderr)
 r = random.Random(seed)
 

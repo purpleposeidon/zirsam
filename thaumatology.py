@@ -58,7 +58,7 @@ class QuoteStream:
   
   def __iter__(self):
     while 1:
-      if self.valsi[0].type == selmaho.ZOI: #Non-lojban qiuote
+      if self.valsi[0].type == selmaho.ZOI: #Non-lojban quote
         #TODO: It'd be nice to turn off warnings and messages from morphology in here
         zoi = self.valsi.pop()
         delim_start = self.valsi.pop()
@@ -107,6 +107,7 @@ class QuoteStream:
               if trim_space == 0:
                 break
               trim_space -= 1
+        zoi.content = self.config.old_chars[start:end]
         yield zoi
       elif self.valsi[0].type == selmaho.ZO: #1-word quote
         zo = self.valsi.pop()
@@ -371,3 +372,4 @@ if __name__ == '__main__':
     #print(_.value, end=' ') # XXX Set this one for the release version, use above if in debug mode
     results.append(_)
   print()
+  r = results
