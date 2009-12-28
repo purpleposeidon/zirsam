@@ -116,10 +116,12 @@ class Rule(BnfObjectBase):
     if result == Match:
       #debug("**** Exiting Rule", self, ": ACCEPT", "with", result, 'from', target)
       tracker.accept_rule()
+      #tracker.rules[self.name] = True
       return result
     else:
       #debug("**** Exiting Rule", self, ": FAILURE")
       child_tracker.fail()
+      #tracker.rules[self.name] = False
       return NoMatch
     
       

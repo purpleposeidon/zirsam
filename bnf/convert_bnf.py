@@ -124,7 +124,7 @@ print(bnf)
 print("""}
 
 BNF['any_word'] = any_word()
-BNF['unmatched'] = 'unmatched' 
+#BNF['unmatched'] = 'unmatched'
 if __name__ == '__main__':
   if len(sys.argv) > 1:
     for key in sys.argv[1:]:

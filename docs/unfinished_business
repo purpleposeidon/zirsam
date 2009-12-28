@@ -1,6 +1,7 @@
 Or, in other words, "TODO"
 Items marked "-" aren't as important as items marked "+"
-
+###### Next
+ - what happened with ZOI?
 ###### Release
  - bnf/convert_bnf.py: DISABLE_HASH = False
 
@@ -13,7 +14,6 @@ Items marked "-" aren't as important as items marked "+"
     - invalid consonant clusters in words
  - What about that old '*' on TrackerMatch? Uhm.
  - Check your dotside!
- - Do more garbage checking (For example, try {kláma} with default settings)
  - make word_end in morphology.py indexed from 0 instead of 1?
  + Test IPA and other alphabets
  - Don't use "config" for the config.Configuration() object, use "conf"? Or rename config.py to conf.py
@@ -102,3 +102,5 @@ Ortohgraphy - what happens to capitalized letters with strict ortho?
  - Study and meditate upon lojban grammar, make grammar parser
  + Check that the BNF is being intepreted properly (The BNF being parsed wrong hasn't been an issue in forever)
  + Make ZOI period-delims behave properly.
+ - slinku'i test
+ - Do more garbage checking (For example, try {kláma} with default settings) (Those are now a sub-selma'o of SELBRI, called CIZYSELBRI)

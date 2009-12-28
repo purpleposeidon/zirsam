@@ -42,7 +42,7 @@ class UnknownSelmaho:
   def __contains__(self, token):
     return token not in SELMAHO
 """
-What is this?
+What is this comment?
       '''
       What I want.
       is_selmaho(token, SELMAhO)

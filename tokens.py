@@ -18,95 +18,27 @@ class Token:
   y = False
   counts_CC = False
   has_V = False
-
-  def __getname(self):
-    if self.type == ...:
-      return type(self).__name__
-    else:
-      return self.type.__name__
-
-  def __repr__(self):
-    return str(self)
-    '''
-    #The below is more informative, but fugly
-    r = self.__getname()+'('
-    for i in self.bits:
-      r += repr(i)
-    end = ''
-    if self.content:
-      end += ', content=' + repr(self.content)
-    if self.end:
-      end += ', end=' + repr(self.end)
-    return r+repr(self.bits[0].position)+end+')'
-    '''
-
-  def __str__(self):
-    val = str(self.value)
-    if self.content:
-      val += ', content=' + str(self.content)
-    if self.end:
-      val += ', end=' + str(self.end)
-    if self.ve_lujvo_rafsi:
-      val += '=' + '+'.join(self.ve_lujvo_rafsi)
-    r = "{0}({1})".format(self.__getname(), val)
-    if self.modifiers:
-      for _ in self.modifiers:
-        r += '_'+str(_)
-    
-    return r
-
-  def calculate_value(self, config):
-    """
-    Return the ascii value of the token
-    XXX This feels out of place
-    """
-    #Assemble a string out of the values of every bit
-    v = ''
-    bad_bit = False
-    for bit in self.bits:
-      v += bit.value
-      if not isinstance(bit, orthography.Bit):
-        bad_bit = True
-
-    if bad_bit:
-      ##config.warn("Observation: A token of non-bits has been made, so it might have a weird value", self.bits[0].position)
-      ##config.debug(repr(self.bits)+'='+v, self.bits[0].position)
-      return v
-      
-    #Check for irregular stress. If the stress is regular, then we can do str.lower()
-    #We want penultimate stress.
-    stressed_regularly = ...
-    i = len(self.bits)
-    encountered_vowels = 0
-    while i >= 0:
-      i -= 1
-      if self.bits[i].has_V:
-        encountered_vowels += 1
-      if self.bits[i].accented and encountered_vowels != 2:
-        stressed_regularly = False
-
-    if stressed_regularly:
-      return v.lower() #Eliminates unecessary accents
-    return v #Keep the given accents
-
   def __init__(self, bits, config):
+    self.config = config
     self.bits = bits
     if not len(bits):
-      config.error("Trying to tokenize nothing!")
+      self.config.error("Trying to tokenize nothing!")
     self.position = self.bits[0].position
-    self.value = self.calculate_value(config)
+    self.value = self.calculate_value()
     self.type = ...
     self.ve_lujvo_rafsi = []
-    self.classify(config)
+    self.classify()
     self.content = None
-    self.modifiers = [] #Emphasis and such.
+    self.modifiers = [] #BAhE and UI such.
     self.whitespace = [] #Whitespace and pauses that occur BEFORE the token.
     self.end = None #Acceptable types: None, Token
-    if config.hate_token and config.hate_token == self.value:
+    if self.config.hate_token and self.config.hate_token == self.value:
       #Be hatin' - for morphology debugging
       raise Exception("Tokenization Backtrace")
 
-  def classify(self, config):
+  def classify(self):
+    #Sets self.type to whatever is appropriate
+    #Also verifies lujvo/fu'ivla
     if self.type != ...:
       return
     if isinstance(self, CMAVO):
@@ -115,11 +47,12 @@ class Token:
       if self.value in SELMAHO:
         self.type = SELMAHO[self.value]
       else:
-        config.warn("Unknown cmavo %r"%(self.value), self.position)
+        self.config.warn("Unknown cmavo %r"%(self.value), self.position)
         self.type = SELMAHO['CIZMAhO']
     elif isinstance(self, SELBRI):
       #A gismu, a lujvo, or a fuhivla?
       #gismu: CCVCV or CVCCV
+      #This will probably never be used.
       if len(self.bits) == 4:
         if self.bits[0].CC and self.bits[1].V and self.bits[2].C and self.bits[3].V:
           self.type = GISMU
@@ -128,9 +61,11 @@ class Token:
         else:
           if self._lujvo_analyze(self.value):
             self.type = LUJVO
+            #Like "klakla"
           else:
             self.type = FUHIVLA
-          #raise Exception("Now what?")
+            
+          
       else:
         if self._lujvo_analyze(self.value):
           self.type = LUJVO
@@ -138,9 +73,27 @@ class Token:
           self.type = FUHIVLA
     else:
       #cmene, or possibly pre-defined (as lujvo/gismu/fuhivla), or maybe garbage
-      self.type = type(self)
+      #fu'ivla need to pass the slinku'i test, however, fu'ivla from {2.C.4)b)5]e]3>} (which are the only source of pre-defined fu'ivla) are pretty much defined as passing slinku'i I think XXX
+      t = type(self)
+      if t == Token:
+        raise Exception("No type for Token")
+      
+      self.type = t
 
-  
+    if self.type == FUHIVLA:
+      self._test_slinkuhi()
+
+  def __eq__(self, other):
+    return isinstance(other, Token) and (self.type == other.type) and (self.value == other.value)
+  def _test_slinkuhi(self):
+    test_word = 'pa'
+    test = test_word+self.value
+    #See if it matches a lujvo...
+    #hackish, REALLY NEED to do something better with lujvo analyzation stuff...
+    orig_ve_lujvo_rafsi = self.ve_lujvo_rafsi
+    if self._lujvo_analyze(test):
+      self.config.warn("This ambigious fu'ivla fails the slinku'i test (\"{0}\" is a lujvo, not \"{1} {2}\")".format(test, test_word, self.value), self.position)
+
   def _match_form(self, chars, form, is_first):
     i = 0
     rafsi = ''
@@ -187,7 +140,7 @@ class Token:
     #XXX TODO Not everything that isn't a gismu/lujvo/cmavo is a fu'ivla
     #XXX Move somewhere else?
     self.ve_lujvo_rafsi = []
-    chars = list(orthography.stream_char(config.Configuration(stdin=io.StringIO(value+' '), args=[])))
+    chars = list(orthography.stream_char(config.Configuration(stdin=io.StringIO(value+' '), args=[]))) #XXX why you need that extra space, eh?
     orig_chars = list(chars)
     forms = [0]
     
@@ -244,6 +197,7 @@ class Token:
       if all_[form][:2] == 'CC':
         #Check consonant clusters
         if not orthography.valid_init_cc(orig_chars[i].value+orig_chars[i+1].value):
+          self.config.debug("Invalid consonant cluster for lujvo: {0}".format(self)) #XXX - config.warn
           return False
       i += len(all_[form])
     '''
@@ -264,6 +218,76 @@ class Token:
     self.ve_lujvo_rafsi[-1] = self.ve_lujvo_rafsi[-1][:-1] #Dump the whitespace from the begining
     return True
 
+  def __getname(self):
+    if self.type == ...:
+      return type(self).__name__
+    else:
+      return self.type.__name__
+
+  def __repr__(self):
+    return str(self)
+    '''
+    #The below is more informative, but fugly
+    r = self.__getname()+'('
+    for i in self.bits:
+      r += repr(i)
+    end = ''
+    if self.content:
+      end += ', content=' + repr(self.content)
+    if self.end:
+      end += ', end=' + repr(self.end)
+    return r+repr(self.bits[0].position)+end+')'
+    '''
+
+  def __str__(self):
+    val = str(self.value)
+    if self.content:
+      val += ', content=' + str(self.content)
+    if self.end:
+      val += ', end=' + str(self.end)
+    if self.ve_lujvo_rafsi:
+      val += '=' + '+'.join(self.ve_lujvo_rafsi)
+    r = "{0}({1})".format(self.__getname(), val)
+    if self.modifiers:
+      for _ in self.modifiers:
+        r += '_'+str(_)
+
+    return r
+
+  def calculate_value(self):
+    """
+    Return the ascii value of the token
+    XXX This feels out of place
+    """
+    #Assemble a string out of the values of every bit
+    v = ''
+    bad_bit = False
+    for bit in self.bits:
+      v += bit.value
+      if not isinstance(bit, orthography.Bit):
+        bad_bit = True
+
+    if bad_bit:
+      ##self.config.warn("Observation: A token of non-bits has been made, so it might have a weird value", self.bits[0].position)
+      ##self.config.debug(repr(self.bits)+'='+v, self.bits[0].position)
+      return v
+
+    #Check for irregular stress. If the stress is regular, then we can do str.lower()
+    #We want penultimate stress.
+    stressed_regularly = ...
+    i = len(self.bits)
+    encountered_vowels = 0
+    while i >= 0:
+      i -= 1
+      if self.bits[i].has_V:
+        encountered_vowels += 1
+      if self.bits[i].accented and encountered_vowels != 2:
+        stressed_regularly = False
+
+    if stressed_regularly:
+      return v.lower() #Eliminates unecessary accents
+    return v #Keep the given accents
+
 
 class VALSI(Token): pass
 class   CMENE(VALSI): pass
@@ -272,6 +296,7 @@ class   SELBRI(VALSI): pass
 class     GISMU(SELBRI): pass
 class     LUJVO(SELBRI): pass
 class     FUHIVLA(SELBRI): pass
+class     CIZYSELBRI(SELBRI): pass
 BRIVLA = SELBRI #I prefer SELBRI, lojban.bnf uses BRIVLA  XXX could replace it in the BNF
 
 

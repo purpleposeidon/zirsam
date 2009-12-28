@@ -346,14 +346,15 @@ we: {4}""".format(self.bit.buffer, cc_location, cc, ps, word_end))
       #self.config.debug(self.bit.buffer)
       if self.bit[0].counts_CC or  (self.bit[0].C and self.bit[1].V and self.bit[2].CyC) : #CC... CVCyC...
         #{2.C.4)b)1]} - more selbri should be like this
-        #Except, I want to implement more error checking!
+        
         for bit in self.bit.items(end_of_brivla+1):
           if bit.garbage:
             self.config.warn("This supposed selbri has garbage in it", bit.position)
+            return self.tokenize(end_of_brivla+1, CIZYSELBRI)
         return self.tokenize(end_of_brivla+1, SELBRI)
       elif self.bit[0].CyC:
         #{2.C.4)b)2]} - I'm not sure this is neccessary. Why is this neccessary?
-        # Would it not be handled with everything else?
+        # Would it not be handled with everything else? TODO - test what happens if you remove it
         return self.tokenize(word_end, GARBAGE)
       elif self.bit[0].C and self.bit[1].counts_VV and (self.bit[2].CC or self.bit[2].CCC): #CVVCC
         #{2.C.4)b)3]}
@@ -369,7 +370,7 @@ we: {4}""".format(self.bit.buffer, cc_location, cc, ps, word_end))
         if ps != 1 and valid_init_cc(self.bit[2]):
           return self.tokenize(2, CMAVO)
         else:
-          return self.tokenize(end_of_brivla+1, SELBRI )
+          return self.tokenize(end_of_brivla+1, SELBRI)
       elif self.bit[0].C and self.bit[1].V and self.bit[2].counts_CC: #CVCC..
         #{2.C.4)b)5]]}
         if self.bit[3].V and end_of_brivla == 3: #CVCCV

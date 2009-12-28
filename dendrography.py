@@ -43,31 +43,12 @@ def pprint(wut, first=True):
     return head
   return str(wut)+'\n'
 
-'''
-def __alt_pprint(wut):
-  src = repr(wut)
-  r = ''
-  indent = 0
-  tab = '  '
-  src = src.replace(', ', ',').replace(':', '')
-  for c in src:
-    if c == '{':
-      indent += 1
-      r += '\n'+tab*indent
-    elif c == '}':
-      indent -= 1
-    elif c == ',':
-      r += '\n'+tab*indent
-    else:
-      r += c
-  return r
-'''
-
 class MatchTracker:
   """
   A node in the parse tree. Each node coresponds to a rule. Each node keeps a list of accepted valsi and sub-nodes
   """
-
+  def __str__(self):
+    return pprint(self)
   def __repr__(self):
     #if str(self.rule)[-1] in '1234567890' and self.accepted:
     #if not self.config._debug and (len(self.value) == 1 and type(self.value[0]) == MatchTracker):
@@ -89,6 +70,8 @@ class MatchTracker:
     self.rule = rule
     self.accepted = False
     self.stack = [] #For inner-rule grammarstuffins
+    self.used_rules = []
+    self.child_rules = {}
   def accept_terminal(self):
     #print("adding terminal", self.valsi[self.current_valsi])
     self.value.append(self.valsi[self.current_valsi])
@@ -101,6 +84,9 @@ class MatchTracker:
     assert self.value
     self.accepted = True
     self.current_valsi = self.value[-1].current_valsi  #+ 1
+    self.used_rules.append(self.rule.name)
+    if self.parent:
+      self.parent.child_rules[self.rule.name] = self.value[-1]
     #self.config.debug('ACCEPT', self)
   def fail(self):
     #A rule failed
@@ -108,6 +94,9 @@ class MatchTracker:
       #if self.value:
       #self.config.debug("@@@ FAILING", self)
       self.parent.value.pop(self.parent.value.index(self))
+      for rule in self.used_rules:
+        if rule in self.parent.child_rules:
+          del self.parent.child_rules[rule]
       #self.parent.value.pop(self.start)
     else:
       raise Exception("Tried to fail root node")
@@ -172,12 +161,10 @@ class GrammarParser:
 
   def __iter__(self):
     #yield ROOT_TOKENs
-    import sys
     while 1:
       root_rule = magic_bnf.Rule(self.config.parsing_unit)
       root_value = BNF[root_rule]
       tracker = MatchTracker(self.valsi, root_rule, conf=self.config)
-      sys.tracker = tracker
       try:
         v = root_value.match(tracker)
       except (EOFError, StopIteration) as e:
@@ -193,7 +180,8 @@ class GrammarParser:
       if tracker.current_valsi == 0:
         #Pretty much fail. Try, uh, try getting rid of that token maybe there's something good behind it
         try:
-          self.valsi.pop(0)
+          dacheated = self.valsi.pop(0)
+          self.config.warn("Unable to parse anything, dropping this token", dacheated.position)
         except (EOFError, StopIteration):
           break
         continue

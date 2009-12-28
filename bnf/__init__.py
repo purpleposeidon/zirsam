@@ -57,6 +57,9 @@ class BnfWrapper:
     if type(val) == str:
       val = val.replace('-', '_')
     return self.b[val]
+  
+  def keys(self):
+    return self.b.keys()
 
 try:
   import bnf_data

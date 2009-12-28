@@ -267,7 +267,7 @@ Arguments:"""
     
     
     self.has_warnings = False
-    self.parsing_unit = 'x_parse_root' #'sumti' #'term' #"sentence" #'quantifier' #"sentence" #'subsentence' #"sumti" #terms
+    self.parsing_unit = 'x_parse_root'
     self.parsing_unit = self.parsing_unit.replace('-', '_')
     self.show_progress = False
 

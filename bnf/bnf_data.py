@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 #automatically generated
-#on Fri Dec 18 12:28:51 2009
+#on Tue Dec 22 02:55:09 2009
 #by poseidon@skami
 
 from magic_bnf import *
@@ -132,7 +132,7 @@ Rule('x_inefficiency_example'):  Rule('a')*Rule('b')*Rule('c')
 }
 
 BNF['any_word'] = any_word()
-BNF['unmatched'] = 'unmatched' 
+#BNF['unmatched'] = 'unmatched'
 if __name__ == '__main__':
   if len(sys.argv) > 1:
     for key in sys.argv[1:]:
