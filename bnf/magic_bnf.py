@@ -97,11 +97,11 @@ class Terminal(BnfObjectBase):
     
     if a.type == self.selmaho:
       tracker.accept_terminal()
-      tracker.node[self.selmaho.name] = a
+      tracker.node[self.selmaho.__name__] = a
       return Match
     elif type(self.selmaho) == type and isinstance(a, self.selmaho):
       tracker.accept_terminal()
-      tracker.node[self.selmaho.name] = a
+      tracker.node[self.selmaho.__name__] = a
       return Match
     else:
       return NoMatch
