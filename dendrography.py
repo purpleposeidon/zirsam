@@ -71,6 +71,7 @@ class MatchTracker:
     self.accepted = False
     self.stack = [] #For inner-rule grammarstuffins
     self.used_rules = []
+    self.node = {} # XXX TODO: Give better name.
     self.child_rules = {}
   def accept_terminal(self):
     #print("adding terminal", self.valsi[self.current_valsi])

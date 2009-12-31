@@ -22,7 +22,7 @@ class selmaho:
     for form in forms:
       SELMAHO[form] = self
     #SELMAHO_DICT[__name__] = forms
-    self.__name__ = name
+    self.name = self.__name__ = name
     self.forms = forms
 
   def __contains__(self, token):

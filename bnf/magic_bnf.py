@@ -97,9 +97,11 @@ class Terminal(BnfObjectBase):
     
     if a.type == self.selmaho:
       tracker.accept_terminal()
+      tracker.node[self.selmaho.name] = a
       return Match
     elif type(self.selmaho) == type and isinstance(a, self.selmaho):
       tracker.accept_terminal()
+      tracker.node[self.selmaho.name] = a
       return Match
     else:
       return NoMatch
@@ -116,16 +118,14 @@ class Rule(BnfObjectBase):
     if result == Match:
       #debug("**** Exiting Rule", self, ": ACCEPT", "with", result, 'from', target)
       tracker.accept_rule()
+      tracker.node[self.name] = child_tracker
       #tracker.rules[self.name] = True
-      return result
+      return Match
     else:
       #debug("**** Exiting Rule", self, ": FAILURE")
       child_tracker.fail()
       #tracker.rules[self.name] = False
       return NoMatch
-    
-      
-    
 
   def __repr__(self):
     return self.name
