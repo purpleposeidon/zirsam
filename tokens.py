@@ -111,6 +111,8 @@ class Token:
   
   def _test_slinkuhi(self):
     test_word = 'pa'
+    if self.value[0] in 'aeiou':
+      return #Uh, should probably begin with a period
     test = test_word+self.value
     #See if it matches a lujvo...
     #hackish, REALLY NEED to do something better with lujvo analyzation stuff...
@@ -265,10 +267,7 @@ class Token:
 
   def __str__(self):
     val = str(self.value)
-    try:
-      self.content
-    except:
-      help(self) #XXX
+    self.content
     if self.content:
       val += ', content=' + str(self.content)
     if self.end:

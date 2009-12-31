@@ -5,7 +5,9 @@
 import io
 from subprocess import getstatusoutput as gso
 import sys
-
+sys.path.append('./')
+import dendrography
+import config
 
 camxes_cmd = "echo %r | java -Xss64m -jar /home/poseidon/Development/ideas/camxes/lojban_peg_parser.jar -t"
 gso_fail = len(gso(camxes_cmd % (''))[1])
@@ -23,6 +25,16 @@ def compare_jbofihe(line):
 def compare_zirsam(line):
   r = gso("echo %r | ~/sync/Development/JBOPARSER/dendrography.py --all-error" % line)[0]
   return r == 0
+
+def compare_zirsam(line):
+  s = dendrography.Stream(config.Configuration(stdin=io.StringIO(line), args=['--all-error', '--forbid-warn'], stdout=io.StringIO(), stderr=io.StringIO()))
+  try:
+    #val, r = dendrography.main(s)
+    list(s)
+    return s.orig.good_parse
+  except:
+    return False
+  return val
 
 def run_line(line):
   if line.count('--') == 1:
@@ -68,15 +80,25 @@ def run_line(line):
 
 
 def run_test():
+  if '--help' in sys.argv:
+    print("""Usage:
+    ./tools/test_grammar.py [optional options]
+      --help    show this message
+      --test    test=the-test
+      --full    Run a complete and full check, takes extra long
+    If given no options, will """)
+    raise SystemExit
   IGNORE = []
-  if 0:
+  if '--test' in sys.argv:
     import io
     src = io.StringIO("""zomimi klama -- GOOD""")
-  elif 0:
+  elif '--full' in sys.argv:
     src = open("data/gram_test_sentences.txt", errors='ignore')
-    IGNORE = [6709] #Because jbofihe chokes up when it sees a paren
+    IGNORE = [6709] #Because jbofihe chokes up and dies when it sees a paren
     print("This is going to take forever. Seriously. Like, a couple hours. Sorry.\n\n")
   else:
+    import os
+    os.system('pwd')
     src = open("data/failed_gram_tests.txt")
   i = 0
   failed_tests = 0
@@ -100,7 +122,8 @@ def run_test():
       failed_tests += 1
       #raise SystemExit
   print("Total tests:", i, "Failed tests:", failed_tests)
-  print("Your grade for the course:", ((i-failed_tests)/i)*100)
+  print("Grade for the course:", ((i-failed_tests)/i)*100)
+  print("(Not that it means anything)")
 
 if __name__ == '__main__':
   run_test()

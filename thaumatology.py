@@ -241,10 +241,10 @@ class ErasureStream:
         else:
           su_stoppers = selmaho.NIhO, selmaho.LU, selmaho.TUhE, selmaho.TO
           while backlog:
-            backlog.pop(-1)
             if backlog[-1].type in su_stoppers:
-              backlog.pop(-1) #XXX I suppose they are supposed to be erased.
+              #backlog.pop(-1) #Fixed: "I suppose they are supposed to be erased", but not according to camxes
               break
+            backlog.pop(-1)
           if backlog == [] and stuff_behind:
             self.config.error("Erasure buffer is not large enough for this SU", su.position)
           #backlog = []

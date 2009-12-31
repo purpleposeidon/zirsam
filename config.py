@@ -181,18 +181,23 @@ Arguments:"""
     if self._debug:
       input("HEY! There's no position argument given! Okay?")
       raise Exception
-    raise SystemExit(1)
-  
-  def warn(self, msg, position):
-    self.has_warnings = True
-    if not self._quiet or self.forbid_warn:
-      print('WARN: ', position, ': ', msg, sep='', file=self.stderr)
-    elif self.forbid_warn:
-      self.error(msg, position)
     if self.all_error:
       print("Exiting with failure", file=self.stderr)
       raise SystemExit(2)
+    raise SystemExit(1)
+  
+  def warn(self, msg, position):
     
+    self.has_warnings = True
+    if not (self._quiet or self.forbid_warn):
+      print('WARN: ', position, ': ', msg, sep='', file=self.stderr)
+    if self.forbid_warn:
+      self.error(msg, position)
+    if self.all_error:
+      print("Exiting with failure", file=self.stderr)
+      raise SystemExit("2")
+    #raise SystemExit("2")
+    #raise Exception
   def message(self, *msg, position=None, **kwargs):
     #Discussion: Should position be required?
     if not self._quiet:

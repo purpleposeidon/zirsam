@@ -14,7 +14,7 @@ try:
   did_CD = True
 except:
   if not 'convert_bnf.py' in os.listdir('./'):
-    raise SystemExit("Please run directly from the JBOPARSER directory")
+    raise SystemExit("Please run from the JBOPARSER directory")
 
 deps = "../data/lojban.bnf ../data/bnf.html ../data/extensions.bnf convert_bnf.py dehtml_bnf.py __init__.py".split()
 final = "bnf_data.py"
@@ -74,5 +74,5 @@ __all__ = ['BNF']
 
 
 
-#if did_CD:
-  
+if did_CD:
+  os.chdir("..")
