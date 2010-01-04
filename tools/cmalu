@@ -8,7 +8,6 @@ Even better compression could be achieved. There are 2228 words (including some 
 
 
 
-TODO: rename cmalu; or maybe zircma?
 TODO: Properly rebuild lujvo
 """
 DATA_DIR = "data/"
@@ -149,7 +148,7 @@ elif '--decompress' in sys.argv:
   pass
 else:
   print("""Usage:
-  ./tools/panje --compress
+  ./tools/cmalu --compress
       Sends compressed data to non-tty stdout
   Other options valid for --compress:
       --show-savings
@@ -159,7 +158,7 @@ else:
       --force
           Print stdout will be written to tty anyways
 
-  ./tools/panje --decompress
+  ./tools/cmalu --decompress
       Reads compressed data from stdin
 
 If typing from stdin, you have to hit EOF twice because python3 is weird

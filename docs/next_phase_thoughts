@@ -3,7 +3,7 @@ Zerothly, need to turn those tokens into objects or something.
 Maaaaybe, not verbosify.
 Okaay.
 Ah, soo
-We descend through the parse tree, picking up Abstractions. And if we encounter something like "lo nu mi viska lo do mamta kei goi ko'a", we assign that to our KOhA table for that ni'o/paragraph/text... Also need to think about KI. And SOI. 
+We descend through the parse tree, picking up Abstractions. And if we encounter something like "lo nu mi viska lo do mamta kei goi ko'a", we assign that to our KOhA table for that ni'o/paragraph/text... Also need to think about KI. And SOI. And ROhA. And GOhA
 AbstractionTable:
 Name     Type   Description
 ID       Int    The primary key, not unique.

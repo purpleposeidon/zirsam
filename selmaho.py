@@ -56,6 +56,7 @@ unknown = UnknownSelmaho()
 #I count 122 selma'o
 #Everything below is more data than code
 #Generated using data from cmavo.txt - if you want to regen, take note: spaces/periods in front of cmavo, some selmaho are really weird, like UIa, or UI3. Also, there are combined forms like UI*, don't use those.
+#NOTE: Have to make some modifications. FA must be in order ['fa, 'fe', 'fi', 'fo', 'fu'...
 BE = selmaho('BE', ['be'])
 SEhU = selmaho('SEhU', ["se'u"])
 BO = selmaho('BO', ['bo'])
@@ -115,7 +116,7 @@ ZIhE = selmaho('ZIhE', ["zi'e"])
 TUhE = selmaho('TUhE', ["tu'e"])
 NAhE = selmaho('NAhE', ["je'a", "na'e", "no'e", "to'e"])
 DOI = selmaho('DOI', ['doi'])
-FA = selmaho('FA', ['fa', 'fai', 'fe', 'fi', "fi'a", 'fo', 'fu'])
+FA = selmaho('FA', ['fa', 'fe', 'fi', 'fo', 'fu', 'fai', "fi'a"])
 COI = selmaho('COI', ["be'e", "co'o", 'coi', "fe'o", "fi'i", "je'e", "ju'i", "ke'o", "ki'e", "mi'e", "mu'o", "nu'e", "pe'u", "re'i", "ta'a", "vi'o"])
 TEI = selmaho('TEI', ['tei'])
 KOhA = selmaho('KOhA', ["ce'u", 'da', "da'e", "da'u", 'de', "de'e", "de'u", 'dei', 'di', "di'e", "di'u", 'do', "do'i", "do'o", "fo'a", "fo'e", "fo'i", "fo'o", "fo'u", "ke'a", 'ko', "ko'a", "ko'e", "ko'i", "ko'o", "ko'u", 'ma', "ma'a", 'mi', "mi'a", "mi'o", 'ra', 'ri', 'ru', 'ta', 'ti', 'tu', "vo'a", "vo'e", "vo'i", "vo'o", "vo'u", "zi'o", "zo'e", "zu'i"])

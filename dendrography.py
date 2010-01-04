@@ -162,9 +162,10 @@ class GrammarParser:
 
   def __iter__(self):
     #yield ROOT_TOKENs
+    root_rule = magic_bnf.Rule(self.config.parsing_unit)
+    root_value = BNF[root_rule]
     while 1:
-      root_rule = magic_bnf.Rule(self.config.parsing_unit)
-      root_value = BNF[root_rule]
+      
       tracker = MatchTracker(self.valsi, root_rule, conf=self.config)
       try:
         v = root_value.match(tracker)
@@ -194,7 +195,7 @@ class GrammarParser:
       except (EOFError, StopIteration):
         self.good_parse = True
         break
-      break #XXX Only do one for now
+      #break #XXX Only do one for now
 
 
 
