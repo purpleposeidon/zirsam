@@ -35,8 +35,8 @@ import tracker_handler
 class SemanticsException(Exception): pass
 
 def examine(tracker, context):
-  pre_name = "pre_handle_"+tracker.rule.name
-  end_name = "end_handle_"+tracker.rule.name
+  pre_name = "pre_"+tracker.rule.name
+  end_name = "end_"+tracker.rule.name
   if hasattr(tracker_handler, pre_name):
     getattr(tracker_handler, pre_name)(tracker, context)
   for value in tracker.value:
@@ -45,30 +45,30 @@ def examine(tracker, context):
   if hasattr(tracker_handler, end_name):
     getattr(tracker_handler, end_name)(tracker, context)
 
-def void_handler(tracker, context): pass
 
-#--------------- boiler-plate goes here ---------------
+#--------------- Semantics Bits Handlers ---------------
 
-def pre_handle_sentence(tracker, context):
+
+def pre_sentence(tracker, context):
   context.push_abstraction()
-def end_handle_sentence(tracker, context):
+def end_sentence(tracker, context):
   context.pop_abstraction()
 
-def pre_handle_tanru_unit_2(tracker, context):
+def pre_tanru_unit_2(tracker, context):
   selbri = tracker.node.get("SELBRI")
   if not selbri:
     raise SemanticsException("Can only handle SELBRI right now, but tanru_unit_2 consists of {0}".format(tracker.node))
   context.abstraction_stack[0].selbri.insert(0, selbri)
-def end_handle_tanru_unit_2(tracker, context): pass
+def end_tanru_unit_2(tracker, context): pass
 
-def pre_handle_bridi_tail(tracker, context):
+def pre_bridi_tail(tracker, context):
   obs = context.abstraction_stack[-1].observative
   if obs == ...:
     context.abstraction_stack[-1].observative = True
-def end_handle_bridi_tail(tracker, context): pass
+def end_bridi_tail(tracker, context): pass
 
 
-def pre_handle_term(tracker, context):
+def pre_term(tracker, context):
   FA = tracker.node.get("FA")
   if FA:
     FA = selmaho.FA.forms.index(FA.value)
@@ -76,10 +76,10 @@ def pre_handle_term(tracker, context):
   new_term = semantology.Terbri(context.abstraction_stack[-1], term_num, "nei", ...)
   context.abstraction_stack[-1].terms.append(new_term)
   
-def end_handle_term(tracker, context): pass
+def end_term(tracker, context): pass
 
 
-def pre_handle_sumti_6(tracker, context):
+def pre_sumti_6(tracker, context):
   context.abstraction_stack[-1].terms[-1].sumti = tracker.value[0]
   
-def end_handle_sumti_6(tracker, context): pass
+def end_sumti_6(tracker, context): pass
