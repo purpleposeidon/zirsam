@@ -18,8 +18,10 @@ except:
 
 deps = "../data/lojban.bnf ../data/bnf.html ../data/extensions.bnf convert_bnf.py dehtml_bnf.py __init__.py".split()
 final = "bnf_data.py"
-final_time = os.stat(final).st_mtime
-
+try:
+  final_time = os.stat(final).st_mtime
+except:
+  final_time = 0
 redo_html = False
 needs_redo = False
 try:
