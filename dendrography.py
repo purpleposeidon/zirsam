@@ -23,7 +23,7 @@ def pprint(wut, first=True):
   if isinstance(wut, MatchTracker):
     head = str(wut.rule)
     #wut.config._debug = False
-    if head[-1] in '1234567890' and not wut.config._debug:
+    if head[-1] in '1234567890' and not (wut.config._debug or wut.config.full_tree):
       head = ''
       for v in wut.value:
         head += pprint(v, first=False)

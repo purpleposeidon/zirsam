@@ -30,6 +30,7 @@ Arguments:"""
   'err2out':"Write what would normally go to stderr to stdout", \
   'no readline':"Don't use GNU Readline for input", \
   'cbreak':"Disable line buffering (may damage your terminal)", \
+  'full tree':"Show a complete grammar parse tree", \
   
   'alphabet':"Select alphabet. --alphabet=? lists available values. The default is 'latin'", \
   
@@ -49,7 +50,7 @@ Arguments:"""
   
   }
   #Why don't you just be smart and use two tupples, or something?
-  __help_order = 'help, quiet, show progress, err2out, no readline, alphabet, no dotside, forbid warn, strict, all error, debug, full buffer, cbreak, token error, hate token, do exit, print tokens, no space'.split(', ') #Help, Parsing configuration, Debug, unimplemented
+  __help_order = 'help, quiet, show progress, err2out, full tree, no readline, alphabet, no dotside, forbid warn, strict, all error, debug, full buffer, cbreak, token error, hate token, do exit, print tokens, no space'.split(', ') #Help, Parsing configuration, Debug, unimplemented
   for val in __help:
     if val not in __help_order:
       raise Exception("Command option %r is not present in Configuration.__help_order"%val)
@@ -145,6 +146,8 @@ Arguments:"""
     if arg('cbreak'):
       self.cbreak = True
       self.permit_readline = False
+    if arg('full tree'):
+      self.full_tree = True
     _ = valued_arg("alphabet", alphabets.GlyphTable.tables)
     if _: self.glyph_table = _
     _ = valued_arg("hate token")
@@ -269,7 +272,7 @@ Arguments:"""
     #morphic
     self.print_tokens = False
     self.dotside = True
-    
+    self.full_tree = False
     self.token_error = False
     self.do_exit = False
     self.all_error = False
