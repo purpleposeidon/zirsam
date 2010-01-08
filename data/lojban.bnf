@@ -56,8 +56,8 @@ terms-1 =
 terms-2 =
     term [CEhE # term] ...
 term =
-    sumti
-    | (tag | FA #) (sumti | /KU#/)
+    sumti | (tag | FA #) (sumti
+    | /KU#/)
     | termset
     | NA KU #
 termset =

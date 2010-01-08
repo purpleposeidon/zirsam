@@ -72,7 +72,28 @@ class Abstraction:
     self.terms = [] #terbri
     self.filled_places = [] #For FA terms
     self.selbri = [] #The first is the primary one, like in a tanru.
+    self.SE = [] #Swap 1 with these values...
     self.observative = ... #Don't know
+  def resolve_nei(self):
+    selbri = self.selbri[0]
+    for term in self.terms:
+      if term.type == 'nei':
+        term.type = selbri
+  def resolve_se(self):
+    #while self.se:
+    #swap x1 with x_(self.se.pop())
+    selbri = self.selbri[0]
+    while self.SE:
+      x1 = self.get_term(1, selbri)
+      SE = self.SE.pop(0)
+      xSE = self.get_term(SE, selbri)
+      x1.SE = SE
+      if xSE:
+        xSE.SE = 1
+  def get_term(self, SE, type_):
+    for term in self.terms:
+      if SE == term.SE and type_ == term.type:
+        return term
   def next_term(self, tag_num=None):
     if tag_num:
       #Given a FA-index

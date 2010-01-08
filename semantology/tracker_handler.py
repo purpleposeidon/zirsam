@@ -45,7 +45,7 @@ def examine(tracker, context):
   if hasattr(tracker_handler, end_name):
     getattr(tracker_handler, end_name)(tracker, context)
 
-
+SE_VALS = {'se':2, 'te':3, 've':4, 'xe':5}
 #--------------- Semantics Bits Handlers ---------------
 
 
@@ -56,9 +56,12 @@ def end_sentence(tracker, context):
 
 def pre_tanru_unit_2(tracker, context):
   selbri = tracker.node.get("SELBRI")
-  if not selbri:
-    raise SemanticsException("Can only handle SELBRI right now, but tanru_unit_2 consists of {0}".format(tracker.node))
-  context.abstraction_stack[0].selbri.insert(0, selbri)
+  if selbri:
+    context.abstraction_stack[0].selbri.insert(0, selbri)
+    #If we don't get a selbri now, hopefully we'll get one later. Otherwise, no selbri = emo
+  if tracker.node.get("SE"):
+    se_item = SE_VALS[tracker.node['SE'].value]
+    context.abstraction_stack[0].SE.append(se_item)
 def end_tanru_unit_2(tracker, context): pass
 
 def pre_bridi_tail(tracker, context):
@@ -83,3 +86,8 @@ def pre_sumti_6(tracker, context):
   context.abstraction_stack[-1].terms[-1].sumti = tracker.value[0]
   
 def end_sumti_6(tracker, context): pass
+
+def pre_tail_terms(tracker, context): pass
+def end_tail_terms(tracker, context):
+  context.abstraction_stack[-1].resolve_nei() #Give our sumti's proper selbri
+  context.abstraction_stack[-1].resolve_se() #Deal with like xe se broda
