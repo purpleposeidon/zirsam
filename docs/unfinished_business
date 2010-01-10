@@ -6,7 +6,7 @@ Items marked "-" aren't as important as items marked "+"
  - bnf/convert_bnf.py: DISABLE_HASH = False
 
 ###### Soon
- + Store results of grammar expressions. I should be able to do Tracker.FA ...
+ - SELBRI vs. BRIVLA. I think I'm using SELBRI when I should be using BRIVLA.
  - Minimal parse tree printout
  - Implement everything according to http://www.lojban.org/tiki/Magic+Words
     * Make sure that everything interacts properly
@@ -106,3 +106,4 @@ Ortohgraphy - what happens to capitalized letters with strict ortho?
  - slinku'i test
  - Do more garbage checking (For example, try {kláma} with default settings) (Those are now a sub-selma'o of SELBRI, called CIZYSELBRI)
  - what happened with ZOI? (oops, forgot to put the zoi.content...)
+ + Store results of grammar expressions. I should be able to do Tracker.FA ...

@@ -56,8 +56,8 @@ Abstractions:
 
   def pop_abstraction(self):
     return self.abstraction_stack.pop(0)
-  
   def add_abstraction(self):
+    #Creates a new abstraction, but doesn't push it onto the stack
     self.abstraction_count += 1
     a = Abstraction(self.abstraction_count)
     self.abstraction_list.append(a)
@@ -67,6 +67,8 @@ Abstractions:
 class Abstraction:
   def __str__(self):
     return """  #{0}: {1} --> {2}""".format(self.id, ' '.join(str(_) for _ in self.selbri), ', '.join(str(_) for _ in self.terms))
+  def refer(self):
+    return "#"+str(self.id)
   def __init__(self, id_):
     self.id = id_
     self.terms = [] #terbri

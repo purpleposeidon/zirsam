@@ -39,11 +39,13 @@ def examine(tracker, context):
   end_name = "end_"+tracker.rule.name
   if hasattr(tracker_handler, pre_name):
     getattr(tracker_handler, pre_name)(tracker, context)
+    print(pre_name, context)
   for value in tracker.value:
     if isinstance(value, dendrography.MatchTracker):
       examine(value, context)
   if hasattr(tracker_handler, end_name):
     getattr(tracker_handler, end_name)(tracker, context)
+    print(end_name, context)
 
 SE_VALS = {'se':2, 'te':3, 've':4, 'xe':5}
 #--------------- Semantics Bits Handlers ---------------
@@ -89,5 +91,15 @@ def end_sumti_6(tracker, context): pass
 
 def pre_tail_terms(tracker, context): pass
 def end_tail_terms(tracker, context):
-  context.abstraction_stack[-1].resolve_nei() #Give our sumti's proper selbri
-  context.abstraction_stack[-1].resolve_se() #Deal with like xe se broda
+  if context.abstraction_stack[-1].selbri:
+    context.abstraction_stack[-1].resolve_nei() #Give our sumti's proper selbri
+    context.abstraction_stack[-1].resolve_se() #Deal with like xe se broda
+  
+
+def pre_sumti_tail_1(tracker, context):
+  sumti_tail_abstraction = context.add_abstraction()
+  context.abstraction_stack[-1].terms[-1] = sumti_tail_abstraction.refer()
+  context.push_abstraction(sumti_tail_abstraction)
+  
+def end_sumtil_tail_1(tracker, context):
+  context.pop_abstraction()
