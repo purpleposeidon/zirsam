@@ -25,6 +25,7 @@ la djan goi ko'a cu barda .i ko'a mlatu
 
 
 import dendrography
+import tokens
 import selmaho
 
 import sys
@@ -39,13 +40,13 @@ def examine(tracker, context):
   end_name = "end_"+tracker.rule.name
   if hasattr(tracker_handler, pre_name):
     getattr(tracker_handler, pre_name)(tracker, context)
-    print(pre_name, context)
+    #print(pre_name, context)
   for value in tracker.value:
     if isinstance(value, dendrography.MatchTracker):
       examine(value, context)
   if hasattr(tracker_handler, end_name):
     getattr(tracker_handler, end_name)(tracker, context)
-    print(end_name, context)
+    #print(end_name, context)
 
 SE_VALS = {'se':2, 'te':3, 've':4, 'xe':5}
 #--------------- Semantics Bits Handlers ---------------
@@ -78,14 +79,17 @@ def pre_term(tracker, context):
   if FA:
     FA = selmaho.FA.forms.index(FA.value)
   term_num = context.abstraction_stack[-1].next_term(FA)
-  new_term = semantology.Terbri(context.abstraction_stack[-1], term_num, "nei", ...)
+  new_term = semantology.Terbri(context.abstraction_stack[-1], term_num, tokens.FakeToken(selmaho.GOhA, "nei"), ...)
   context.abstraction_stack[-1].terms.append(new_term)
   
 def end_term(tracker, context): pass
 
 
 def pre_sumti_6(tracker, context):
-  context.abstraction_stack[-1].terms[-1].sumti = tracker.value[0]
+  KOhA = tracker.node.get("KOhA")
+  if KOhA:
+    context.abstraction_stack[-1].terms[-1].sumti = KOhA
+  #context.abstraction_stack[-1].terms[-1].sumti = tracker.value[0]
   
 def end_sumti_6(tracker, context): pass
 

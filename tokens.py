@@ -9,7 +9,6 @@ import orthography
 
 from selmaho import SELMAHO
 
-
 class Token:
   #The items below are a hack for the morphology module, which re-inserts tokens into the Bit stream.
   #With these values, nobody will try to re-tokenize it.
@@ -315,6 +314,19 @@ class Token:
       return v.lower() #Eliminates unecessary accents
     return v #Keep the given accents
 
+class FakeToken(Token):
+  def __init__(self, type_, value):
+    self.position = None
+    self.type = type_
+    self.value = value
+    self.content = None
+    self.ve_lujvo_rafsi = []
+    self.modifiers = [] #BAhE and UI such.
+    self.whitespace = [] #Whitespace and pauses that occur BEFORE the token.
+    self.end = None #Acceptable types: None, Token
+
+
+
 
 class VALSI(Token): pass
 class   CMENE(VALSI): pass
@@ -324,8 +336,7 @@ class     GISMU(SELBRI): pass
 class     LUJVO(SELBRI): pass
 class     FUHIVLA(SELBRI): pass
 class     CIZYSELBRI(SELBRI): pass
-BRIVLA = SELBRI #I prefer SELBRI, lojban.bnf uses BRIVLA  XXX could replace it in the BNF
-
+BRIVLA = SELBRI #idiot, you should be using BRIVLA because they are WORD TYPES TODO XXX
 
 class EXTRA(Token): pass #Something that can't be parsed
 class   GARBAGE(EXTRA): pass #Strange characters in Lojbanistan
