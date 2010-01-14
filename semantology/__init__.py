@@ -66,7 +66,8 @@ Abstractions:
 
 class Abstraction:
   def __str__(self):
-    return """  #{0}: {1} --> {2}""".format(self.id, ' '.join(str(_) for _ in self.selbri), ', '.join(str(_) for _ in self.terms))
+    return """  #{0}: {1} --> {2}""".format(self.id, ' '.join(str(_) for _ in self.selbri), ' gi\'a '.join(str(_) for _ in self.terms))
+    #return """  #{0}: {1} --> {2}""".format(self.id, ' '.join(str(_) for _ in self.selbri), ', '.join(str(_) for _ in self.terms))
   def refer(self):
     return "#"+str(self.id)
   def __init__(self, id_):
@@ -79,7 +80,7 @@ class Abstraction:
   def resolve_nei(self):
     selbri = self.selbri[0]
     for term in self.terms:
-      if term.type == 'nei':
+      if term.type.value == 'nei':
         term.type = selbri
   def resolve_se(self):
     #while self.se:
@@ -127,7 +128,7 @@ class Abstraction:
 
 class Terbri:
   def __str__(self):
-    return """{0}{1}: {2}""".format(['wtf ', '', 'se ', 'te ', 've ', 'xe '][self.SE], self.type, self.sumti)
+    return """{2} {0}{1}""".format(['wtf ', '', 'se ', 'te ', 've ', 'xe '][self.SE], self.type.value, self.sumti.value)
   def __init__(self, abstraction_id, SE, type_, sumti):
     """3, se klama, <lo do zdani>"""
     self.abstraction_id = abstraction_id
