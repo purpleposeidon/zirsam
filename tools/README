@@ -1,0 +1,1 @@
+Some of these programs (the ones that actually use the zirsam parser) need to be run from the zirsam directory, so do like ./tools/foo
