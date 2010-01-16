@@ -341,7 +341,7 @@ we: {4}""".format(self.bit.buffer, cc_location, cc, ps, word_end))
       
       
       if self.bit[find_first_consonant].counts_CC:
-        return self.tokenize(word_end, SELBRI)
+        return self.tokenize(word_end, BRIVLA)
       else:
         return self.tokenize(find_first_consonant, CMAVO)
       
@@ -355,8 +355,8 @@ we: {4}""".format(self.bit.buffer, cc_location, cc, ps, word_end))
         for bit in self.bit.items(end_of_brivla+1):
           if bit.garbage:
             self.config.warn("This supposed selbri has garbage in it", bit.position)
-            return self.tokenize(end_of_brivla+1, CIZYSELBRI)
-        return self.tokenize(end_of_brivla+1, SELBRI)
+            return self.tokenize(end_of_brivla+1, CIZBRIVLA)
+        return self.tokenize(end_of_brivla+1, BRIVLA)
       elif self.bit[0].CyC:
         #{2.C.4)b)2]} - I'm not sure this is neccessary. Why is this neccessary?
         # Would it not be handled with everything else? TODO - test what happens if you remove it
@@ -366,7 +366,7 @@ we: {4}""".format(self.bit.buffer, cc_location, cc, ps, word_end))
         
         if ps == 1 or not valid_init_cc(self.bit[2]):
           #{2.C.4)b)3]a]}
-          return self.tokenize(end_of_brivla+1, SELBRI)
+          return self.tokenize(end_of_brivla+1, BRIVLA)
         else:
           #{2.C.4)b)3]b]}
           return self.tokenize(2, CMAVO)
@@ -375,12 +375,12 @@ we: {4}""".format(self.bit.buffer, cc_location, cc, ps, word_end))
         if ps != 1 and valid_init_cc(self.bit[2]):
           return self.tokenize(2, CMAVO)
         else:
-          return self.tokenize(end_of_brivla+1, SELBRI)
+          return self.tokenize(end_of_brivla+1, BRIVLA)
       elif self.bit[0].C and self.bit[1].V and self.bit[2].counts_CC: #CVCC..
         #{2.C.4)b)5]]}
         if self.bit[3].V and end_of_brivla == 3: #CVCCV
           #{2.C.4)b)5]a]} - gismu
-          return self.tokenize(4, SELBRI)
+          return self.tokenize(4, BRIVLA)
         
         if not valid_init_cc(self.bit[2]):
           #{2.C.4)b)5]b]}
@@ -389,7 +389,7 @@ we: {4}""".format(self.bit.buffer, cc_location, cc, ps, word_end))
             if bit.CC and not valid_init_cc(bit):
               OKAY = False
           if OKAY:
-            return self.tokenize(end_of_brivla+1, SELBRI)
+            return self.tokenize(end_of_brivla+1, BRIVLA)
         
         
         #{2.C.4)b)5]c]}
@@ -398,7 +398,7 @@ we: {4}""".format(self.bit.buffer, cc_location, cc, ps, word_end))
           if bit.has_V:
             first_v_is_ps = False
         if first_v_is_ps:
-          return self.tokenize(end_of_brivla+1, SELBRI)
+          return self.tokenize(end_of_brivla+1, BRIVLA)
         
         
         #{2.C.4)b)5]d]}
@@ -429,7 +429,7 @@ we: {4}""".format(self.bit.buffer, cc_location, cc, ps, word_end))
             if i+2 >= len(letters): #End of word... End of selbri..
               if i >= 3*2: #Then it's probably okay! But one more thing...
                 CVC_MATCH = True
-                return self.tokenize(end_of_brivla+1, SELBRI)
+                return self.tokenize(end_of_brivla+1, BRIVLA)
               break
             if letters[i+0].C and letters[i+1].V and letters[i+2].C:
               i += 3 #Match a CVC
@@ -447,7 +447,7 @@ we: {4}""".format(self.bit.buffer, cc_location, cc, ps, word_end))
                 self.debug("Has invalid init CC", bit.position)
                 break
               elif bit.wordsep or bit.y:
-                return self.tokenize(end_of_brivla+1, SELBRI)
+                return self.tokenize(end_of_brivla+1, BRIVLA)
           
           #{2.C.4)b)5]d]2>}
           frontmiddles = ["CVC", "CVV", "CV'V", "CCV"]
@@ -458,12 +458,12 @@ we: {4}""".format(self.bit.buffer, cc_location, cc, ps, word_end))
             if test(letters, i, ends, matchall):
               #Can match ZERO frontmiddles
               #So, it is a selbri!
-              return self.tokenize(end_of_brivla+1, SELBRI)
+              return self.tokenize(end_of_brivla+1, BRIVLA)
             
             fms = test(letters, i, frontmiddles, match)
             if not fms:
               #{2.C.4)b)5]d]3>} - Doesn't match a front-middle
-              return [self.tokenize(2, CMAVO), self.tokenize(has_y-2, SELBRI)]
+              return [self.tokenize(2, CMAVO), self.tokenize(has_y-2, BRIVLA)]
             i += fms
           
           
@@ -491,7 +491,7 @@ we: {4}""".format(self.bit.buffer, cc_location, cc, ps, word_end))
                 if not(valid_init_cc(self.bit[end_of_brivla-1])):
                   break
                 #First two are cmavo, rest is selbri
-                return [self.tokenize(2, CMAVO), self.tokenize(end_of_brivla-1, SELBRI)]
+                return [self.tokenize(2, CMAVO), self.tokenize(end_of_brivla-1, BRIVLA)]
               break
             elif i % 2 == 0: #Even bit, a CC
               if not self.bit[i].CC or not valid_init_cc(self.bit[i]):
@@ -506,7 +506,7 @@ we: {4}""".format(self.bit.buffer, cc_location, cc, ps, word_end))
           
           #Try: nuncasnu
           
-          #If any CC's are not valid_init_cc, then SELBRI
+          #If any CC's are not valid_init_cc, then BRIVLA
           old = None
           for bit in self.bit.items(end_of_brivla):
             if bit.counts_CC:
@@ -515,9 +515,9 @@ we: {4}""".format(self.bit.buffer, cc_location, cc, ps, word_end))
                 b = old.chars[-1].value
                 c = bit.chars[0].value
                 if not valid_init_cc([b, c]):
-                  return self.tokenize(end_of_brivla+1, SELBRI)
+                  return self.tokenize(end_of_brivla+1, BRIVLA)
               if not valid_init_cc(bit):
-                return self.tokenize(end_of_brivla+1, SELBRI)
+                return self.tokenize(end_of_brivla+1, BRIVLA)
               else:
                 old = bit #There might be a case of [CC][CC], in which case we'd need to check the C][C
             else:
@@ -551,7 +551,7 @@ we: {4}""".format(self.bit.buffer, cc_location, cc, ps, word_end))
                 #There is more than one end, so it must be cmavo(CV) selbri()
                 break
               else:
-                return self.tokenize(end_of_brivla+1, SELBRI)
+                return self.tokenize(end_of_brivla+1, BRIVLA)
             
             
             
@@ -559,7 +559,7 @@ we: {4}""".format(self.bit.buffer, cc_location, cc, ps, word_end))
             if not frontmiddle_test:
               #Doesn't match a front-middle
               break
-              #return [self.tokenize(2, CMAVO), self.tokenize(has_y-2, SELBRI)]
+              #return [self.tokenize(2, CMAVO), self.tokenize(has_y-2, BRIVLA)]
             
             i += frontmiddle_test
             

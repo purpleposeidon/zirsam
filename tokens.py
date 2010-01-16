@@ -49,7 +49,7 @@ class Token:
       else:
         self.config.warn("Unknown cmavo %r"%(self.value), self.position)
         self.type = SELMAHO['CIZMAhO']
-    elif isinstance(self, SELBRI):
+    elif isinstance(self, BRIVLA):
       #A gismu, a lujvo, or a fuhivla?
       #gismu: CCVCV or CVCCV
       #This will probably never be used.
@@ -331,12 +331,11 @@ class FakeToken(Token):
 class VALSI(Token): pass
 class   CMENE(VALSI): pass
 class   CMAVO(VALSI): pass
-class   SELBRI(VALSI): pass
-class     GISMU(SELBRI): pass
-class     LUJVO(SELBRI): pass
-class     FUHIVLA(SELBRI): pass
-class     CIZYSELBRI(SELBRI): pass
-BRIVLA = SELBRI #idiot, you should be using BRIVLA because they are WORD TYPES TODO XXX
+class   BRIVLA(VALSI): pass
+class     GISMU(BRIVLA): pass
+class     LUJVO(BRIVLA): pass
+class     FUHIVLA(BRIVLA): pass
+class     CIZBRIVLA(BRIVLA): pass
 
 class EXTRA(Token): pass #Something that can't be parsed
 class   GARBAGE(EXTRA): pass #Strange characters in Lojbanistan

@@ -60,6 +60,9 @@ class QuoteStream:
     while 1:
       if self.valsi[0].type == selmaho.ZOI: #Non-lojban quote
         #TODO: It'd be nice to turn off warnings and messages from morphology in here
+        #self.config.message("Start of a ZOI quote; all errors can be ignored.")
+        orig_stderr = self.config.stderr
+        self.config.stderr = io.StringIO()
         zoi = self.valsi.pop()
         delim_start = self.valsi.pop()
         if delim_start.type in (selmaho.SI, selmaho.SA, selmaho.SU, selmaho.ZO, selmaho.BU, selmaho.ZEI, selmaho.FAhO):
@@ -108,6 +111,8 @@ class QuoteStream:
                 break
               trim_space -= 1
         zoi.content = self.config.old_chars[start:end]
+        #self.config.message("End of ZOI quote. You may now continue paying attention to errors.")
+        self.config.stderr = orig_stderr
         yield zoi
       elif self.valsi[0].type == selmaho.ZO: #1-word quote
         zo = self.valsi.pop()
@@ -210,8 +215,8 @@ class ErasureStream:
           break
         target_type = orig.type
         
-        if isinstance(orig, tokens.SELBRI):
-          target_type = tokens.SELBRI
+        if isinstance(orig, tokens.BRIVLA):
+          target_type = tokens.BRIVLA
         found = False
         LOHU_CASE = False #XXX I'm saying this at 2:54 am, check at some point please.
         while 1:
@@ -220,7 +225,7 @@ class ErasureStream:
             break
           b = backlog.pop(-1)
           LOHU_CASE = (target_type == selmaho.LEhU and b.type == selmaho.LOhU)
-          if b.type == target_type or (isinstance(b, tokens.SELBRI) and target_type == tokens.SELBRI) \
+          if b.type == target_type or (isinstance(b, tokens.BRIVLA) and target_type == tokens.BRIVLA) \
             or LOHU_CASE:
             count_back -= 1
             if count_back == 0:

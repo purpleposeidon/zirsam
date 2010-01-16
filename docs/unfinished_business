@@ -6,7 +6,6 @@ Items marked "-" aren't as important as items marked "+"
  - bnf/convert_bnf.py: DISABLE_HASH = False
 
 ###### Soon
- - SELBRI vs. BRIVLA. I think I'm using SELBRI when I should be using BRIVLA.
  - Minimal parse tree printout
  - Implement everything according to http://www.lojban.org/tiki/Magic+Words
     * Make sure that everything interacts properly
@@ -20,6 +19,7 @@ Items marked "-" aren't as important as items marked "+"
  - Don't use "config" for the config.Configuration() object, use "conf"? Or rename config.py to conf.py
  - Add option for progress bar, and maybe auto-detect if you might want progress info. Say... 3 seconds or so
  - Link to python3, not python3.0. (You actually have 3.1 installed...)
+    But other installations might not have a python3! So no. >_>
  - Put in GPL licensing or something and other legalese stuff in files that need it (Not lojban.bnf)
 
 ###### Later
@@ -38,20 +38,21 @@ Items marked "-" aren't as important as items marked "+"
  - Print out tokenization immediatly on input (import tty)
  - It could be faster! Instead of Xor(Xor(...), A) do Xor(A, Xor(...). Because that would make it faster? Only if the most common forms are listed first in the BNF. Well, at least the old method might not be faster, but the current one would be faster because it has to run more XOr tests.
  - Another way to make it faster would be to merge Concat(A, Concat(B, C)) into Concat(A, B, C), at the cost of increased code complexity. (Or, perhaps Concat(A, Concat(B, Concat(C, D))) into Concat(Concat(A, B), Concat(C, D)), without adding more code?)
- + Move lujvo/fuhivla sorting crap in morphology
+ + Move/Do lujvo/fuhivla sorting crap in morphology
  - Have a config option for zoi to be filtered by the alphabet, or just from what we get
  + could optimize by first parsing sentences and ignoring content? (Well, not reaaaaly an optimization. But better for streaming.) "--flat-parse". Parse in units of the selma'o I. x-sentence-parse-root might be, "NIhO | I | sentence"]
+    - For parsing long documents, it would probably be best to do parsing at the sentence-level.
+    - Unless it isn't actually any faster?
+    - In some cases, you might actually want sentence-at-a-time.
  - have switches that enable or disable certain parts of the BNF to allow for grammars designed for other situations
+    - Such as...?
 
 ###### Much Later
  - (Have error messages in lojban?)
- - Emulate output of jbofihe and camxes? (And other parsers?)
  - Semantics engine and supporting stuff (Nope. Seperate project.) (Well, maybe not all of it)
  - Jbovlaste integration
  + Oh, also, learn how to speak lojban. Jeeze.
  - Make option for output to be spaceless
- - Make a funny/bad// joke about {tosmabru}
- - If there is demand: xml output
  - look into proper distribution methods, see the distutils module http://docs.python.org/distutils/
      "package_data" for setup.py
  - Optimize the parser by not checking optionals until after we know the item following doesn't match?
@@ -69,12 +70,18 @@ Items marked "-" aren't as important as items marked "+"
             It is quite likely that the BNF doesn't have stuff in the form [FOO] FOO.
     Conclusion:
       We can put off checking optionals so long as the optional isn't the same as the next part, and I doubt the BNF has anything like that. But this will prolly need more investigation.
- - Have an option for inputting by letter type (like CVCCV), which would have been good for debugging morphology but might not be so useful now
  - Go through everything I checked off, make sure it really is.
+ - Only allow real gismu?
 
 ###### I don't know what I was writing
  - Test more aspects of morphology, and also for the other modules
  - Make the helper code nicer
+
+###### (probably) NEVER
+ - Have an option for inputting by letter type (like CVCCV), which would have been good for debugging morphology but might not be so useful now
+ - Make a funny/bad// joke about {tosmabru}
+ - If there is demand: xml output
+ - Emulate output of jbofihe and camxes? (And other parsers?)
 
 
 ###### Some things I've completed, to make me feel special
@@ -107,3 +114,4 @@ Ortohgraphy - what happens to capitalized letters with strict ortho?
  - Do more garbage checking (For example, try {kláma} with default settings) (Those are now a sub-selma'o of SELBRI, called CIZYSELBRI)
  - what happened with ZOI? (oops, forgot to put the zoi.content...)
  + Store results of grammar expressions. I should be able to do Tracker.FA ...
+ - SELBRI vs. BRIVLA. I think I'm using SELBRI when I should be using BRIVLA.
