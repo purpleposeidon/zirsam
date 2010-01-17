@@ -11,7 +11,7 @@ import config
 import tokens
 import selmaho
 
-from tracker_handler import examine
+from tracker_handler import examine, SemanticsException
 
 """
 Steps...
@@ -66,12 +66,20 @@ Abstractions:
 
 class Abstraction:
   def __str__(self):
-    return """  #{0}: {1} --> {2}""".format(self.id, ' '.join(str(_) for _ in self.selbri), ' gi\'a '.join(str(_) for _ in self.terms))
+    #This is the most beautiful thing you've ever seen in your life.
+    #And you know it.
+    r = """  #{0}: {1} --> {2}"""
+    return r.format(self.id,
+      ' '.join(str(_) for _ in self.selbri),
+      " gi'a ".join(_.repr(self) for _ in self.terms)
+    )
     #return """  #{0}: {1} --> {2}""".format(self.id, ' '.join(str(_) for _ in self.selbri), ', '.join(str(_) for _ in self.terms))
   def refer(self):
-    return "#"+str(self.id)
+    return self.get_term(1)
+    #return "#"+str(self.id)
   def __init__(self, id_):
     self.id = id_
+    assert type(self.id) == int
     self.terms = [] #terbri
     self.filled_places = [] #For FA terms
     self.selbri = [] #The first is the primary one, like in a tanru.
@@ -80,7 +88,8 @@ class Abstraction:
   def resolve_nei(self):
     selbri = self.selbri[0]
     for term in self.terms:
-      if term.type.value == 'nei':
+      #print(term, type(term))
+      if term.type.value == 'nei' and term.abstraction == self:
         term.type = selbri
   def resolve_se(self):
     #while self.se:
@@ -93,10 +102,18 @@ class Abstraction:
       x1.SE = SE
       if xSE:
         xSE.SE = 1
-  def get_term(self, SE, type_):
+  def get_term(self, SE, type_=None):
     for term in self.terms:
-      if SE == term.SE and type_ == term.type:
+      if SE == term.SE: #and type_ == term.type:
         return term
+    #Uh oh, the term doesn't exist! Make something up.
+    if not self.selbri:
+      selbri = tokens.FakeToken(selmaho.GOhA, "nei")
+    else:
+      selbri = self.selbri[0]
+    fakery = Terbri(self, SE, selbri, tokens.FakeToken(selmaho.KOhA, "zo'e"))
+    self.terms.append(fakery)
+    return fakery
   def next_term(self, tag_num=None):
     if tag_num:
       #Given a FA-index
@@ -104,6 +121,7 @@ class Abstraction:
         raise SemanticsException("fai/fi'a not implemented")
       assert tag_num
       if tag_num in self.filled_places:
+        print(tag_num, self.filled_places)
         raise SemanticsException("Trying to double-dip a term")
       self.filled_places.append(tag_num)
     elif not self.filled_places:
@@ -128,13 +146,24 @@ class Abstraction:
 
 class Terbri:
   def __str__(self):
-    return """{2} {0}{1}""".format(['wtf ', '', 'se ', 'te ', 've ', 'xe '][self.SE], self.type.value, self.sumti.value)
-  def __init__(self, abstraction_id, SE, type_, sumti):
+    
+    if self.value == ...:
+      v = "<Not yet known>"
+    else:
+      v = self.value.value
+    return """{2} {0}{1}""".format(['wtf ', '', 'se ', 'te ', 've ', 'xe '][self.SE], self.type.value, v)
+  def repr(self, from_):
+    if from_.id!=self.abstraction.id:
+      return "#{2}".format(['wtf ', '', 'se ', 'te ', 've ', 'xe '][self.SE], self.type.value, self.abstraction.id)
+    else:
+      return str(self)
+  def __init__(self, abstraction, SE, type_, sumti):
     """3, se klama, <lo do zdani>"""
-    self.abstraction_id = abstraction_id
+    self.abstraction = abstraction
+    assert isinstance(self.abstraction, Abstraction) #DEBUG
     self.SE = SE #1 = nothing, 2 = se, 3 = te, ve = 4, xe = 5
     self.type = type_
-    self.sumti = sumti
+    self.value = sumti
 
 class runterbri:
   """

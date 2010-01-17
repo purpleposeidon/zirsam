@@ -318,7 +318,7 @@ def Stream(conf=None):
   return bitbuf
 
 if __name__ == '__main__':
-  print("Shows the grouping of letter clusters", file=sys.stderr)
+  #print("Shows the grouping of letter clusters", file=sys.stderr)
   bitbuf = Stream()
   r = []
   for bit in bitbuf:

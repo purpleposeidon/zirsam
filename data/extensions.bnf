@@ -81,7 +81,7 @@ x-test =
 
 x-test-issue-1 =
   LA CMENE ...
-  | LA SELBRI
+  | LA BRIVLA
 
 x-test-issue-2 =
     a [b] ...
@@ -98,7 +98,7 @@ x-test-issue-3-bit-2 =
 
 x-test-undermatch = x-short | x-long
 x-short = PA
-x-long = [PA] LE SELBRI
+x-long = [PA] LE BRIVLA
 
 a =
   A
@@ -139,10 +139,10 @@ x-test-elide =
   ;Does it actually work? No. Idea.
 
 x-test-elide-bit-1 =
-  (LE SELBRI ...) | KOhA
+  (LE BRIVLA...) | KOhA
 
 x-test-elide-bit-2 =
-  (/CU/ SELBRI) | PA
+  (/CU/ BRIVLA) | PA
 
 x-inefficiency-example =
   a b c

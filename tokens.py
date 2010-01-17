@@ -267,7 +267,7 @@ class Token:
   def __str__(self):
     val = str(self.value)
     self.content
-    if self.content:
+    if self.content != None:
       val += ', content=' + str(self.content)
     if self.end:
       val += ', end=' + str(self.end)

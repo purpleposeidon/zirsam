@@ -22,8 +22,9 @@ def main():
     semantology.examine(sentence, context)
     #print(sentence)
   print(context)
+  return context
 
 
 
 if __name__ == '__main__':
-  main()
+  c = main()

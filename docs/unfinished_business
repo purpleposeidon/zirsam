@@ -6,14 +6,13 @@ Items marked "-" aren't as important as items marked "+"
  - bnf/convert_bnf.py: DISABLE_HASH = False
 
 ###### Soon
- - Minimal parse tree printout
- - Implement everything according to http://www.lojban.org/tiki/Magic+Words
-    * Make sure that everything interacts properly
  - More error checking and recovery
     - lai & friends in cmene
     - invalid consonant clusters in words
  - What about that old '*' on TrackerMatch? Uhm.
+    - Possibly related to funny bridi_tail that keeps following me around
  - Check your dotside!
+    (Not just dotside. Pauses in general. "ui" vs. ".ui", "alis" vs ".alis". IOW, require all words begining with a vowel to start with a pause instead.)
  - make word_end in morphology.py indexed from 0 instead of 1?
  + Test IPA and other alphabets
  - Don't use "config" for the config.Configuration() object, use "conf"? Or rename config.py to conf.py
@@ -52,7 +51,8 @@ Items marked "-" aren't as important as items marked "+"
  - Semantics engine and supporting stuff (Nope. Seperate project.) (Well, maybe not all of it)
  - Jbovlaste integration
  + Oh, also, learn how to speak lojban. Jeeze.
- - Make option for output to be spaceless
+ - System to convert words to be spaceless
+ - System to fix lack of pauses
  - look into proper distribution methods, see the distutils module http://docs.python.org/distutils/
      "package_data" for setup.py
  - Optimize the parser by not checking optionals until after we know the item following doesn't match?
@@ -115,3 +115,6 @@ Ortohgraphy - what happens to capitalized letters with strict ortho?
  - what happened with ZOI? (oops, forgot to put the zoi.content...)
  + Store results of grammar expressions. I should be able to do Tracker.FA ...
  - SELBRI vs. BRIVLA. I think I'm using SELBRI when I should be using BRIVLA.
+ - Minimal parse tree printout (check-ish. It's shitty. It's fugly. It could look much nicer.)
+ - Implement everything according to http://www.lojban.org/tiki/Magic+Words
+    * Make sure that everything interacts properly (More tests could be done, a testsuite could be made...)

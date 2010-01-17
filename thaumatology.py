@@ -3,22 +3,10 @@
 
 #thaumatology - handles (in the CLL's words) filtering, termination, and absorbtion
 #For reference, see http://www.lojban.org/tiki/Magic+Words
-#That URL is assumed to be the canonical description for magic-word handling
-# XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX
-# XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX
-# XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX
-#     In need of a thorough investigation
-# XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX
-# XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX
-# XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX
+#That URL is assumed to refer to the canonical description for magic-word handling
 
 #Don't read, http://www.lojban.org/tiki/Magic+Words+Alternatives it is full of darkness and evil and LIES.
-
-"""
-Observation.
-
-Magic+Words says that {lo'u fu le'u} is treated as one word. Yet, {sa le'u} would erase the le'u which is rather awkward.
-"""
+#Don't make me repeat myself, don't click on the link!
 
 
 import sys, io
@@ -41,6 +29,7 @@ class InterestStream:
     self.config = conf
 
   def __iter__(self):
+    y = None
     while 1:
       boring = []
       while isinstance(self.valsi[0], tokens.IGNORABLE):
@@ -48,6 +37,16 @@ class InterestStream:
       v = self.valsi.pop()
       v.whitespace = boring
       boring = []
+      if y:
+        if v in selmaho.BU:
+          v.content = y
+          #Try this for fun: zo .y. fusi bu
+        else:
+          yield y
+        y = None
+      if isinstance(v, tokens.HESITATION):
+        y = v
+        continue
       yield v
 
 class QuoteStream:
@@ -61,24 +60,28 @@ class QuoteStream:
       if self.valsi[0].type == selmaho.ZOI: #Non-lojban quote
         #TODO: It'd be nice to turn off warnings and messages from morphology in here
         #self.config.message("Start of a ZOI quote; all errors can be ignored.")
-        orig_stderr = self.config.stderr
-        self.config.stderr = io.StringIO()
+        
         zoi = self.valsi.pop()
         delim_start = self.valsi.pop()
         if delim_start.type in (selmaho.SI, selmaho.SA, selmaho.SU, selmaho.ZO, selmaho.BU, selmaho.ZEI, selmaho.FAhO):
-          self.config.message("This ZOI deliminator (%r) could be confusing" % (delim_start.value), delim_start.position)
+          self.config.message("This ZOI deliminator (%r) could be confusing to the unenlightened" % (delim_start.value), delim_start.position)
         quote_tokens = []
+        
+        orig_stderr = self.config.stderr #Only hide errors inside the actual zoi quote, don't exclude errors
+        self.config.stderr = io.StringIO() #involving the deliminator
         
         try:
           while self.valsi[0].value != delim_start.value:
             next = self.valsi.pop()
             quote_tokens.append(next)
         except (EOFError, StopIteration):
+          self.config.stderr = orig_stderr
           self.config.error("End of File reached in open ZOI quote (close it off with {0!r})".format(delim_start.value), delim_start.position)
         delim_end = self.valsi.pop()
         zoi.end = delim_end
         zoi.start = delim_start
         zoi.zoi_tokens = quote_tokens
+        self.config.stderr = orig_stderr
         
         start = delim_start.position.offset+len(delim_start.value)
         end = delim_end.position.offset-1
@@ -110,9 +113,8 @@ class QuoteStream:
               if trim_space == 0:
                 break
               trim_space -= 1
+        
         zoi.content = self.config.old_chars[start:end]
-        #self.config.message("End of ZOI quote. You may now continue paying attention to errors.")
-        self.config.stderr = orig_stderr
         yield zoi
       elif self.valsi[0].type == selmaho.ZO: #1-word quote
         zo = self.valsi.pop()
@@ -137,14 +139,11 @@ class QuoteStream:
         lohu.content = jbo_tokens
         lohu.end = lehu #I'd rather yield lehu
         yield lohu
+      elif self.valsi[0].type == selmaho.LEhU: #Erroneous error quote end
+        lehu = self.valsi.pop()
+        self.config.warn("Trying to close a non-existant error quote", lehu.position)
+        yield lehu
       else:
-        '''if isinstance(self.valsi[0], tokens.HESITATION) and (and self.valsi[1].type == selmaho.BU):
-          y = self.valsi.pop()
-          bu = self.valsi.pop()
-          bu.content = y
-          yield bu
-        else:
-          '''
         yield self.valsi.pop()
         
 
@@ -179,19 +178,20 @@ class ErasureStream:
         self.EOF = True
         break
       
-      if isinstance(self.valsi[0], tokens.HESITATION):
-        # XXX NOTE XXX http://dag.github.com/cll/21/1/ says this should be handled AFTER si/sa/su, BUT nobody likes that. 
-        #{do .yyy si mi} would be {do mi}
-        y = self.valsi.pop()
-        try:
-          maybu = self.valsi[0].type == selmaho.BU
-        except (EOFError, IndexError):
-          maybu = False
-        if backlog and not maybu:
-          backlog[-1].modifiers.append(y) #If converting to set: use .add()
-        else:
-          backlog.append(y)
-      elif self.valsi[0].type == selmaho.SI:
+      #if isinstance(self.valsi[0], tokens.HESITATION):
+        ## XXX NOTE XXX http://dag.github.com/cll/21/1/ says this should be handled AFTER si/sa/su, BUT nobody likes that. 
+        ##{do .yyy si mi} would be {do mi}
+        #y = self.valsi.pop()
+        #try:
+          #maybu = self.valsi[0].type == selmaho.BU
+        #except (EOFError, IndexError):
+          #maybu = False
+        #if backlog and not maybu:
+          #backlog[-1].modifiers.append(y) #If converting to set: use .add()
+        #else:
+          #backlog.append(y)
+      #el
+      if self.valsi[0].type == selmaho.SI:
         #I agree with camxes, it should be ((zo si) si), not jbofihe's (zo (si si) si). It also says so in the CLL, http://dag.github.com/cll/21/1/
         #(BPFK seems silent on the issue)
         #(I suppose I could make a CLI option. jbofihe's way would be more work too)
@@ -274,8 +274,9 @@ class ErasureStream:
             bu.content = backlog.pop()
           except (IndexError):
             self.config.warn("BU must have something to quote!", bu.position)
-        else:
-          raise Exception("So, how'd that bu get a content already???")
+        if bu.content and bu.content.value == 'zei':
+          self.config.message("You're going to hell if you actually use this", bu.position)
+        #else: It should be .y.bu
         backlog.append(bu)
       else:
         # XXX TODO Here is where you would release some ammount of backlog, either "before the I" or "keep at least 5 words" or "per each NIhO" or something
@@ -302,7 +303,7 @@ class AbsorptionStream:
             self.valsi[0].modifiers.append(word)
             continue
         except (StopIteration, EOFError):
-          self.config.warn("BAhE needs something to emphasize", word.position)
+          self.config.warn("BAhE has nothing to emphasize", word.position)
           
         next = self.valsi[0]
         while 1:
