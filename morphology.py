@@ -1,6 +1,6 @@
 #!/usr/bin/python3.0
 # -*- coding: utf-8 -*-
-
+#TODO: rename self.dot_sided to self.hit_pause, bad name.
 __version__ = "0" #I expect it will only get worst
 __author__ = "djeims.roistn <purpleposeidon@gmail.com>"
 
@@ -119,7 +119,7 @@ class ValsiParser:
       except EOFError:
         self.config.debug("EOF hit in ValsiParser")
         self.EOF = True
-        return
+        break
       if v == ...:
         continue
       elif v == None or v == []:
@@ -145,7 +145,7 @@ class ValsiParser:
     return i
   
   def locate_cc(self, start=0):
-    #Return (Bit index of a CC or CyC, number of non-h letters)
+    #Return the tupple, (Bit index of a CC or CyC, number of non-h letters)
     #Bit Index is indexed from 0, Non-h letters starts at 1.
     letter_count = 0
     while 1:
@@ -169,9 +169,10 @@ class ValsiParser:
   def locate_ps(self, start):
     #{2.C.2)} - Return the index of the penultimate stress
     if start >= 1 and self.bit[start-1].accented:
-      #{2.C.2)a)} and {2.C.2)b)} are taken care of by orthography.py, as diphthongs are kept together
-      #a) is part because the selbri (or cmavo+selbri) always starts at 0 because everything in front
-      #   has been broken off alerady
+      #{2.C.2)a)} and {2.C.2)b)} are taken care of by orthography.py,
+      #   as diphthongs are kept together
+      #a) is part because the selbri (or cmavo+selbri) always starts at 0
+      #   because everything in front has been broken off alerady
       #b) is satisfied because dipthongs are handled together
       return start - 1
     locus_ps = start
@@ -619,6 +620,8 @@ we: {4}""".format(self.bit.buffer, cc_location, cc, ps, word_end))
     if self.bit[0].period:
       self.dot_sided = True
       return self.tokenize(1, PERIOD)
+    if not self.dot_sided and self.bit[0].has_V:
+      self.config.warn("Words that start with vowls should have a period in front of them.", self.bit[0].position)
     if self.bit[word_end-1].has_C: #It's a cmene! OMG!
       #{2.A.1)}
       #The cmene must have a pause in front unless (not DOTSIDE and) there is a marker
@@ -631,7 +634,6 @@ we: {4}""".format(self.bit.buffer, cc_location, cc, ps, word_end))
         #mi'e .las.
         #So, what we're going to do is just reach back until the next wordsep?
         return self.tokenize(word_end, CMENE) #This is a lot easier.
-      #else: (Doesn't need another indentation [you may have noticed, I don't like large indents])
       
       #{2.A.1)a)}
       #Requires a cmene marker: la, lai, la'i, doi
