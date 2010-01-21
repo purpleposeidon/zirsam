@@ -20,6 +20,7 @@ Items marked "-" aren't as important as items marked "+"
  - Link to python3, not python3.0. (You actually have 3.1 installed...)
     But other installations might not have a python3! So no. >_>
  - Put in GPL licensing or something and other legalese stuff in files that need it (Not lojban.bnf)
+ - Should be able to run dendrography off of a raw valsi stream
 
 ###### Later
  - Check that each marker in brkwords is properly implemented and documented

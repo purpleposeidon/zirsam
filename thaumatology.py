@@ -129,6 +129,8 @@ class QuoteStream:
         while 1:
           try:
             vla = self.valsi.pop()
+            if vla.type == selmaho.ZOI:
+              self.config.message("This implementation doesn't do ZOI in LOhU", vla.position)
           except EOFError:
             self.config.error("End of File reached in open LOhU quote (end it with le'u) ", lohu.position)
 

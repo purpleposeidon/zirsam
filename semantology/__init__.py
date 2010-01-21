@@ -29,6 +29,8 @@ class Tense:
 
 class Context:
   def __str__(self):
+    return """Abstractions:
+{3}""".format(hex(id(self)), self.ki, self.koha, self.__abs_str__())
     return """Context at {0}:
 KI status: {1}
 KOhA status: {2}
@@ -62,6 +64,42 @@ Abstractions:
     a = Abstraction(self.abstraction_count)
     self.abstraction_list.append(a)
     return a
+
+class Fact:
+  def __init__(self, group, id_, selbri_type):
+    self.group = group
+    self.id = id_
+    self.type = selbri_type
+  def __repr__(self):
+    if self.id == 0: value = "zo'e"
+    else: value = self.id
+    return "G{0} #{1} {2}".format(self.group, value, self.type)
+
+class SelbriClass:
+  SE_VALS = {'se':2, 'te':3, 've':4, 'xe':5}
+  PA_VALS = {'1':'pa', '2':'re', '3':'ci', '4':'vo', '5':'mu', '6':'xa', '7':'ze', '8':'bi', '9':'so', '0':'no'}
+  class SelbriType:
+    def __init__(self, name, slot, truth_function):
+      self.name = name #Some stupid string
+      self.slot = slot
+      self.truth_function = truth_function
+      
+  def __init__(self, name, max_slots=5, truth_function=None):
+    self.name = name
+    self.max_slots = max_slots
+    self.truth_function = truth_function
+
+  def access(self, SE=1):
+    if SE in SelbriClass.SE_VALS:
+      s = SelbriClass.SE_VALS[SE]
+    elif SE == 1:
+      s = ''
+    else:
+      assert SE >= 1
+      s = 'xi'
+      for digit in str(SE):
+        s += SelbriClass.PA_VALS[digit]
+    return SelbriClass.SelbriType(s+self.name, SE, self.truth_function)
 
 
 class Abstraction:
@@ -146,7 +184,6 @@ class Abstraction:
 
 class Terbri:
   def __str__(self):
-    
     if self.value == ...:
       v = "<Not yet known>"
     else:

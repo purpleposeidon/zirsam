@@ -65,7 +65,7 @@ def end_sentence(tracker, context):
   context.pop_abstraction()
 
 def pre_tanru_unit_2(tracker, context):
-  selbri = tracker.node.get("SELBRI")
+  selbri = tracker.node.get("BRIVLA")
   if selbri:
     context.abstraction_stack[0].selbri.insert(0, selbri)
     #If we don't get a selbri now, hopefully we'll get one later. Otherwise, no selbri = emo
@@ -139,7 +139,5 @@ def end_sumti_tail_1(tracker, context):
   context.abstraction_stack[0].resolve_nei()
   context.abstraction_stack[0].resolve_se()
   sumti_tail_abstraction = context.pop_abstraction()
-  print(context.abstraction_stack[0])
-  print(sumti_tail_abstraction)
   context.abstraction_stack[0].terms[-1].value = sumti_tail_abstraction.terms[0]
   
