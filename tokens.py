@@ -2,6 +2,7 @@
 
 #Different kinds of tokens
 import io
+import cgi
 
 import config
 import common
@@ -28,6 +29,7 @@ class Token:
     self.ve_lujvo_rafsi = []
     self.modifiers = [] #BAhE and UI such.
     self.whitespace = [] #Whitespace and pauses that occur BEFORE the token.
+    self.start = None #Acceptable types: None, Token
     self.end = None #Acceptable types: None, Token
     self.value = self.calculate_value()
 
@@ -249,6 +251,70 @@ class Token:
     else:
       return self.type.__name__
 
+  def html(self):
+    taip = type(self).__name__.lower()
+    defin = ''
+    if taip == "brivla":
+      g = "\n {0}".format(self.value)
+      for line in open("data/gismu.txt").readlines():
+        line = '\n'+line
+        if g in line:
+          defin = line
+          break
+      if not defin:
+        #assert g in open("data/gismu.txt").read()
+        g = "\n{0}:".format(self.value)
+        g = self.value
+        for line in open("data/lujvo.txt").readlines():
+          line = '\n'+line
+          if g in line:
+            defin = line
+            break
+      if not defin and self.ve_lujvo_rafsi:
+        for raf in self.ve_lujvo_rafsi:
+          raf = " {0} ".format(raf)
+          for line in open("data/gismu.txt").readlines():
+            test = line[:20]
+            if raf in test and not(line in defin):
+              #import sys
+              #print("Found a rafsi in", line, file=sys.stderr)
+              defin += line+'\n'
+              break
+      defin = defin.strip()
+      if not defin:
+        defin = "unknown brivla"
+    elif taip == 'cmavo':
+      v = self.value
+      
+      if v[0] in 'aeiou': v = '.'+v
+      else: v= ' '+v
+      g = "\n{0} ".format(v)
+      for line in open("data/cmavo.txt").readlines():
+        line = '\n'+line
+        if g in line:
+          defin = line.strip()
+          break
+      if not defin: defin = "unknown cmavo"
+    elif taip == 'cmene':
+      defin = "name-word"
+      taip = 'cmevla'
+    elif defin == '':
+      defin = "this doesn't know about " + taip
+    value = self.value
+    if self.start:
+      value += ' '+cgi.escape(self.start.value)
+    if type(self.content) == str:
+      value += ' '+cgi.escape(self.content)
+    elif self.content:
+      value += self.content.html()
+    if self.end:
+      value += ' '+cgi.escape(self.end.value)
+    for _ in self.modifiers:
+      value += ' '+_.html()
+    if 1 or defin:
+      return """<span class="{0}" title="{1}">{2}</span>""".format(taip, defin, value)
+    else:
+      return """<span class="{0}">{2} </span>""".format(taip, defin, self.value)
   def __repr__(self):
     return str(self)
     '''

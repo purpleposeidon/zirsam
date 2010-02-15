@@ -47,10 +47,11 @@ Arguments:"""
   'print tokens':"(DEBUG OPTION) Print out a tokens as they are created", \
   
   'no space':"(NOT IMPLEMENTED) Convert input to not use spaces", \
+  'html': "(XXX NOT DONE YET?) Output an annotated parse tree in HTML", \
   
   }
   #Why don't you just be smart and use two tupples, or something?
-  __help_order = 'help, quiet, show progress, err2out, full tree, no readline, alphabet, no dotside, forbid warn, strict, all error, debug, full buffer, cbreak, token error, hate token, do exit, print tokens, no space'.split(', ') #Help, Parsing configuration, Debug, unimplemented
+  __help_order = 'help, quiet, show progress, err2out, full tree, no readline, alphabet, no dotside, forbid warn, strict, all error, debug, full buffer, cbreak, token error, hate token, do exit, print tokens, no space, html'.split(', ') #Help, Parsing configuration, Debug, unimplemented
   for val in __help:
     if val not in __help_order:
       raise Exception("Command option %r is not present in Configuration.__help_order"%val)
@@ -148,6 +149,8 @@ Arguments:"""
       self.permit_readline = False
     if arg('full tree'):
       self.full_tree = True
+    if arg("html"):
+      self.html = True
     _ = valued_arg("alphabet", alphabets.GlyphTable.tables)
     if _: self.glyph_table = _
     _ = valued_arg("hate token")
@@ -280,7 +283,7 @@ Arguments:"""
     self.output_no_space = False
     self.hate_token = None #If we see this token, raise Exception
     
-    
+    self.html = False
     
     self.has_warnings = False
     self.parsing_unit = 'x_parse_root'

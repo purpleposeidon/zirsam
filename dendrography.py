@@ -13,7 +13,7 @@ from bnf import BNF
 import magic_bnf
 
 
-def pprint(wut, first=True):
+def pprint(wut, first=True, html=False):
   """More complex than the one below.
   We can output in a few different ways:
     * Print the entire parse tree, including sub-rules like "sumti_6"
@@ -22,25 +22,35 @@ def pprint(wut, first=True):
   
   if isinstance(wut, MatchTracker):
     head = str(wut.rule)
+    
     #wut.config._debug = False
     if head[-1] in '1234567890' and not (wut.config._debug or wut.config.full_tree):
+      #It is part of a big rule
       head = ''
       for v in wut.value:
-        head += pprint(v, first=False)
+        head += pprint(v, first=False, html=html)
       while '  \n' in head:
         head = head.replace('  \n', ' \n')
       head = head.replace(' \n', '')
       return head+''
-    head += ':'
+    if not html: head += ':'
+    else: head = """<span class="rule {0}" title="{0}">""".format(str(wut.rule), head)
     for v in wut.value:
-      for line in pprint(v, first=False).split('\n'):
+      for line in pprint(v, first=False, html=html).split('\n'):
         head += '\n  '+line
     head += '\n'
+    if html:
+      head += "</span>"
     if first:
       while ' \n' in head: head = head.replace(' \n', '\n')
       while '\n\n' in head: head = head.replace('\n\n', '\n')
+      if html:
+        head = """<span class="rule {0}" title="{0}">{1}</span>""".format(str(wut.rule), head)
+        #head += "</span>"
       return head.strip()
     return head
+  if html:
+    return wut.html()+'\n'
   return str(wut)+'\n'
 
 class MatchTracker:
@@ -58,6 +68,29 @@ class MatchTracker:
     #if self.stack:
     #  r += '<'+str(self.stack)[1:-1]+'>'
     return r
+  def html(self):
+    return pprint(self, html=True)
+  def text(self, first=True):
+    #Return a string of the valsi values
+    r = ''
+    for child in self.value:
+      if isinstance(child, MatchTracker):
+        r += child.text(first=False)
+      else:
+        r += ' '+child.value
+    if first:
+      r = r.strip()
+    return r
+  def pull(self, *dive_list):
+    #nodes is a list of nodes to dive through, tries to descend through the tree to get it.
+    #Don't expect to ever get dive_list back tho
+    if dive_list:
+      val = dive_list.pop(0)
+      child = self.node.get(val)
+      if child:
+        return child.pull(*dive_list)
+    else: #You called?
+      return self #Ta da! :D
   def __init__(self, valsi, rule, conf=None, current_valsi=0, parent=None, depth=0):
     assert conf
     self.config = conf
@@ -136,7 +169,6 @@ class MatchTracker:
     """For exploring the length of branches in bnf.magic_bnf.XOr. Important to note is the fact that the first item in the tuple is the current_valsi"""
     return self.current_valsi, list(self.value), self.accepted, list(self.stack)
   def restore_state(self, state):
-    
     self.current_valsi, self.value, self.accepted, self.stack = state
 
 '''
@@ -219,14 +251,49 @@ def main(_stream):
   #print('='*70)
   for i in _stream:
     #print('*************************\n', pprint(i), '\n-------------------------')
-    print()
-    print(pprint(i))
+    if not _stream.config.html:
+      print()
+      print(pprint(i))
     r.append(i)
     #print(i)
-  if not r:
-    print(r, '(empty)')
-  #if len(str(i)) < 33: #For testing. Didn't get much text.
-    #raise SystemExit(1)
+  if _stream.config.html:
+    print("Converting to html...", file=sys.stderr)
+    print("""<html>
+<style>
+.brivla {
+color: red;
+}
+.cmavo {
+color: blue;
+}
+.sumti {
+border-bottom-width: 1px;
+border-bottom-style: solid;
+border-color: black;
+}
+.sumti .sumti { border-color: gray; }
+.sumti .sumti .sumti { border-color: red; }
+.sumti .sumti .sumti .sumti { border-color: orange; }
+.sumti .sumti .sumti .sumti .sumti { border-color: yellow; }
+.sumti .sumti .sumti .sumti .sumti .sumti { border-color: green; }
+.sumti .sumti .sumti .sumti .sumti .sumti .sumti { border-color: blue; }
+.sumti .sumti .sumti .sumti .sumti  .sumti .sumti .sumti { border-color: purple; }
+.rule {
+/*border-style-left:solid;
+border-width-left:1px;
+margin-left: 2px;
+padding-left: 1px;*/
+}
+</style>
+<body>""")
+    for i in r:
+      print("""<div class="text">""")
+      print(pprint(i, html=True))
+      print("""</div>""")
+    print("""</body></html>""")
+  else:
+    if not r:
+      print(r, '(empty)')
   return _stream.orig.good_parse and len(r) == 1, r
 
 

@@ -621,7 +621,7 @@ we: {4}""".format(self.bit.buffer, cc_location, cc, ps, word_end))
       self.dot_sided = True
       return self.tokenize(1, PERIOD)
     if not self.dot_sided and self.bit[0].has_V:
-      self.config.warn("Words that start with vowls should have a period in front of them.", self.bit[0].position)
+      self.config.warn("Words that start with vowels should have a period in front of them.", self.bit[0].position)
     if self.bit[word_end-1].has_C: #It's a cmene! OMG!
       #{2.A.1)}
       #The cmene must have a pause in front unless (not DOTSIDE and) there is a marker
