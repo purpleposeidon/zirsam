@@ -1,30 +1,32 @@
 #!/usr/bin/python3.0
 # -*- coding: utf-8 -*-
 
-import sys; sys.path.append('./')
+import sys
+import os
+if os.path.basename(os.getcwd()) == 'semantology':
+  os.chdir('../')
+sys.path.append('./')
+
 
 import config
 import dendrography
 
-import semantology
+import bridi_loader
 
 
-
-
-def main():
+#def main():
+if 1:
   conf = config.Configuration()
   conf.parsing_unit = "x_parse_sentence"
-  sentences = dendrography.Stream(conf)
-
-  context = semantology.Context()
-  
-  for sentence in sentences:
-    semantology.examine(sentence, context)
-    #print(sentence)
-  print(context)
-  return context
-
+  trackers = dendrography.Stream(conf)
+  ae = bridi_loader.AbstractionExtractor(config=conf)
+  for tracker in trackers:
+    ae.run(tracker)
+  #print("Life!")
+  #print(repr(ae))
+  print(ae)
+  #print("Death! :(")
 
 
-if __name__ == '__main__':
-  c = main()
+#if __name__ == '__main__':
+  #c = main()

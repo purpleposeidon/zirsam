@@ -81,14 +81,29 @@ class MatchTracker:
     if first:
       r = r.strip()
     return r
+  def search(self, rule_name, first=True, stops=("text", "sentence")):
+    #iter over every node in tracker, returning nodes who's rule is rule_name
+    #It does not look inside of matches for more matches
+    #It does not search inside of rules mentioned in stops.
+    if self.rule.name == rule_name:
+      yield self
+    elif not first and (self.rule.name in stops):
+      print("Stopping at", self.rule.name)
+      return
+    else:
+      for val in self.value:
+        if isinstance(val, MatchTracker):
+          for _ in val.search(rule_name, first=False, stops=stops):
+            yield _
   def pull(self, *dive_list):
     #nodes is a list of nodes to dive through, tries to descend through the tree to get it.
-    #Don't expect to ever get dive_list back tho
+    #More of a pain in the ass to use, however, it is more trustworthy than search().
+    # TODO: Could be implemented as a while loop?
     if dive_list:
-      val = dive_list.pop(0)
+      val = dive_list[0]
       child = self.node.get(val)
       if child:
-        return child.pull(*dive_list)
+        return child.pull(*dive_list[1:])
     else: #You called?
       return self #Ta da! :D
   def __init__(self, valsi, rule, conf=None, current_valsi=0, parent=None, depth=0):
