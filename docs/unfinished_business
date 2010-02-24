@@ -1,6 +1,7 @@
 Or, in other words, "TODO"
 Items marked "-" aren't as important as items marked "+"
 ###### Next
+  - What is up with {lo cerni cu puki clira mi ki'u lo du'u lo prulamcte ku lerci mi}???
 
 ###### Release
  - bnf/convert_bnf.py: DISABLE_HASH = False
@@ -11,8 +12,6 @@ Items marked "-" aren't as important as items marked "+"
     - invalid consonant clusters in words
  - What about that old '*' on TrackerMatch? Uhm.
     - Possibly related to funny bridi_tail that keeps following me around
- - Check your dotside!
-    (Not just dotside. Pauses in general. "ui" vs. ".ui", "alis" vs ".alis". IOW, require all words begining with a vowel to start with a pause instead.)
  - make word_end in morphology.py indexed from 0 instead of 1?
  + Test IPA and other alphabets
  - Don't use "config" for the config.Configuration() object, use "conf"? Or rename config.py to conf.py
@@ -21,6 +20,7 @@ Items marked "-" aren't as important as items marked "+"
     But other installations might not have a python3! So no. >_>
  - Put in GPL licensing or something and other legalese stuff in files that need it (Not lojban.bnf)
  - Should be able to run dendrography off of a raw valsi stream
+ - Move HTML-ify to a separate module
 
 ###### Later
  - Check that each marker in brkwords is properly implemented and documented
@@ -29,7 +29,7 @@ Items marked "-" aren't as important as items marked "+"
  - Check for weird/odd/wrong comments
  - Make sure I didn't accidentally change/deleting anything in BRKWORDS.txt
  - (seperate out the configuration options for each section?)
- - It would be interesting to have an option to disable line-buffering; the user could see the immediate tokenization.
+ - It would be interesting to have an option to disable line-buffering; the user could see the immediate tokenization. (Bleh, meh)
  - How do I like Position? Does it match up with vi, kate, and other editors?
  - Do I like how the Configuration object is propagated? Is there a way to make it more... uhmm
    - Don't use self.config, use self.buffer.config? (the way it is now is more flexible)
@@ -43,9 +43,10 @@ Items marked "-" aren't as important as items marked "+"
  + could optimize by first parsing sentences and ignoring content? (Well, not reaaaaly an optimization. But better for streaming.) "--flat-parse". Parse in units of the selma'o I. x-sentence-parse-root might be, "NIhO | I | sentence"]
     - For parsing long documents, it would probably be best to do parsing at the sentence-level.
     - Unless it isn't actually any faster?
-    - In some cases, you might actually want sentence-at-a-time.
+    - In some situations, you might actually want sentence-at-a-time.
  - have switches that enable or disable certain parts of the BNF to allow for grammars designed for other situations
     - Such as...?
+ + Investigate cython! (Used to be called pyrex)
 
 ###### Much Later
  - (Have error messages in lojban?)
@@ -119,3 +120,6 @@ Ortohgraphy - what happens to capitalized letters with strict ortho?
  - Minimal parse tree printout (check-ish. It's shitty. It's fugly. It could look much nicer.)
  - Implement everything according to http://www.lojban.org/tiki/Magic+Words
     * Make sure that everything interacts properly (More tests could be done, a testsuite could be made...)
+ - Check your dotside!
+    (Not just dotside. Pauses in general. "ui" vs. ".ui", "alis" vs ".alis". IOW, require all words begining with a vowel to start with a pause instead.) (Shows a message if it isn't dotted.)
+

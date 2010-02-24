@@ -16,7 +16,7 @@ except:
   if not 'convert_bnf.py' in os.listdir('./'):
     raise SystemExit("Please run from the JBOPARSER directory")
 
-deps = "../data/lojban.bnf ../data/bnf.html ../data/extensions.bnf convert_bnf.py dehtml_bnf.py __init__.py".split()
+deps = "../data/lojban.bnf ../data/bnf.html ../data/extensions.bnf convert_bnf.py optimizer.py dehtml_bnf.py __init__.py".split()
 final = "bnf_data.py"
 try:
   final_time = os.stat(final).st_mtime
@@ -45,6 +45,7 @@ except:
         raise Exception("Could not find w3m. This program must be run to extract the bnf from the CLL html. Or you can get lojban.bnf from somewhere else, and put it into data/.")
   #print("Converting data/lojban.bnf", file=sys.stderr)
   os.system("./convert_bnf.py")
+  #os.system("./optimizer.py")
 
 #os.chdir('../')
 import sys

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 #A fragment of my anti- curses.i'enai.ionairu'e cook-book
+#No, not BNF-terminals, or elidable terminators
 
 ESC = chr(27)
 CSI = ESC+'['

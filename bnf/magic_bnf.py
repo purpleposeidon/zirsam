@@ -128,7 +128,7 @@ class Rule(BnfObjectBase):
       return NoMatch
 
   def __repr__(self):
-    return self.name
+    return "Rule({0!r})".format(self.name)
   def __str__(self): return self.name
   def __hash__(self):
     return hash(self.name)

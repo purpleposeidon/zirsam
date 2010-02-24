@@ -1,31 +1,25 @@
 
 
-
-
-
 If you don't modify the bnf, then you don't need to look at anything in this directory
 
 
+This directoy contains all of the stuff used to create the bnf_data.py file. __init__.py will take care of updating bnf_data.py if the timestamps are off.
 
-
-
-
-
-
-
-This directoy contains all of the stuff used to create the bnf.py file. You'll only need it you're haxxing up the BNF file.
+=================
+BNF FROM SCRATCH?
+=================
 
 Run dehtml_bnf.py; it uses that chapter from the CLL that contains the BNF. Download & save it as "bnf.html". I used donri's at dag.github.com/cll. The original draft version from lojban.org probably won't work because it isn't broken up into chunks. The dehtml_bnf.py script uses w3m to extract the BNF data from the HTML. You'll need to have w3m installed, of course. The file gets saved to src_bnf.bnf
 	./dehtml_bnf.py
-Then, run convert_bnf.py. It will turn that perfectly good albeit redundently named src_bnf.bnf into a fugly bnf.py file.
+Then, run convert_bnf.py. It will turn that perfectly good albeit redundently named src_bnf.bnf into a fugly bnf_data.py file.
 	./convert_bnf.py
 You should check that file to make sure that python likes it.
-	python ./bnf.py
+	python ./bnf_data.py
 
 
 
 
 
 
-Of course, you might say, "If you can't even write an EBNF parser, how could you possibly write a lojban parser?", to which I reply http://tvtropes.org/pmwiki/pmwiki.php/Main/ptitlem4f37xq499gk?from=Main.AttentionDeficitOohShiny . But seriously, wouldn't one of those actually be more LoC than this? :P
+Of course, you might say, "If you can't even write an EBNF parser, how could you possibly write a lojban parser?", to which I reply http://tvtropes.org/pmwiki/pmwiki.php/Main/ptitlem4f37xq499gk?from=Main.AttentionDeficitOohShiny . Besides, wouldn't take more LoC than this? :P
 
