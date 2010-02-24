@@ -1,0 +1,49 @@
+ko'a broda ko'e
+
+
+
+LU !?!?!?
+tanru
+
+mi tavla do caku
+
+do zasti, idiot!
+
+Fact Table Format:
+  Fact Group Id
+    Integer, not unique
+    Indexed?
+  Fact Group Referent ID
+    Integer, > 1
+  Bridi Type
+    Something funky. Probably an index in another table
+
+   -Items in the second column MUST refer to a "zo'e zasti" group, which MUST have only 1 entry
+<by default?>
+#0 zo'e  zasti (shit exists)
+"mi tavla do"
+#1 zo'e  zasti (Or, maybe rather... BEING_SOMEBODY())
+#2 zo'e  zasti
+#3 #1    tavla
+#3 #2 se tavla
+
+"lo mlatu ku klama lo zarci mi"
+#4 zo'e  zasti
+#5 #4    mlatu
+#6 zo'e  zasti
+#7 #6    zarci
+#8 #4    klama
+#8 #6 se klama
+#8 #1 te klama
+
+"lo mlatu ku barda"
+#9 #4    barda
+
+"lo mlatu ku mo"
+What does "lo mlatu" refer to? The most recently accessed "mlatu", I guess... >_>
+Print out every group that has #4 in it.
+#9 #4    barda
+#8 #4    klama
+#5 #4    mlatu
+lo mlatu zo'u barda .ije klama .ije mlatu
+We shouldn't fake knowing lojban?
