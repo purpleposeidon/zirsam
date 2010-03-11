@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 
-DEBUG = False
+DEBUG = True
 def debug(*args, **kwargs):
   if DEBUG:
     print(*args, **kwargs)

@@ -58,8 +58,8 @@ x-parse-root =
   ;;;; This should refer to a single rule.
   ;;;; (An old bug, haven't tested recently TODO)
   ;sentence
-  text
-  ;x-test
+  ;text
+  x-test
 
 x-parse-sentence =
   [I] sentence
@@ -71,13 +71,22 @@ x-test =
   ;x-test-issue-3
   ;x-test-cat
   ;x-test-cat-2
-  x-test-undermatch
+  ;x-test-undermatch
   ;x-test-xor
   ;x-test-and
   ;x-test-optional-1
   ;x-test-optional-2
   ;x-test-optional-3
   ;x-test-elide
+  ;x-test-puki
+  ;x-test-tail
+  x-test-issue-4
+
+x-test-issue-4 =
+  ((time [space] | space [time]) & CAhA) [KI]
+
+
+
 
 x-test-issue-1 =
   LA CMENE ...
@@ -104,7 +113,8 @@ a =
   A
 b =
   CMENE
-
+c =
+  PA
 
 
 x-test-cat =
@@ -148,6 +158,20 @@ x-inefficiency-example =
   a b c
 ;TODO: Stored as "Concat(Concat(a, b), c)". It would be better to be done as Concat(a, Concat(b, c))
 
+x-test-puki =
+  sentence ; XXX TODO XXX
+
+x-test-tail =
+  [x-test-tail-a [CU]] x-test-tail-b
+
+x-test-tail-a =
+  a
+
+x-test-tail-b =
+  b [x-test-tail-c]
+
+x-test-tail-c =
+  c ...
 
 ;;;;Non-Formal Rules Checklist:
 ;       word: just uses any-word, thaumatology folds the BAhE into it

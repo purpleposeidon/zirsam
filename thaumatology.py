@@ -29,25 +29,23 @@ class InterestStream:
     self.config = conf
 
   def __iter__(self):
-    y = None
+    boring = []
+    y = []
     while 1:
-      boring = []
-      while isinstance(self.valsi[0], tokens.IGNORABLE):
-        boring.append(self.valsi.pop())
       v = self.valsi.pop()
-      v.whitespace = boring
-      boring = []
-      if y:
-        if v in selmaho.BU:
-          v.content = y
-          #Try this for fun: zo .y. fusi bu
-        else:
-          yield y
-        y = None
-      if isinstance(v, tokens.HESITATION):
-        y = v
+      if isinstance(v, tokens.IGNORABLE):
+        boring.append(v)
         continue
+      if isinstance(v, tokens.HESITATION):
+        y.append(v)
+        continue
+      if y and v in selmaho.BU:
+        v.content = y.pop()
+      v.modifiers += y
+      v.whitespace += boring
       yield v
+      y = []
+      boring = []
 
 class QuoteStream:
   #Especially things that go forwards
@@ -130,10 +128,9 @@ class QuoteStream:
           try:
             vla = self.valsi.pop()
             if vla.type == selmaho.ZOI:
-              self.config.message("This implementation doesn't do ZOI in LOhU", vla.position)
+              self.config.warn("This implementation doesn't do ZOI in LOhU", vla.position)
           except EOFError:
             self.config.error("End of File reached in open LOhU quote (end it with le'u) ", lohu.position)
-
           if vla.type == selmaho.LEhU:
             lehu = vla
             break
@@ -143,7 +140,7 @@ class QuoteStream:
         yield lohu
       elif self.valsi[0].type == selmaho.LEhU: #Erroneous error quote end
         lehu = self.valsi.pop()
-        self.config.warn("Trying to close a non-existant error quote", lehu.position)
+        self.config.warn("Trying to close a non-existant error quote (open with lo'u)", lehu.position)
         yield lehu
       else:
         yield self.valsi.pop()
@@ -165,10 +162,12 @@ class ErasureStream:
   def blank_iter(self):
     for v in self.valsi:
       yield v
+  def lost_stuff(self, token):
+    self.config.warn("There is no buffer left for {0}! Increase the buffer size (TODO: What option?)".format(token.type), token.position) #XXX
   def __iter__(self):
-    '''For sa: we only need to keep N of each selmaho, where N is how many repeated sa are permited
+    """For sa: we only need to keep N of each selmaho, where N is how many repeated sa are permited
     For si: we only need to keep N valsi, where N is how many repeated si are permited
-    For UI, we need to keep at least 1 valsi'''
+    For UI, we need to keep at least 1 valsi"""
     #XXX check for compliance with http://www.lojban.org/tiki/BPFK+Section:+Erasures&fullscreen=y
     #XXX Starting with full erasure handling, so TODO: limit erasure backlog...
     backlog = []
@@ -176,23 +175,10 @@ class ErasureStream:
     while 1:
       try:
         self.valsi[0]
+        #print(self.valsi[0])
       except EOFError:
         self.EOF = True
         break
-      
-      #if isinstance(self.valsi[0], tokens.HESITATION):
-        ## XXX NOTE XXX http://dag.github.com/cll/21/1/ says this should be handled AFTER si/sa/su, BUT nobody likes that. 
-        ##{do .yyy si mi} would be {do mi}
-        #y = self.valsi.pop()
-        #try:
-          #maybu = self.valsi[0].type == selmaho.BU
-        #except (EOFError, IndexError):
-          #maybu = False
-        #if backlog and not maybu:
-          #backlog[-1].modifiers.append(y) #If converting to set: use .add()
-        #else:
-          #backlog.append(y)
-      #el
       if self.valsi[0].type == selmaho.SI:
         #I agree with camxes, it should be ((zo si) si), not jbofihe's (zo (si si) si). It also says so in the CLL, http://dag.github.com/cll/21/1/
         #(BPFK seems silent on the issue)
@@ -200,6 +186,8 @@ class ErasureStream:
         si = self.valsi.pop()
         if backlog:
           backlog.pop(-1)
+        elif stuff_behind:
+          self.lost_stuff(si)
       elif self.valsi[0].type == selmaho.SA:
         #CLL says, "as far back as until what follows attatches to what proceeds".
         #BPFK says to go back to the same selmaho
@@ -212,7 +200,7 @@ class ErasureStream:
             orig = self.valsi.pop()
             count_back += 1
         except EOFError:
-          self.config.error("EOT when trying to find match for SA", orig.position)
+          self.config.error("EOT when trying to find an erase target for SA", orig.position)
           backlog = []
           break
         target_type = orig.type
@@ -223,7 +211,9 @@ class ErasureStream:
         LOHU_CASE = False #XXX I'm saying this at 2:54 am, check at some point please.
         while 1:
           if not backlog:
-            self.config.message("No backlog for SA")
+            if stuff_behind:
+              self.lost_stuff(sa)
+              #self.config.warn("There is no buffer left for SA! Increase the buffer size (TODO: What option?)", sa.position) #XXX
             break
           b = backlog.pop(-1)
           LOHU_CASE = (target_type == selmaho.LEhU and b.type == selmaho.LOhU)
@@ -238,33 +228,39 @@ class ErasureStream:
                 self.config.message("This lojbanist thinks SA LEhU is stupid.")
               break
         if not found and stuff_behind:
-          self.config.error("Erasure buffer is not large enough for this SA", sa.position)
+          self.lost_stuff(sa)
+          #self.config.warn("There is no buffer left for SA! Increase the buffer size (TODO: What option?)", sa.position) #XXX
+          #self.config.error("Erasure buffer is not large enough for this SA", sa.position)
         if orig and not LOHU_CASE:
           backlog.append(orig)
       elif self.valsi[0].type == selmaho.SU:
         su = self.valsi.pop()
-        if not self.config.handle_su:
-          self.config.error("SU are not enabled", su.position)
-        else:
-          su_stoppers = selmaho.NIhO, selmaho.LU, selmaho.TUhE, selmaho.TO
-          while backlog:
-            if backlog[-1].type in su_stoppers:
-              #backlog.pop(-1) #Fixed: "I suppose they are supposed to be erased", but not according to camxes
-              break
-            backlog.pop(-1)
-          if backlog == [] and stuff_behind:
-            self.config.error("Erasure buffer is not large enough for this SU", su.position)
-          #backlog = []
+        su_stoppers = selmaho.NIhO, selmaho.LU, selmaho.TUhE, selmaho.TO
+        while backlog:
+          if backlog[-1].type in su_stoppers:
+            #XXX review this
+            #backlog.pop(-1) #Fixed: "I suppose they are supposed to be erased", but not according to camxes
+            break
+          backlog.pop(-1)
+        if backlog == [] and stuff_behind:
+          self.lost_stuff(su)
+          #self.config.warn("There is no buffer left for SA! Increase the buffer size (TODO: What option?)", sa.position) #XXX
       elif self.valsi[0].type == selmaho.ZEI:
         zei = self.valsi.pop(0)
         try:
-          s1 = backlog.pop(0)
+          s1 = backlog.pop()
         except IndexError:
-          self.config.error("There is nothing for ZEI to bind on the left", zei.position)
-        try:
-          s2 = self.valsi.pop(0)
-        except (StopIteration, EOFError):
-          self.config.error("There is nothing for ZEI to bind on the right", zei.position)
+          if stuff_behind:
+            self.lost_stuff(zei)
+            #self.config.warn("There is no buffer left for ZEI! Increase the buffer size (TODO: What option?)", zei.position) #XXX
+          else:
+            self.config.error("There is nothing for ZEI to bind on the left", zei.position)
+        finally:
+          #In a finally clause so the user catches both errors
+          try:
+            s2 = self.valsi.pop(0)
+          except (StopIteration, EOFError):
+            self.config.error("There is nothing for ZEI to bind on the right", zei.position)
         zei.content = [s1, s2]
         
         zei.type = tokens.LUJVO #The BNF uses ZEI, so it's just going unused.
@@ -274,16 +270,23 @@ class ErasureStream:
         if not bu.content:
           try:
             bu.content = backlog.pop()
-          except (IndexError):
-            self.config.warn("BU must have something to quote!", bu.position)
+          except IndexError:
+            if stuff_behind:
+              self.lost_stuff(bu)
+            else:
+              self.config.warn("BU must have something to quote!", bu.position)
+        #else: It is ybu (Or maybe pre-parsed?)
         if bu.content and bu.content.value == 'zei':
           self.config.message("You're going to hell if you actually use this", bu.position)
-        #else: It should be .y.bu
         backlog.append(bu)
       else:
-        # XXX TODO Here is where you would release some ammount of backlog, either "before the I" or "keep at least 5 words" or "per each NIhO" or something
-        backlog.append(self.valsi.pop())
+        backlog.append(self.valsi.pop()) #A regular word
+      if self.config.erase_buffer and (len(backlog) > self.config.erase_buffer):
+        #print("Full buffer, dropping", backlog[0])
+        yield backlog.pop(0)
+        stuff_behind = True
     for b in backlog:
+      #print("We're finished, yielding", b)
       yield b
 
 class AbsorptionStream:

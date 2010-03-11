@@ -130,9 +130,15 @@ class MatchTracker:
     self.value.append(child)
     return child
   def accept_rule(self):
+    #A rule was parsed succesfully
     assert self.value
     self.accepted = True
     self.current_valsi = self.value[-1].current_valsi  #+ 1
+    #print(self.rule.name)
+    #XXX
+    #if self.rule.name == 'bridi_tail_3':
+      ##This is where the tail_terms comes from...
+      #print(self.parent)
     self.used_rules.append(self.rule.name)
     if self.parent:
       self.parent.child_rules[self.rule.name] = self.value[-1]
@@ -186,20 +192,6 @@ class MatchTracker:
   def restore_state(self, state):
     self.current_valsi, self.value, self.accepted, self.stack = state
 
-'''
-      def get_state(self):
-    """For exploring the length of branches in bnf.magic_bnf.XOr. Important to note is the fact that the first item in the tuple is the current_valsi"""
-    
-    if self.parent:
-      papa = self.parent.get_state()
-    else: papa = None
-    #return self.current_valsi, self.value, self.accepted, self.stack, papa
-    return self.current_valsi, self.accepted, self.stack, papa
-  def restore_state(self, state):
-    #self.current_valsi, self.value, self.accepted, self.stack, papa = state
-    self.current_valsi, self.accepted, self.stack, papa = state
-    if self.parent:
-      self.parent.restore_state(papa)'''
 
 class GrammarParser:
   def __init__(self, token_iter, config):
@@ -242,6 +234,7 @@ class GrammarParser:
       except (EOFError, StopIteration):
         self.good_parse = True
         break
+      raise Exception("Unable to parse token {0} at {1}".format(self.valsi[0], self.valsi[0].position))
       #break #XXX Only do one for now
 
 

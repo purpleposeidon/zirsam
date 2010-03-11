@@ -9,7 +9,7 @@ from special_terminals import *
 
 
 import bnf_data
-from convert_bnf import head_info, tail_info, bnf
+from convert_bnf import head_info, tail_info, bnf #<-- if you want, uhm... try something else okay?
 
 def fix(term):
   """

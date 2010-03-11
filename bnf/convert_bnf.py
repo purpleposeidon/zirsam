@@ -47,6 +47,7 @@ if __name__ == '__main__':
 """
 
 if __name__ == '__main__':
+  #Painful. Why?
   sys.stdout = open(bnf, 'w')
   bnf = ''
   bnf = open('../data/lojban.bnf').read()

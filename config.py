@@ -40,6 +40,7 @@ Arguments:"""
   'all error':"Treat all messages as errors", \
   
   'debug':"(DEBUG OPTION) Print information from parsing", \
+  'parse debug':"(DEBUG OPTION) Print dendrography debugging information", \
   'full buffer':"(DEBUG OPTION) Completly buffer text", \
   'token error':"(DEBUG OPTION) Raise an Exception when the first token is made, which prints a backtrace", \
   'hate token':"(DEBUG OPTION) Raise an exception when that text is encountered", \
@@ -51,7 +52,7 @@ Arguments:"""
   
   }
   #Why don't you just be smart and use two tupples, or something?
-  __help_order = 'help, quiet, show progress, err2out, full tree, no readline, alphabet, no dotside, forbid warn, strict, all error, debug, full buffer, cbreak, token error, hate token, do exit, print tokens, no space, html'.split(', ') #Help, Parsing configuration, Debug, unimplemented
+  __help_order = 'help, quiet, show progress, err2out, full tree, no readline, alphabet, no dotside, forbid warn, strict, all error, debug, parse debug, full buffer, cbreak, token error, hate token, do exit, print tokens, no space, html'.split(', ') #Help, Parsing configuration, Debug, unimplemented
   for val in __help:
     if val not in __help_order:
       raise Exception("Command option %r is not present in Configuration.__help_order"%val)
@@ -122,7 +123,9 @@ Arguments:"""
     if arg("debug"):
       self._debug = True
       self.print_tokens = True
-    if arg("print tokens"): #Print tokens as they are parsed
+    if arg("parse debug"):
+      self.parse_debug = True
+    if arg("print tokens"): #Print tokens as they are parsed by morphology
       self.print_tokens = True
     if arg("show progress"):
       self.show_progress = True
@@ -291,9 +294,10 @@ Arguments:"""
     self.show_progress = False
 
     #magic-words stuff
-    self.si_depth = 5 #Store always at least 5 words for si erasure
-    self.handle_su = True #Don't flush until EOT in case we find a su
-    self.handle_sa = True #Don't flush for a sentence?
+    self.erase_buffer = 0
+    #self.si_depth = 5 #Store always at least 5 words for si erasure
+    #self.handle_su = True #Don't flush until EOT in case we find a su
+    #self.handle_sa = True #Don't flush for a sentence?
     self.flush_on = None #I or NIhO?
     self.end_on_faho = True #Treat FAhO as EOT, or uhm... don't yield it...?
     self.position = common.Position()

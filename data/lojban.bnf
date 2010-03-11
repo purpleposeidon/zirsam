@@ -224,8 +224,7 @@ tense-modal =
     | FIhO # selbri /FEhU#/
 simple-tense-modal =
     [NAhE] [SE] BAI [NAI] [KI]
-    | [NAhE] (time [space]
-    | space [time]) & CAhA [KI]
+    | [NAhE] (time [space] | space [time]) & CAhA [KI]
     | KI
     | CUhE
 time =
