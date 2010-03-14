@@ -233,7 +233,7 @@ Arguments:"""
         print('STRICT: ', msg, file=self.stderr)
       raise SystemExit(1)
     else:
-      self.message(msg, position)
+      self.message(msg, position=position)
     if self.all_error:
       print("Exiting with failure", file=self.stderr)
       raise SystemExit(2)

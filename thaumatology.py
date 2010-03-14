@@ -56,13 +56,11 @@ class QuoteStream:
   def __iter__(self):
     while 1:
       if self.valsi[0].type == selmaho.ZOI: #Non-lojban quote
-        #TODO: It'd be nice to turn off warnings and messages from morphology in here
-        #self.config.message("Start of a ZOI quote; all errors can be ignored.")
         
         zoi = self.valsi.pop()
         delim_start = self.valsi.pop()
         if delim_start.type in (selmaho.SI, selmaho.SA, selmaho.SU, selmaho.ZO, selmaho.BU, selmaho.ZEI, selmaho.FAhO):
-          self.config.message("This ZOI deliminator (%r) could be confusing to the unenlightened" % (delim_start.value), delim_start.position)
+          self.config.message("This ZOI deliminator (%r) could be confusing to the unenlightened" % (delim_start.value), position=delim_start.position)
         quote_tokens = []
         
         orig_stderr = self.config.stderr #Only hide errors inside the actual zoi quote, don't exclude errors
@@ -227,7 +225,7 @@ class ErasureStream:
               if LOHU_CASE:
                 b.end = orig
                 backlog.append(b)
-                self.config.message("This lojbanist thinks SA LEhU is stupid.")
+                self.config.message("This lojbanist thinks SA LEhU is stupid.", position=b.position)
               break
         if not found and stuff_behind:
           self.lost_stuff(sa)
@@ -280,7 +278,7 @@ class ErasureStream:
               self.config.warn("BU must have something to quote!", bu.position)
         #else: It is ybu (Or maybe pre-parsed?)
         if bu.content and bu.content.value == 'zei':
-          self.config.message("You're going to hell if you actually use this", bu.position)
+          self.config.message("You're going to hell if you actually use this", position=bu.position)
         backlog.append(bu)
       else:
         backlog.append(self.valsi.pop()) #A regular word
