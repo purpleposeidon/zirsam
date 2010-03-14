@@ -50,7 +50,9 @@ sumti-6 =
     | LOhU LEhU # ;originally "LOhU any-word ... LEhU #". Thaumatology keeps the LEhU
     | ZOI # ; originally "ZOI any-word anything any-word #"
 
-
+;The parens below are inserted by me. Erm.
+time =
+    ZI & time-offset ... & (ZEhA [PU [NAI]]) & interval-property ...
 
 
 x-parse-root =
@@ -58,8 +60,8 @@ x-parse-root =
   ;;;; This should refer to a single rule.
   ;;;; (An old bug, haven't tested recently TODO)
   ;sentence
-  ;text
-  x-test
+  text
+  ;x-test
 
 x-parse-sentence =
   [I] sentence
@@ -79,12 +81,7 @@ x-test =
   ;x-test-optional-3
   ;x-test-elide
   ;x-test-puki
-  ;x-test-tail
-  x-test-issue-4
-
-x-test-issue-4 =
-  ((time [space] | space [time]) & CAhA) [KI]
-
+  x-test-tail
 
 
 

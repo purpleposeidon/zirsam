@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 
-DEBUG = True
+DEBUG = False
 def debug(*args, **kwargs):
   if DEBUG:
     print(*args, **kwargs)
@@ -36,7 +36,7 @@ BNF = None  #This will be set by bnf/__init__.py; it is used by the Rule.
 
 class BnfObjectBase:
   #All bnf items will need these methods
-  def __mul__(self, other): #sepearted by whitespace
+  def __add__(self, other): #sepearted by whitespace
     return Concat(self, other)
 
   def __pow__(self, other): #...
@@ -44,12 +44,15 @@ class BnfObjectBase:
     # raise Exception("Please multiply by string 'REPEAT'")
     return Repeat(self)
 
-  def __add__(self, other): #&
+  def __mul__(self, other): #&
     return AndOr(self, other)
 
   def __lshift__(self, other): #|
     return XOr(self, other)
 
+  #Until I can figure out which way it's actually supposed to be!
+  __sub__ = __mul__
+  __truediv__ = __add__
   def match(self, tracker):
     #A debug-hookie thing.
     ret = self.test(tracker)

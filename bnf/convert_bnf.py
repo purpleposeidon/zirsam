@@ -124,8 +124,13 @@ if __name__ == '__main__':
   if 1:
     #Everything becomes absolutly illegible here
     bnf = bnf.replace('...', '**"REPEAT"') #repeat
-    bnf = bnf.replace(' ', '*') #concat
-    bnf = bnf.replace('&', '+') #and/or
+    if 1: #The BNF seems unable to make up its mind on this point? >_>
+      bnf = bnf.replace('&', '*') #and/or
+      bnf = bnf.replace(' ', '+') #concat
+    else:
+      bnf = bnf.replace(' ', '/') #concat
+      bnf = bnf.replace('&', '-') #and/or
+      
     bnf = bnf.replace('|', '<<') #alternation
   
   #Format it to look like a dictionary
