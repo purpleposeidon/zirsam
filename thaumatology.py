@@ -113,6 +113,8 @@ class QuoteStream:
               trim_space -= 1
         
         zoi.content = self.config.old_chars[start:end]
+        if zoi.start.value in zoi.content:
+          self.config.warn("This deliminator ({0!r}) is in the content".format(zoi.start), zoi.start.position)
         yield zoi
       elif self.valsi[0].type == selmaho.ZO: #1-word quote
         zo = self.valsi.pop()
@@ -246,7 +248,8 @@ class ErasureStream:
           self.lost_stuff(su)
           #self.config.warn("There is no buffer left for SA! Increase the buffer size (TODO: What option?)", sa.position) #XXX
       elif self.valsi[0].type == selmaho.ZEI:
-        zei = self.valsi.pop(0)
+        zeival = self.valsi.pop(0)
+        zei = tokens.LUJVO(zeival.bits, zeival.config)
         try:
           s1 = backlog.pop()
         except IndexError:
