@@ -211,9 +211,9 @@ Arguments:"""
     #Discussion: Should position be required?
     if not self._quiet:
       if position:
-        print(position, ': ', *msg, sep='', file=self.stderr, **kwargs)
+        print("MESG: ", position, ': ', *msg, sep='', file=self.stderr, **kwargs)
       else:
-        print(*msg, file=self.stderr, **kwargs)
+        print("MESG:", *msg, file=self.stderr, **kwargs)
     if self.all_error:
       print("Exiting with failure", file=self.stderr)
       raise SystemExit(2)

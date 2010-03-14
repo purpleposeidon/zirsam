@@ -122,4 +122,4 @@ Ortohgraphy - what happens to capitalized letters with strict ortho?
     * Make sure that everything interacts properly (More tests could be done, a testsuite could be made...)
  - Check your dotside!
     (Not just dotside. Pauses in general. "ui" vs. ".ui", "alis" vs ".alis". IOW, require all words begining with a vowel to start with a pause instead.) (Shows a message if it isn't dotted.)
-
+ - Make error messages consistant (run "a b")
