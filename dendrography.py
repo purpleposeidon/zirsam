@@ -3,7 +3,7 @@
 
 import sys
 #sys.setrecursionlimit(2000)
-sys.setrecursionlimit(1000) #The default on my system
+#sys.setrecursionlimit(1000) #The default on my system
 import io
 
 from config import Configuration
