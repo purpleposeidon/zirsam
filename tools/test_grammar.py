@@ -99,7 +99,8 @@ def run_test():
   else:
     import os
     os.system('pwd')
-    src = open("data/failed_gram_tests.txt")
+    src = open("data/gram_test_sentences.txt")
+    #src = open("data/failed_gram_tests.txt")
   i = 0
   failed_tests = 0
   for line in src:
