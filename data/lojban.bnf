@@ -56,8 +56,8 @@ terms-1 =
 terms-2 =
     term [CEhE # term] ...
 term =
-    sumti
-    | (tag | FA #) (sumti | /KU#/)
+    sumti | (tag | FA #) (sumti
+    | /KU#/)
     | termset
     | NA KU #
 termset =
@@ -70,7 +70,8 @@ sumti-1 =
 sumti-2 =
     sumti-3 [joik-ek sumti-3] ...
 sumti-3 =
-    sumti-4 [(ek | joik) [stag] BO # sumti-3]
+    sumti-4 [(ek
+    | joik) [stag] BO # sumti-3]
 sumti-4 =
     sumti-5
     | gek sumti gik sumti-4
@@ -224,7 +225,8 @@ tense-modal =
     | FIhO # selbri /FEhU#/
 simple-tense-modal =
     [NAhE] [SE] BAI [NAI] [KI]
-    | [NAhE] (time [space] | space [time]) & CAhA [KI]
+    | [NAhE] (time [space]
+    | space [time]) & CAhA [KI]
     | KI
     | CUhE
 time =
