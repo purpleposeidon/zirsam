@@ -1,7 +1,7 @@
 Or, in other words, "TODO"
 Items marked "-" aren't as important as items marked "+"
 ###### Next
-  - What is up with {do cu puki broda}
+
 
 ###### Release
  - bnf/convert_bnf.py: DISABLE_HASH = False
@@ -11,20 +11,20 @@ Items marked "-" aren't as important as items marked "+"
     - lai & friends in cmene
     - invalid consonant clusters in words
  - What about that old '*' on TrackerMatch? Uhm.
-    - Possibly related to funny bridi_tail that keeps following me around
+    - related to funny bridi_tail that keeps following me around
  - make word_end in morphology.py indexed from 0 instead of 1?
  + Test IPA and other alphabets
  - Don't use "config" for the config.Configuration() object, use "conf"? Or rename config.py to conf.py
  - Add option for progress bar, and maybe auto-detect if you might want progress info. Say... 3 seconds or so
- - Link to python3, not python3.0. (You actually have 3.1 installed...)
-    But other installations might not have a python3! So no. >_>
  - Put in GPL licensing or something and other legalese stuff in files that need it (Not lojban.bnf)
- - Should be able to run dendrography off of a raw valsi stream
+ - Should be able to run dendrography off of a raw valsi stream. Write an example!
  - Move HTML-ify to a separate module
+  - What is up with {do cu puki broda}
+      - BNF isn't being parsed right; agh!
+      - Check all of those &'s
 
 ###### Later
- - Check that each marker in brkwords is properly implemented and documented
- - Add an "--abusive" option zo'o
+- Add an "--abusive" option zo'o
  - $ grep -C 2 "XXX\|TODO" */*.bnf *.py */*.py
  - Check for weird/odd/wrong comments
  - Make sure I didn't accidentally change/deleting anything in BRKWORDS.txt
@@ -46,7 +46,7 @@ Items marked "-" aren't as important as items marked "+"
     - In some situations, you might actually want sentence-at-a-time.
  - have switches that enable or disable certain parts of the BNF to allow for grammars designed for other situations
     - Such as...?
- + Investigate cython! (Used to be called pyrex)
+ + Investigate cython! (Used to be called pyrex?)
 
 ###### Much Later
  - (Have error messages in lojban?)
@@ -72,7 +72,6 @@ Items marked "-" aren't as important as items marked "+"
             It is quite likely that the BNF doesn't have stuff in the form [FOO] FOO.
     Conclusion:
       We can put off checking optionals so long as the optional isn't the same as the next part, and I doubt the BNF has anything like that. But this will prolly need more investigation.
- - Go through everything I checked off, make sure it really is.
  - Only allow real gismu?
 
 ###### I don't know what I was writing
@@ -84,6 +83,11 @@ Items marked "-" aren't as important as items marked "+"
  - Make a funny/bad// joke about {tosmabru}
  - If there is demand: xml output
  - Emulate output of jbofihe and camxes? (And other parsers?)
+
+##### Morphology: I don't care about it anymore
+ - Check that each marker in brkwords is properly implemented and documented (Turns out I don't really care)
+ - Go through everything I checked off, make sure it really is.
+
 
 
 ###### Some things I've completed, to make me feel special
@@ -123,3 +127,7 @@ Ortohgraphy - what happens to capitalized letters with strict ortho?
  - Check your dotside!
     (Not just dotside. Pauses in general. "ui" vs. ".ui", "alis" vs ".alis". IOW, require all words begining with a vowel to start with a pause instead.) (Shows a message if it isn't dotted.)
  - Make error messages consistant (run "a b")
+ - Link to python3, not python3.0. (You actually have 3.1 installed...)
+    But other installations might not have a python3! So no. >_>
+    Bah, did it anyways.
+

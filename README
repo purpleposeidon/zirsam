@@ -1,5 +1,5 @@
 To do some parsing:
-  python3.0 dendrograpy.py
+  python3 dendrograpy.py
 
 If that doesn't work, and you're too lazy to fix:
   ssh zirsam@neptune.wtf.la; password is "lojban"

@@ -1,4 +1,4 @@
-#!/usr/bin/python3.0
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
 #After you have put the *formal rules* of the CLL's BNF to data/lojban.bnf,
@@ -21,7 +21,7 @@ geninfo = "#automatically generated\n#on {0}\n".format(date)
 if author:
   geninfo += "#by " + author
 
-head_info = """#!/usr/bin/python3.0
+head_info = """#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
 {0}

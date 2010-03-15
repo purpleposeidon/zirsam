@@ -37,7 +37,7 @@ except:
   if redo_html or not 'lojban.bnf' in os.listdir('../data'):
     if 'w3m' in os.popen('which w3m').read().strip():
       #print("Extracting lojban.bnf from bnf.html", file=sys.stderr)
-      os.system("python ./dehtml_bnf.py")
+      os.system("python3 ./dehtml_bnf.py")
     else:
       if redo_html:
         print("Warning: BNF HTML source was modified, but don't have w3m to dump it.", file=sys.stderr)

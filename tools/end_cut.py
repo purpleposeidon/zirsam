@@ -1,4 +1,4 @@
-#!/usr/bin/python3.0
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 #XXX TODO Make this actually work
 #As opposed to not working at all

@@ -1,4 +1,4 @@
-#!/usr/bin/python3.0
+#!/usr/bin/python3
 """Usage:
   ./tools/vocab.py
 Reads lojban text from standard input. Writes to standard output how often a word occurs. If you want to sort this list, do:

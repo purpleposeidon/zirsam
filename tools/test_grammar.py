@@ -1,4 +1,4 @@
-#!/usr/bin/python3.0
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 #Slow as all hell, reuse this crap instead of calling bah
 #Tests the grammar.... Oh boy!

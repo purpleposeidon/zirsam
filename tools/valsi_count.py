@@ -1,4 +1,4 @@
-#!/usr/bin/python3.0
+#!/usr/bin/python3
 #Doesn't take into account si & friends; you could use thaumatology, but then "zo ka" would be treated as 1 word.
 import sys
 sys.path.append('./')

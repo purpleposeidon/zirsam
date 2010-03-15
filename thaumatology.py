@@ -1,4 +1,4 @@
-#!/usr/bin/python3.0
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
 #thaumatology - handles (in the CLL's words) filtering, termination, and absorbtion

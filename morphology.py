@@ -1,4 +1,4 @@
-#!/usr/bin/python3.0
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 #TODO: rename self.dot_sided to self.hit_pause, bad name.
 __version__ = "0" #I expect it will only get worst
