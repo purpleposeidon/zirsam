@@ -97,7 +97,7 @@ def run_test():
   elif '--full' in sys.argv:
     src = open("data/gram_test_sentences.txt", errors='ignore')
     IGNORE = [6709] #Because jbofihe chokes up and dies when it sees a paren
-    print("This is going to take forever. Seriously. Like, a couple hours. Sorry. (get pypy/cython going or something, but probably still isn't out for 3k)\n\n")
+    print("This is going to take forever. Seriously. Like, a couple hours. Sorry. bnf optimizations, get pypy/cython going or something, but probably still isn't out for 3k\n\n")
   else:
     import os
     os.system('pwd')

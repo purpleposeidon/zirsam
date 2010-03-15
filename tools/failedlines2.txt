@@ -1,0 +1,905 @@
+$ ./tools/test_grammar.py --full
+mi co broda da de sa ka brodi do -- BAD
+mi co broda da sa lo broda -- BAD
+mi co zei co bu si do -- GOOD
+mi lojban zei ciska -- GOOD
+mi ciska me'o .ui zei nai bu -- GOOD
+doi grizis mi tcidu za'e la ralcku -- GOOD
+mi ba'o viska le skina be me'e zoi gy. Vanilla Sky gy. gi'e no'e nelci sy. -- GOOD
+zoi si some random words si si .y. zoi sa some other words sa cu mupli -- GOOD
+mi so'a roi na morji le cmene be me'o zoi zoi That letter that you use between a user id and a host name in an e-mail address zoi bu -- GOOD
+xu do nelci le cnino jvinu be la'o gy. lojban.org gy. -- GOOD
+ua .i ki'u ma mi cusku zo cerni -- GOOD
+lu klama zei zo cu li'u lujvo da poi no da djuno -- BAD
+mi cusku lo'u li mi le'u -- GOOD
+.oi mi pu cusku lo'u spacu le'u -- GOOD
+lo'u se ra'a le'u cu xamgu se pilno -- GOOD
+mi cusku lo'u co co co le'u si lo'u bo bo bo le'u -- GOOD
+mi cusku lo'u co co co le'u .i do cusku sa lo'u bo bo bo le'u -- GOOD
+mi na nelci le ca selsnu su -- GOOD
+.y. le ca nuncasnu cu na snadu su su -- GOOD
+mi viska le blanu zdan. sa le xekri zdani -- GOOD
+mi pilno zo by .e lo clani valsi sa zo cy .e lo clani valsi -- GOOD
+mi pu cusku lo'u do cinki le'u .i ko'a cusku lu .y. sa lo'u do fenki le'u li'o -- GOOD
+mi pu cusku lo'u do cinki le'u .i ko'a cusku lu .y. sa le'u .i ko'e cusku li'o -- GOOD
+mi pu viska broda bu .e lo drata .y. sa by .e cy -- GOOD
+zoi zoi Kamatari Damacy zoi cu cizra sa zoi zoi Katamari Damacy zoi cu cizra se kelci -- GOOD
+mi pu cusku lo'u do cinki si fenki le'u -- GOOD
+mi pu cusku lo'u do cinki le'u si lo'u do fenki le'u -- GOOD
+zoi zoi What a moron! zoi si zoi zoi What a maroon! zoi cu to'e makcu zdile -- GOOD
+lo'u co co co le'u si -- GOOD
+zoi si stuff si -- GOOD
+zo da si -- GOOD
+co zo da si si -- GOOD
+da zei de bu -- GOOD
+zoi zoi That letter that you use between a user id and a host name in an e-mail address zoi bu -- GOOD
+zoi zoi stuff zoi si -- GOOD
+zoi zoi lots of stuff zoi sa zoi si si -- GOOD
+le broda sa le si -- GOOD
+mi ba'e -- BAD
+mi fa'o zei da co -- GOOD
+xoi co co co sa xoi si -- GOOD
+da mi bu .i sa by sa di -- GOOD
+da mi bu .i sa by di -- GOOD
+da by .i sa mi bu di -- GOOD
+da bu zei da bu zei de bu zei di bu cu broda -- GOOD
+lo da bu zei da bu zei de bu zei di cu broda -- GOOD
+da bu zei da bu zei de bu zei di bu si do cu broda -- GOOD
+la cem sa com sa cim -- GOOD
+lo mi zei do mi do sa zei di cu broda -- GOOD
+mi viska le blanu zdan. sa le xekri zdani -- GOOD
+mi pilno zo by .e lo clani valsi sa zo cy .e lo clani valsi -- GOOD
+mi pu cusku lo'u do cinki le'u .i ko'a cusku lu .y. sa lo'u do fenki le'u li'o -- GOOD
+mi pu cusku lo'u do cinki le'u .i ko'a cusku lu .y. sa le'u .i ko'e cusku li'o -- GOOD
+da bu lo broda co co co sa by cu broda -- GOOD
+mi pu viska broda bu .e lo drata .y. sa by .e cy -- GOOD
+mi klama zoi zo broda zo do da sa zo mi -- GOOD
+zoi doi moooo doi .e zoi zoi Kamatari Damacy zoi cu cizra sa zoi zoi Katamari Damacy zoi cu cizra se kelci -- GOOD
+zoi doi moooo doi .e zoi zoi Kamatari Damacy zoi co cu cizra sa zoi zoi Katamari Damacy zoi cu cizra se kelci -- GOOD
+zoi zoi Kamatari Damacy zoi cu cizra sa zoi zoi Katamari Damacy zoi cu cizra se kelci -- GOOD
+.e'a casnu fi'o selsnu ja fi'o bangu la lojban -- GOOD
+i fi'o ke broda brode bo mi klama -- GOOD
+i fi'o broda bo brode mi klama -- GOOD
+i fi'o broda bo brode bo mi klama -- GOOD
+mi byfy mai broda -- GOOD
+zo y y y co nalselmorjyvalsi -- GOOD
+zo y y y si nalselmorjyvalsi -- GOOD
+do zo y y y si broda -- GOOD
+do zo y y y co broda -- GOOD
+zoi fy booz fy co sa zoi bar baz bar -- GOOD
+zoi fy sa co zoi bar baz bar co fy -- GOOD
+zoi fy booz fy co dy sa zoi bar baz bar -- GOOD
+mi nelci le broda brode sa y y y y lo brodi -- GOOD
+da zo si si si -- GOOD
+da co zo si si si si -- GOOD
+da co zo da si si si -- GOOD
+la'o dy dy -- GOOD
+le zoi ibu cgi-bin ibu zei samselpla -- GOOD
+zoi gy %rm lojban.rats 41@#$oueo (&)HUgyTLE gy -- GOOD
+zoi gy broda gy .e zoily lylyly ly -- GOOD
+zoi gy da da da gy si de gy -- GOOD
+zoi gy da da da gy si de dy -- GOOD
+zoi gy da da da gy si si -- GOOD
+zoi gy da da da gy si si de gy -- GOOD
+zoi gy da da da gy si si de dy -- GOOD
+zoi gy da da da gy si si si -- GOOD
+zoi gy da da da gy si si si de gy -- GOOD
+zoi gy da da da gy si si si gy de gy -- GOOD
+zoi gy da da da gy si si si dy de dy -- GOOD
+zoi gy da da da gy si si si si broda -- GOOD
+mi zoi gy da da da da gy si si si si -- GOOD
+mi co zoi gy da da da da gy si si si si -- GOOD
+mi co zoi gy da da da da gy si si si si si -- GOOD
+zoi zo da da da da zo zo co -- GOOD
+zoi gy da da da da gy si si de de gy sa zoi dy da dy -- GOOD
+le lojbo zo irk zei seljmaji vreji cu selstuzi -- GOOD
+le broda [ku] cu klama -- GOOD
+mi ba'e cu klama ba'e -- BAD
+.yyyyy. bu fu'e uinaisairo'i du li pa -- GOOD
+le'u bu co bu -- GOOD
+mi lo'u mi le'u le'u si si si klama -- GOOD
+lo'u mi le'u si lo'u mi le'u -- GOOD
+lo'u bu le'u -- GOOD
+lo'u le'u si lo'u le'u -- GOOD
+lo'u mi le'u -- GOOD
+lo'u mi le'u co le'u si si klama -- GOOD
+lo'u mi le'u co si klama -- GOOD
+lo'u mi si le'u -- GOOD
+lo'u si mi le'u -- GOOD
+mi broda fa'o I love cheese! -- GOOD
+mi klama fa'o I love cheese! -- GOOD
+melbi je ke cmalu je nixli bo ckule [ke'e] -- GOOD
+mi nelci la djan. .e la martas. .abo la meris. -- GOOD
+.i sei la djan. cusku se'u .y. mi .y. mutce spopa .y. le nu le speni si .y. ba speni .y. .y. su .yyyyyy. mu'o -- GOOD
+bau [ku] bai ku mi tavla -- GOOD
+la an,iis. joi la .asun. bruna remei -- GOOD
+la djeimyz. ce'e la meris. pe'e je la djordj. ce'e la martas. prami -- GOOD
+mi tavla bau [ku] bai tu'a la frank. -- GOOD
+mi viska le blanu zdan. sa le xekri zdani -- GOOD
+vei ci .a vo [ve'o] prenu cu klama le zarci -- GOOD
+xy. xi ky. -- GOOD
+xy. xi vei by. ce'o dy. [ve'o] -- GOOD
+i baziku la alis mo'ine'i jersi ry gi'e noroi pensi le du'u ta'i ba'e makau abu ba za'ure'u bartu -- GOOD
+i mo'ini'a mo'ini'a mo'ini'a i xu le nu farlu cu noroi mulno i lu mi kucli le du'u mi ca minli li xokau le ni farlu sei abu cladu cusku i ia mi pu'o jibni le midju be le terdi i ka'u minli li voki'o le ni cnita tosa'a la alis pu cilre so'o da la'e di'u le ckule i zu'u le cabna na matrai le nu jarco le ka djuno kei kei ki'u le nu noda abu tirna i zu'unai le nu rapsku cu xamgu abu le nu crebi'o toi i iese'i le se minli cu jibni drani i ku'i mi kucli le du'u makau ti stuzrlatitudi gi'e stuzrlongitudi li'u i to la alis nasai djuno le du'u makau smuni ga zo stuzrlatitudi gi zo stuzrlongitudi i ku'i abu jinvi le du'u melbi je banli valsi toi -- GOOD
+i mo'ini'a mo'ini'a mo'ini'a i ka'e zukte no drata be la'e di'e iseki'ubo la alis za'ure'u co'a tavla i lu ju'o la dinas ba mutce le ka se claxu mi kei ca le cabnicte tosa'a la dinas cu mlatu toi i a'o da ba morji tu'a le dy ladru palna ca le sanmi tcika i doi dinas noi dirba mi do'u au do mi kansa le cnita i u'u no smacu cu zvati le vacri i ku'i do ka'e kavbu lo volratcu noi ka'u mutce le ka simsa lo'e smacu i ku'i a'u xu lo'e mlatu cu citka lo'e volratcu li'u i caku la alis co'a sipydji lifri gi'e di'a senva sezysku lu xu lo'e mlatu cu citka lo'e volratcu i xu lo'e mlatu cu citka lo'e volratcu li'u esu'oroibo lu xu lo'e volratcu cu citka lo'e mlatu li'u iseja'ebo na vajni mutce fa le du'u porsi makau ki'u le nu abu ka'e spuda no le re preti i abu lifri le nu pu'o sipna kei gi'e puzi co'a senva le nu abu xanjaisi'u cadzu kansa la dinas gi'e cusku lu ju'i doi dinas ko mi jungau le jetnu i xu do su'oroi citka lo volratcu li'u ca le nu suksa fa le nu abu le cpana be lo derxi be loi grana ku joi loi sudga pezli mo'u farlu -- GOOD
+i la alis uu zo'u le nu mlana vreta gi'e catlu le purdi sepi'o pa kanla cu jimte lei se zukte le ka abu kakne ce'u i le nu pagre cu nalcumki traji i abu zutse gi'e za'ure'u co'a klaku -- GOOD
+i lu ei do ckeji sei la alis cusku i do barda nixli tosa'a ju'o drani toi i i'enai ca'o tai klaku i le'o ko ca sisti li'u i ku'i abu za'o klaku loi litce be li so'i ja'e le nu abu se sruri lo barda lalxu noi centre li ji'ipano le ka condi kei gi'e preja le xadba be le kumfa -- GOOD
+i lu ju'o lei valsi na drani sei la alis uu cusku li'u i lei abu kanla cu za'ure'u tisna loi se klaku ca le nu di'a cusku lu ja'o mi du la mabel i mi ba bilga le nu xabju le pindi ke cmalu zdani gi'e ponse ji'ino selkei gi'e oi cilre so'isai da i ai na go'i i mi mu'o jdice le du'u mi ganai du la mabel gi stali ti i noda ba prali lei bartu prenu le nu py setca le stedu ti gi'e cusku lu ko barkla doi dirba li'u i mi ba fa'aga'u catlu gi'e cusku lu pau mi du ma i pamai ko mi jungau la'e di'u ibabo mi va'o le nu nelci le nu du makau cu barkla i va'o le nu na nelci cu denpa ti le nu mi drata li'u i ku'i oi sei la alis suksa klaku krica i au su'o da ca'a setca le stedu ti i mi tai titpa le nu mi ti nonkansa li'u -- GOOD
+i abu ca le nu cusku di'u cu fa'ani'a catlu le abu xance gi'e se spaji le nu viska le nu abu pu co'a dasni pa le cmalu ke blabi ke kanba gluta pe la ractu ze'a le nu tavla i lu mi kakne ti ma sei abu pensi i ja'o mi za'ure'u jdika le ka barda li'u i abu sa'irbi'o gi'e klama le jubme tezu'e le nu sezmerli fi jy i facki le du'u ca centre li ji'imuno gi'e sutra le nu ca'o jdika i bazi facki le du'u rinka la'e di'u fa le nu jgari le bifpra i sutra falcru by puzi le nu mo'usai jdika -- GOOD
+i lu jibni rivbi sei la alis noi tolmilxe le ka terpa le nu suksa cenba kei kei gi'e ku'i mutce le ka gleki le nu ca'o zasti cu cusku i e'e caku mi klama le purdi li'u i abu bajra serai le ka sutra kei fa'a le cmalu vorme i ku'i oidai le cmalu vorme cu za'ure'u ganlo i le cmalu ke solji ckiku za'ure'u vreta le blaci jubme i lu le tcini roda xlamau sei le se kecti verba cu pensi iki'ubo mi noroi pu cmalu tai ti i noroi i ju'a ty mutce le ka xlali je'u li'u -- GOOD
+i lu zo mi'o ue sei la smacu noi da bi'i le jipno be le ke'a rebla cu desku cu krixa i ju'onaicai mi casnu lo simsa i le mi lanzu ze'e xebni lo'e mlatu i rigni je tolba'i je malfadni danlu i e'u mi na za'ure'u tirna le cmene li'u -- GOOD
+i le pamoi co preti cu li'a du'u ta'i makau za'ure'u sudga i casnu la'edi'u ibabo zi lo mentu be li so'u cu simlu le ka rarna kei fa le nu la alis ca'o pendo tavla le romei tai le nu da'i abu se slabu ra ze'a le nu abu jmive i je'u abu pu ze'u daupro la cipnrlori noi uo badri carna gi'e cusku lu mi do tolcitmau gi'eja'ebo junmau li'u po'o i la'e di'u zo'u la alis na curmi secau le nu djuno le du'u ly nanca makau i ki'u le nu la cipnrlori cu je'a tolsarxe le nu cusku le du'u ly makau nanca cu na se sumji se cusku -- GOOD
+i lu mi na go'i sei la cipnrlori cu sutra co cusku li'u -- GOOD
+i pamai dy finti lei sinxa be le nunbajra pluta be'o noi cukla milxe to le satci tarmi na vajni sei dy cusku toi ibabo punji le romei le pluta vifa'uvaku i cusku no lu i pa i re i ci i ko bajra li'u i ku'i co'a bajra ca le nu djica ije co'u bajra ca la nu djica iseki'ubo na frili fa le nu djuno le du'u mo'u makau bajra jivni i ku'i ca le nu ba'o bajra ze'a lo cacra be li pimuji'i gi'e za'ure'u je'a sudga kei la dodos spaji kixsku lu le nu jivni cu mulno li'u i le romei cu denmi sanli gi'e vasxu mutce gi'e te preti fi lu ku'i ma jinga li'u -- GOOD
+ibabo le romei cu za'ure'u denmi je sruri abu ca le nu la dodos junri dunda le tajgai gi'e cusku lu mi'a pikci do le nu do cpasarxe le vi melbi tajgai li'u ije ca le nu dy mo'u cusku le tordu se cusku kei le romei cu geirkrixa -- GOOD
+i le bavla'i cu nu citka lei titydja i le go'i cu rinka lo nu savru gi'e cfipu kei ki'u le nu lei barda cipni cu pante le nu na kakne le nu vu'irga'e le mebycy.moi kei kei e le nu lei cmalu cu nandu vasxu gi'e nitcu le nu se darxi fo le trixe i ku'i fanmo uo ije le romei cu za'ure'u zutse co djine gi'e pikci la smacu le nu di'a cusku -- GOOD
+i lu do nupre le nu cusku le citri be do sei la alis cusku e le du'u ki'u makau do xebni .y. my e gy li'u seke jmina cusku abu noi smaji gi'e terpa ru'e le nu da'i sy se xrani za'ure'uku -- GOOD
+i lu clani je'u linsi sei la alis cusku co manci catlu be le rebla be la smacu i ku'i ki'u ma do ly mi'a skicu le ka se badri li'u i abu ca'o manci la'e di'u ca le nu la smacu cu cusku ja'e le nu le abu sidbo be le rebla linsi cu simsa di'e -- GOOD
+i lu ije ge na go'i gi na cumki sei la smacu cu krixa co cladu jeke fengu mutce li'u -- GOOD
+i lu e'osai ko xruti klama gi'e mo'u cusku le lisri be fi do sei la alis kixsku li'u i lei drata cu kansa co cusku lu go'i e'ocai li'u i ku'i la smacu cu desygau po'o le stedu gi'enai depsarxe gi'e sutyze'a le ka cadzu -- GOOD
+i lu au mi na pu tavla fi la dinas sei abu sezysku co badri i no da pe viku cu nelci dy pe'i i ku'i ju'o dy xagrai piro loi mlatu pe le munje i oi doi dinas iu i'i xu mi do ba za'ure'u viska li'u i caku la alis uu co'a za'ure'u klaku ki'u le nu abu cinmo le ka mutce co nonkansa je badri ibazibo ku'i abu cu za'ure'u tirna le nu vu stapa ije abu djicni galvi'a gi'e milxe co pacna le du'u la smacu cu te sidbo fi lo drata gi'e xruti tezu'e le nu mo'u cusku le lisri -- GOOD
+i lu ua cizra sei la alis sezysku fa le nu mi selfu lo ractu i ru'a za'umai la dinas mi ba minde li'u i abu co'a se xanri loi klesi be lei cuntu be'o poi da'i fasnu i lu doi nix alis ko ca klama ti gi'e bredi le nu cadzu li'u i lu mi bazi klama doi kurji i ku'i ei mi jundi le vi kevna gi'e fanta le nu le smacu cu barkla li'u i lu ku'i ianai curmi sei la alis di'a co'e le nu la dinas cu stali le zdani va'o le nu dy co'a tai minde lei prenu li'u -- GOOD
+e minra i ca le ca krefu noda by tcita fi'o jufra lu ko mi pinxe li'u i ku'i abu gacri vimcu gi'e punji by le abu ctebi i lu ju'o ca ro nu mi pinxe ja citka da kei sei abu sezysku ba'e de poi cinri cu fasnu iseki'ubo mi ba zgana le nu le vi botpi makau gasnu i a'o ti gasnu le nu mi za'ure'u banro lo barda i mi mutce le ka tatpi le nu tai cmatce li'u -- GOOD
+i zanfu'a la alis fa le nu le cmalu ke makfa botpi ca mulno le ka ce'u makau rinka i abu ca na banro lo bramau gi'e ku'i mutce le ka tolkufra i za'a na cumki fa le nu abu boi za'ure'u bartu le kumfa iseki'ubo abu tolgei uenai -- GOOD
+i lu iseju noda va cuntu ta i ko ta vimcu li'u -- GOOD
+i lu pa carcylai no'u ba'e ma sei la alis pensi li'u i ku'i abu ze'u na senpi ibazi so'i cmalu bidju cu carvi pa'o le canko i su'oboi by darxi abu fo le flira i lu mi ti ba tolcfagau sei abu sezysku li'u i abu krixa lu le'o ko na za'ure'u co'e li'u i la'edi'u cupra lo drata ke smaji mulno -- GOOD
+i abu ja'aru'e sanji le nu abu lo cmalu grana cu lafti gi'e jarco le gerpanzi ija'ebo le gerpanzi cu plipe le vacri ro le jamfu gi'e se pluka cmoni gi'e sezre'o le garna gi'e gasnu le nu simlu le ka gunta ri ibabo la alis rivbi le nu janli kei le nu muvdu le trixe be lo barda cpinyspa i ca le nu abu tolcanci le drata mlana kei le gerpanzi za'ure'u sezre'o le grana gi'e gunro farlu seja'e le nu sutra troci le nu jgari gy ibabo la alis noi jinvi le du'u simsa lo'e nu kelci lo braxirma zi'e noi terpa lo'e nu se stapa fi le gy jamfu cu za'ure'u bajra fa'ati'a le cpinyspa i le gerpanzi co'a so'oroi ze'i gunta le grana gi'e ve'ifa'a je ve'uto'o bajra gi'e roroi rufsu bacru gi'e romai vu zutse gi'e ta'irva'u gi'e se tance le dandu be le moklu gi'e se kanla lei xadba ganlo -- GOOD
+i lu ku'i dirba ke cmalu gerpanzi sei la alis noi surla le nu vreta lo matnyxrula kei gi'e pilno lo my pezli le nu cupra lo brife cu cusku i mi mutce nelci le nu ctuca tu loi seltra va'oda'i le nu mi mapti fi le ka barda i oi mi jibni tolmorji le nu ei mi za'ure'u banro i a'a ei mi ma zukte i ru'a ei mi citka ja pinxe da i ku'i le banli preti zo'u go'i ma li'u -- GOOD
+i la alis jdice le du'u denpa kei ki'u le nu ge noda se zukte gi cumki fa le nu cy jungau abu lo se vamji be le nu tirna i cy ze'a lo mentu be li so'o ca'o damva'u gi'e na tavla i romai cy tolpolje lei birka gi'e za'ure'u lebna le nargile le moklu gi'e cusku lu ja'o do jinvi le du'u do ba'o cenba i xu go'i li'u -- GOOD
+i la alis cusku noda i abu pu tai se fapro noroi le abu nunjmive gi'e ca cinmo le nu fengu binxo -- GOOD
+i lu do ba se tcaci sei la ciftoldi cu cusku i cy punji le nargile le moklu gi'e co'a za'ure'u damva'u -- GOOD
+i la alis pensi zgana le gumri ze'a lo mentu gi'e troci co facki le du'u le re mlana cu du makau i gy prane cukla iseni'ibo le nabmi cu nadycai iku'i ca le fanmo abu tengau lei birka ru'u le gumri ve'a le selku'e gi'e popygau sepi'o ro le re xance le korbi lo cmalu -- GOOD
+i lu ua le stedu be mi cu zifre li'u se cusku la alis fi'o tonga le ka gleki poi bazi binxo le ka tepselspaji kei ca lenu facki le du'u na ka'e tolcri le janco i abu fa'ani'a catlu gi'e viska lo tcebra clani cnebo po'o noi stani simsa sanli le xamsi be fi lo ni'azu crino pezli -- GOOD
+i la alis zenba le ka cfipu ce'u iku'i abu pensi le du'u noda prali le nu jmina cusku pu lenu la tcacpi cu mo'u tavla -- GOOD
+i lu mutce vajni ba'e mi sei la alis sutra cusku i ku'i je'u mi na sisku lo'e sovda i ji'a mi roroi le du'u ja'a go'i cu na'e djica lei me do moi i mi na nelci lo'e nalseljukpa sovda li'u -- GOOD
+i ze'a lo mentu abu sanli gi'e catlu le zdani gi'e pensi le du'u ei bazi zukte makau icabo lo selfu poi dasni le manfyta'u cu bajra cliva le ricmei to abu jinvi le du'u sy selfu kei fo le nu sy dasni lo manfyta'u i abu va'o da'i na'e bo la'e di'u ca le po'o nu viska le flira cu te cmene sy zo finpe toi gi'e cladu darxi le vorme le degycidni i vy karbi'o gau lo drata manfyta'u dasni selfu noi se flira lo cukla gi'e se kanla lo barda tai tu'a lo'e plipybanfi i le re selfu sei la alis sanji zo'u le kerfa cu pumvau gi'e cukla gacri piro le stedu i abu mutce co kucli le du'u srana makau kei -- GOOD
+i la alis tai cmila mu'i la'e di'u ja'e le nu bilga le nu bajra xruti le ricmei ki'u le nu abu terpa le nu ry tirna abu i ca le nu abu cu za'ure'u mipri catlu kei ge le finpe selfu ba'o cliva gi le drata cu zutse le loldi ne'a le vorme gi'e bebna catlu fa'a le tsani -- GOOD
+i lu mi nerkla ta'i ma sei la alis sepi'o lo lauzma tonga za'ure'u retsku li'u -- GOOD
+i la selfu cu simlu le ka jinvi le du'u mapti le nu za'ure'u te pinka i lu mi ti ba zutse sei sy cusku ru'inaiku ze'a lo djedi be li so'i li'u -- GOOD
+i pidu'e boi ty zvati ju'o le vacri i la noltroni'u ji'acai cu ru'inai senci i le cifnu zo'u cy ru'i desfau senci joi kakcmoni i ro jupku'a zvati poi na senci cu du le jukpa a le barda mlatu poi zutse le fagystizu gi'e relkerlo ganra cisma -- GOOD
+lu mi na djuno le du'u lo'e tcicymlatu cu roroi gancisma i ju'o mi na djuno le du'u lo'e mlatu cu ba'e kakne lo'e nu gancisma li'u -- GOOD
+i la alis nasai nelci le tonga pe le pinka gi'e jinvi le du'u xamgu fa le nu cfagau lo drata selcasnu i le jukpa ca le nu abu troci co cuxna sy cu lebna le patxu be lo stasu le fagri gi'e co'a zukte le nu renro ro se kuspe be jy la noltroni'u ku joi le cifnu i lei fagri tirse cu pamoi ibabo jersi fa lo tansi joi palta joi palne carvi i la noltroni'u na'e jundi caji'asai le nu darxi ny i le cifnu pu ca'o tai mutce krixa ja'e le nu nalcumki fa le nu djuno le du'u xukau lei nundarxi cu crogau -- GOOD
+i la alis xanka catlu le jukpa tezu'e le nu zgana le du'u xukau jy zukte fi le nu tinbe i ku'i le jukpe cu jicla le stasu gi'e simlu le ka na jundi iseki'ubo abu di'a cusku lu cacra li revo pe'i ji li pare pei i mi li'u -- GOOD
+i la alis co'a pensi sezysku lu ei mi zukte le nu mo le vi danlu kei ca le nu mi tolcliva le zdani li'u ca le nu cy cu za'ure'u cmoni tai le ka vlile kei ja'e le nu abu xalni milxe catlu le cy flira i caku na senpi i cy zmadu najenai mleca xarju i abu jinvi le du'u le nu abu ca'o bevri cy cu fenki mutce -- GOOD
+iseki'ubo abu punji le danlu le loldi gi'e co'a mutce tolxanka le nu viska le nu dy smaji bajra fa'ane'i le ricmei i lu le cifnu roroi le du'u banro sei abu sezysku cu tolmelbi mutce verba i ku'i pe'i ta ca'a melbi xarju li'u i abu co'a pensi lo drata verba noi ke'a slabu abu gi'e da'i se xamgu le nu ke'a xarju i abu sezysku lu au djuno le du'u makau drani tadji le nu galfi da li'u ca le nu abu milxe se spaji le nu viska la tcicymlatu noi zutse lo jimca be lo tricu va lo mitre be li su'o -- GOOD
+i lu y roroi le du'u mi klama ba'e da sei la alis ciksi jmina li'u -- GOOD
+i lu ua ju'o do ca'a co'e sei la mlatu cu cusku roroi le du'u do cadzu ze'a lo banzu li'u -- GOOD
+i la alis na mutce se spaji la'e di'u ki'u le nu abu ca'o co'a se tcaci lo'e nu loi cizra cu fasnu i la mlatu ca le nu abu catlu le pu se zvati be my cu za'ure'u tolcanci -- GOOD
+i lu le do kerfa cu nitcu le nu se katna sei la mapypre cu cusku li'u i my pu ze'u mutce kucli catlu la alis gi'e ca pare'u tavla -- GOOD
+i lu na mintu sei la mapypre cu cusku i do du'i ka'e cusku le du'u lu mi viska le mi se citka li'u mintu lu mi citka le mi se viska li'u li'u -- GOOD
+i lu do du'i ka'e cusku sei la cibmasti cicyractu cu jmina le du'u lu mi nelci le mi se cpacu li'u mintu lu mi cpacu le mi se nelci li'u li'u -- GOOD
+i lu do du'i ka'e cusku sei la sipsmacu noi simlu le ka sipna tavla cu jmina le du'u lu mi vasxu ze'a le nu sipna li'u mintu lu mi sipna ze'a le nu vasxu li'u -- GOOD
+i lu oiri'e srera la'u lo djedi be li re sei la mapypre cu cusku i mi do pu jungau le du'u lo'e matne na mapti le minji sei my jmina li'u i my fengu catlu la cibmasti cicyractu -- GOOD
+i lu do roroi le du'u se slabu la temci du'i le nu mi no'a sei la mapypre cusku cu na pilno zo le le nu cmene ty i zo la mapti li'u -- GOOD
+i lu ua la'e di'u ve ciksi sei la mapypre cu cusku i ty na nelci lo'e nu darxi i ty boi roroi le nu se pendo do cu gasnu so'a se nelci be do ri'i le junla i mu'a da'i li so ca tcika le nu co'a tadni i banzu fa le nu do ja'aru'e stidi fi ty kei le nu le junla mo'u ze'i cukli'u i uo li pacipimu ca tcika le nu citka li'u -- GOOD
+i la alis na kakne le nu spuda la'e di'u iseki'ubo abu sezyse'u le nu cpacu lo tcati e lo nanba joi matne kei gi'ebabo rere'u te preti fo la sipsmacu fi lu ki'u ma my xabju le loldi be lo jintyke'a li'u -- GOOD
+i la sipsmacu za'ure'u pensi ze'a lo mentu be li ji'ire gi'e ba bo cusku lu jy satyjisra jintyke'a li'u -- GOOD
+i lu na go'i i e'o do ja'a di'a go'i sei la alis mutce cumla cusku i mi na ba za'ure'u zunti i i'a cumki fa le nu ba'e pa go'a cu zasti li'u -- GOOD
+i lu pixra ma my sei la alis noi ca'o tolmorji le se nupre cu cusku li'u -- GOOD
+i la alis na djica le nu za'ure'u cnixai la sipsmacu gi'eseki'ubo kajde ke tolsti cusku lu mi na jimpe i my cpacu lo'e satyjisra ma li'u -- GOOD
+i la sipsmacu ba'o ga'orgau lei kanla ca la'e di'u gi'e ca'o co'a sipna i ku'i sy ca le nu se tunta la mapypre cu za'ure'u cikybi'o gi'e cmalu krixa gi'e di'a cusku lu li'o ro da poi zo my pamoi lei cmene be ke'a lerfu i mu'a lo mirli terkavbu e lo mluni e lo mojrango e lo mutce i ka'u da ka'e mutce i xu do su'oroi viska lo pixra be lo mutce li'u -- GOOD
+i lu ei va'o la'e di'u do na tavla sei la mapypre cu cusku li'u -- GOOD
+i abu boi za'ure'u zvati le clani kumfa gi'e jibni le cmalu ke blaci jubme i lu e'e mi xagmau snada ca le ca krefu sei abu sezysku li'u i pamai abu jgari le cmalu ke solji ckiku gi'e telcaugau le vorme be le purdi i remai abu co'a citka le mledi noi pu punji lo spisa be ke'a le daski ku'o co'u le nu abu cenmitre li ji'icino i cimai abu cadzu pa'o le cmalu vorlu'a i ba'e romai uo abu zvati le melbi purdi gi'e jbini lei carmi ke xrula zdani e lei lenku milxe jaurjinto -- GOOD
+i lu ma krinu sei le tavla pamoi cu cusku li'u -- GOOD
+i roda ca le nu le dzupoi cu crane la alis cu sisti gi'e catlu abu i la noltruni'u cu junri cusku lu ti mo li'u i ny di'u cusku la risna nolse'u noi spuda fi po'o le nu krobi'o je cisma -- GOOD
+i ro le kelci cu kelci ca le mintu gi'e na denpa le me ky moi gi'e ru'i toltugni gi'e damba fi lei jesymabru i baziku la noltruni'u cu fengu cinmo gi'e ca'o marxa cadzu gi'e krixa lu ko le stedu ta vimcu li'u a lu ko le stedu tu vimcu li'u ji'iparoi ro mentu -- GOOD
+i la alis co'a cinmo le ka tolkufra i i'a abu za'o na damba la noltruni'u gi'e ku'i djuno le du'u ka'e bazi fasnu i lu va'o la'e di'u sei abu pensi mi mo i vi nelci lo'e nu vimcu lo'e stedu lo'e prenu i manci mutce fa le nu da stali le ka jmive li'u -- GOOD
+i lu di'u nova'e ci'u lo'e mi ka'e se cusku be va'o le nu mi cuxna sei la noltroni'u cu se pluka tonga spuda li'u -- GOOD
+i lu xu za'ure'u pensi sei la noltroni'u ca le nu za'ure'u ca'ergau le kinli je cmalu firji'o cu te preti li'u -- GOOD
+i lu roda cusku zo ei bu'uku sei la alis ca le nu masno jersi cy cu pensi i mi pu tai se minde noroi le mi nunji'e li'u -- GOOD
+i le remei cu tsebi'o i no da tavla ze'a lo mentu be li so'o i la alis pensi lu mi na jimpe le du'u ta ka'e mo'u co'e ta'i makau va'o le nu ta na co'a co'e li'u gi'eku'i tolxanka denpa -- GOOD
+i lu ko ri'urgau le tance sei la cpicinfo pu le nu la alis ka'e za'ure'u tavla cu jmina cusku li'u i la jitfa cakyrespa cu di'a co'e -- GOOD
+i lu do na mutce le ka nitcu ly sei la alis cusku va'o le nu xabju le xamsi loldi li'u -- GOOD
+i la alis na darsi le nu za'ure'u te preti la'e di'u i abu fa'a la jitfa cakyrespa cu cusku lu do cilre fi ma ji'a li'u -- GOOD
+i lu pau do cilre ca ro donri ze'a lo cacra be li xo sei la alis noi djica le nu sutra galfi le selsnu cu cusku li'u -- GOOD
+i lu la'e di'u ta'e ze'u co'e sei la cpicinfo cu zunti li'u -- GOOD
+i lu mi na djuno le du'u makau stuzi la sairpaln sei la jitfa cakyrespa cu cusku i ku'i do va'o le nu tai so'iroi viska my cu se slabu li'a le nu makau my jvinu li'u -- GOOD
+i la alis co'a tavla fi lei abu selfri pe co'a le nu pare'u viska la blabi ractu i abu milxe le ka xanka la'e di'u kei ca le cfari i le re danlu abu mutce jibni gi'e mlana i dy ganra mutce kargau lei kanla e le moklu i ku'i abu zenba le ka darsi ca le nu ca'o co'e i lei se tirna cu prane smaji co'u le nu abu pencu le pagbu pe sera'a le nu abu sitsku lu do tolcitno doi paf uiliam li'u la ciftoldi fau le nu lei valsi cu fricybi'o icaku la jitfa cakyrespa cu ze'u sakyvasxu gi'e cusku lu la'e di'u mutce le ka cizra li'u -- GOOD
+i lu roda fricybi'o sei la jitfa cakyrespa rere'u pensi cusku i mi djica le nu tirna le nu ta ca troci le nu sitsku da i ko ta skumi'e le nu co'a co'e li'u i jycy catlu la cpicinfo tai le nu jinvi le du'u cy catni la alis -- GOOD
+i lu ju'a mi di'u pu noroi tirna sei la jitfa cakyrespa cu cusku i ku'i simlu le ka nalfadni nonselsmu li'u -- GOOD
+i la alis noda cusku i abu ca'o zutse to le flira cu se sarju le xance toi gi'e kucli le du'u xukau ca de ba za'ure'u rarna fasnu -- GOOD
+i lu e'e di'a co'e le jersi pempau sei la cpicinfo rere'u naldenpa cusku i co'a co'e lu mi pagre le purdi li'u li'u -- GOOD
+i caku la alis ganse lo cizra noi cfipu abu co'u le nu facki le du'u makau fasnu i abu ca'o co'a za'ure'u barda banro gi'e pamai jdice le nu cliva le kumfa kei gi'e ku'i remai jdice le nu stali ze'a le nu le canlu cu banzu -- GOOD
+i lu ko dunda le do datni sei la noltrunau rere'u fengu cusku ija do te catrymi'e gi'u xanka li'u -- GOOD
+i lu mi gleki le nu mi viska la'e di'u sei la alis pensi i mi so'iroi tcidu fi loi karni ca le mo'u nunpai lu troci le nu xanvruzau noi bazi se rinju lei nunpai pulji li'u gi'e pu noroi jimpe le du'u makau smuni li'u -- GOOD
+i lu ije ko le stedu tu vimcu bu'u le bartu sei la noltruni'u fi pa le pulji cu jmina cusku li'u i ku'i la mapypre na ka'e se viska pu le nu le pulji cu tolcliva le vorme -- GOOD
+i lu li'a mi skudji zo tolvajni sei la noltrunau cu sutra cusku li'u i ny ca'o tolylau sezysku lu vajni i tolvajni i tolvajni i vajni li'u tai le nu cipra le ka makau pe ce'u xagmau kei lei valsi -- GOOD
+i lu mi na galtu minli li pa sei la alis cusku li'u -- GOOD
+i lu go'i li ji'ire sei la noltruni'u cu jmina li'u -- GOOD
+i lu iseju ainai mi cliva sei la alis cusku iji'a jy na fadni javni i do jy cazi finti li'u -- GOOD
+i lu lo drata datni za'o ba se jarco pe'u doi nolba'i sei la blabi ractu noi sutra plipe cu cusku i le vi pelji puzi se cpacu li'u -- GOOD
+i pamai my senva la alis i lei abu cmalu xance cu za'ure'u ca'o jgari le my cidni i lei abu carmi selci'i kanla cu catlu lei me my moi i my ka'e tirna le satci tonga be fi le abu voksa gi'e viska le cizra nu stedu desku noi se rinju le kerfa le nu gacri lei kanla i ca le nu my tirna gi'a simlu le ka tirna cu jmive binxo ru'usai my fa lei cizra tigni be le se senva be le my cmalu mensi -- GOOD
+i le clani srasu cu vruvricypra bu'u lei my jamfu ca le nu la blabi ractu cu sutra klama i la smacu noi terpa cu jacre'o pagre le jibni la'ucma i my tirna le sance be lei tcati kabri ca le nu la cibmasti cicyractu cu kansa lei cycy pendo le ze'e nu sanmi i le cpina voksa be la noltruni'u cu minde fi le nu lei ny malselfu'a vitke cu se catra i le xarju cifnu cu za'ure'u senci ga'ure'o le cidni be la noltroni'u ca le nu loi palta ku joi loi palne cu sruri porpi i za'ure'uku le selkrixa be la cpicinfo le snamli be le tanbo pinsi pe le rebyrespa le se zunva'u be lei smacrkobaiu zo'u le romei cu se tisna le vacri gi'e jorne le darno kaksna be la tolgeitce ke jitfa cakyrespa -- GOOD
+fa'o -- GOOD
+si -- GOOD
+si -- GOOD
+for sure -- GOOD
+ije no da ka'e livbai lo tolclite prenu -- GOOD
+doi pau,l do pu zi mo -- GOOD
+si -- GOOD
+zo xau cu rafsi zo xamgu -- GOOD
+si si si si -- GOOD
+sa -- GOOD
+le lojbo zo irk zei seljmaji vreji cu selstuzi la'e zoi ibu http://home.uten.net/arj/lojban/lojban.html ibu -- GOOD
+sa -- GOOD
+sa -- GOOD
+sa -- GOOD
+si -- GOOD
+si -- GOOD
+pei ma fasnu vi do? -- GOOD
+si -- GOOD
+le cmima be le lojbo mriste ca 204mei -- GOOD
+mo vi do? -- GOOD
+ije do ca mo -- GOOD
+sa -- GOOD
+sa -- GOOD
+si eduard -- GOOD
+sa -- GOOD
+sa -- GOOD
+sa -- GOOD
+sa -- GOOD
+mi na djuno ty my -- GOOD
+sa -- GOOD
+za'a do pilno by xy noi me la iuniks semselpla -- GOOD
+sa -- GOOD
+xyby ly ty cu cmene lo cfila be lo skami -- GOOD
+xyby ly ty cu cmene lo minde notci be lo skami -- GOOD
+so'o skami cu jarca le ka se cfila kei pe cyby ly ty -- GOOD
+sa -- GOOD
+si -- GOOD
+sa -- GOOD
+xybulyty cu skami midnoi lo siste be lo samru'e -- GOOD
+xybylyty poi skami midnoi cu rinka le nu lo skami cu sisti le nu kanji -- GOOD
+la linuks troci le nu pilno be xybylyty -- GOOD
+ganai la linuks cu pilno xybylyty poi cfila gi la linuks cu fliba -- GOOD
+ma cfila xybylyty poi se cfila -- GOOD
+sa -- GOOD
+mo vi do? -- GOOD
+xu do terpa la jbofi'e? -- GOOD
+le cmima be la jbosnu ca 19mei -- GOOD
+xu do pu pluka sipna? -- GOOD
+sa sa -- GOOD
+.i xu do tavla fo la lojban? -- GOOD
+sa -- GOOD
+sa -- GOOD
+mo vi do? -- GOOD
+xu do zvati la .austin.? -- GOOD
+sa -- GOOD
+sa -- GOOD
+xu do jundi? -- GOOD
+.i ma fasnu vi do? -- GOOD
+si -- GOOD
+sa -- GOOD
+sa -- GOOD
+xu do jundi? -- GOOD
+zbasu la debi,n -- GOOD
+.ui mi pilno la debi,n -- GOOD
+sa -- GOOD
+mi la xod simsa le ka remna ce le ka lojbo ce le ka nakni -- GOOD
+sa -- GOOD
+sa .i doi Taliesin xu do ba gunka -- GOOD
+cicoi -- GOOD
+sisi -- GOOD
+sa -- GOOD
+sa -- GOOD
+not sure -- GOOD
+risna ritli ? -- GOOD
+Not sure -- GOOD
+kufrabu -- GOOD
+sa -- GOOD
+sisisi -- GOOD
+sa -- GOOD
+sa -- GOOD
+sa -- GOOD
+sa -- GOOD
+le mi xadni se cortu? -- GOOD
+sa -- GOOD
+sa -- GOOD
+sisi -- GOOD
+sa -- GOOD
+sa -- GOOD
+su -- GOOD
+su -- GOOD
+sa sei ji'a mi tolmorji lo 1moi tergismu be zo fenki -- GOOD
+sa -- GOOD
+sa -- GOOD
+not sure -- GOOD
+to mi nelci le tercru be me'e bysydy .e xypapa -- GOOD
+zfire du ma -- BAD
+sa -- GOOD
+sa -- GOOD
+not sure -- GOOD
+2do jai fenki -- GOOD
+zo 1 na sutra zmadu zo pa -- GOOD
+.u'i nypyry cu cusku lesedu'u le xindo cu cusku lesedu'u le kisto soi xy cu ca sarji le terpa sonci -- GOOD
+ma smuni zo xoi -- GOOD
+xu do du zo fracture? -- GOOD
+sa -- GOOD
+sa -- GOOD
+sa -- GOOD
+si ky -- GOOD
+doi xod xu do troci le nu citka le manti .enai le cakla? -- GOOD
+sa -- GOOD
+si -- GOOD
+sa -- GOOD
+jesi -- GOOD
+jejejesisisi -- GOOD
+si -- GOOD
+yyy -- GOOD
+linsi ke lerfu datni ? -- GOOD
+si -- GOOD
+sa -- GOOD
+.ino'i mi se bunre je clani kerfa .iseki'u ko sisku tu'a le bunre je clani se kerfa -- GOOD
+sa -- GOOD
+sa -- GOOD
+sa -- GOOD
+sa pu tcidu da poi srana le terfrica zo y'ybu zo xy -- GOOD
+sa pu tcidu da poi srana le terfrica be zo y'ybu bei zo xy -- GOOD
+mi klama la'e zoi gy. Las Vegas .gy. fu le vinji ca le bavlamdei mu'i lenu viska lenu le bruna po mi cu jernykulpikta kei kei -- GOOD
+Not sure -- GOOD
+sa -- GOOD
+sa -- GOOD
+sa -- GOOD
+sa -- GOOD
+sa -- GOOD
+sa -- GOOD
+sa -- GOOD
+sa -- GOOD
+si .gy -- GOOD
+sa -- GOOD
+sa -- GOOD
+sa -- GOOD
+si -- GOOD
+sa -- GOOD
+si -- GOOD
+sa -- GOOD
+sa -- GOOD
+sa -- GOOD
+not sure -- GOOD
+not sure -- GOOD
+sa -- GOOD
+surely -- GOOD
+not sure -- GOOD
+sa -- GOOD
+sa -- GOOD
+sa -- GOOD
+sa -- GOOD
+sa -- GOOD
+sa -- GOOD
+not sure... -- GOOD
+sa -- GOOD
+le samselpla zvati zoi gy http://tripoint.org/lucern/ gy -- GOOD
+xu do djica lenu se pilno zoi gy latex gy -- GOOD
+sa -- GOOD
+ca le ma jetfu ku? -- GOOD
+zo mu'ei cizra -- GOOD
+sa -- GOOD
+si -- GOOD
+.iepei zo mu'ei -- GOOD
+mi punai je canai jimpe zo mu'ei -- GOOD
+si si -- GOOD
+to toi ? -- GOOD
+not sure -- GOOD
+le mi skami cu na kakne lenu viska la'o .gy http://www.lojban.org/ .gy -- GOOD
+sa -- GOOD
+sa -- GOOD
+sa -- GOOD
+sa -- GOOD
+sa -- GOOD
+sa -- GOOD
+sa -- GOOD
+zoi ky hmm ky mo -- GOOD
+sa -- GOOD
+si si -- GOOD
+.ue noda pu pante tu'a le nalca'ima'o po zo xoi -- GOOD
+la'oxy. paloi .xy -- GOOD
+.i xu do na'eka'e vreji da poi zmadu li 5000 le linjylai -- GOOD
+bai gubni ? -- GOOD
+not sure -- GOOD
+not sure -- GOOD
+bau la lojban! -- GOOD
+girzu denpa ? -- GOOD
+not sure -- GOOD
+sa -- GOOD
+coi tomasso .i xu mi pu penmi do -- BAD
+ije baziku mi cliva .i co'o rodo -- GOOD
+ma xe fanva la'o gy. keywords .gy le glico le lojbo -- GOOD
+si kiril -- GOOD
+lu li nynyny cu fonjudri mi i e'u do .... -- GOOD
+mi 33ce'imei mulno lenu fanva le gimste -- GOOD
+xu le midju prenu pe le 28moi cu tcidu le xunre cukta -- GOOD
+not sure -- GOOD
+sa -- GOOD
+sa -- GOOD
+susu -- GOOD
+sa -- GOOD
+not sure -- GOOD
+lojban. bilga lenu zmadu fileka pilno te valsi lo se smuni be la'ogy. good .gy noi frica -- GOOD
+su -- GOOD
+sa zo djet -- GOOD
+sa -- GOOD
+sasa -- GOOD
+le no zei cukta ? -- GOOD
+sa mi na jimpe le terckini be la nomoi bei le remoi bei du'o do -- GOOD
+ma xelfanva fe zoi gy. AKA/also-known-as .gy. -- GOOD
+ma xelfanva fe zoi gy. AKA/also-known-as .gy. -- GOOD
+sa -- GOOD
+xu fetsi jijnu? -- GOOD
+le malcrida cu citka le ruxse'i be le prenu poi pilno zoi mabla / mabla -- GOOD
+si bancus. -- GOOD
+not sure -- GOOD
+not sure -- GOOD
+sa -- GOOD
+do su -- GOOD
+sa -- GOOD
+me le pare traji tsali nanmu moi ? -- GOOD
+sa -- GOOD
+i ma valsi zoi gy Iranian/Persian/Farsi gy -- GOOD
+mi se xrani di'o zyjy -- GOOD
+le le gerku ku ni blanu ? -- GOOD
+le ni blanu? -- GOOD
+doi xod. do jinvi ma le pu jufra pe zo xoi -- GOOD
+sa -- GOOD
+yyyyyy -- GOOD
+sa -- GOOD
+sa -- GOOD
+sa mi .e la avital pu sojypa'a le nu do fonxa benji fi abu. -- GOOD
+sa -- GOOD
+.i no'i le nu co'a tadni cu mukti fi mi fe le nu mi zenba le ka lojbo certu ja'e le nu cumki fa le nu le cuntu nunpensi'u cu te bangu fi la lojban. po'o -- GOOD
+.i sa -- GOOD
+mu'i ma do cusku zo abu. .enai zo gy. -- GOOD
+xu do mo'u tcidu ro le caza mrilu poi casnu zo xoi -- GOOD
+si ius -- GOOD
+ko sarji le finprweili .i -- BAD
+but sure -- GOOD
+.ija da poi kelci zo'u ra ka'e denpa lonu da cusku zoi gy. done .gy -- GOOD
+zo radni cu valsi mo(?) -- GOOD
+xu 2moi jufra -- GOOD
+sa -- GOOD
+sa -- GOOD
+sa -- GOOD
+not sure -- GOOD
+sa -- GOOD
+sa -- GOOD
+sa again -- GOOD
+sa -- GOOD
+not sure -- GOOD
+si -- GOOD
+to la xod. na tugni gi'e cusku le merko zei zo .y. toi -- GOOD
+.i xu do nelci lo zu'o pilno zo .e zo kei noi cusku zo lu .e zo li'u -- BAD
+sa -- GOOD
+sa -- GOOD
+sa -- GOOD
+le mi ni temci cu na banzu ? -- GOOD
+sa -- GOOD
+si -- GOOD
+sa doi lojbab -- GOOD
+sa -- GOOD
+sa -- GOOD
+djuno fi le smuni zo jy ? -- GOOD
+djuno fi le selsinxa zo jy ? -- GOOD
+not sure -- GOOD
+si -- GOOD
+sa -- GOOD
+sa -- GOOD
+su -- GOOD
+le nu le do xabju lifri cu xmagu cu cumki -- BAD
+ko se bangu la raizenban noi traji fi piroi loi bangu fe le ka zenba le ka xokau da se bangu ce'u .i ko na se bangu la lojban noi morsi je klama be noda bangu -- GOOD
+sa -- GOOD
+not sure -- GOOD
+leka simsa ma? -- GOOD
+sa -- GOOD
+tadji ro da fa ...? -- GOOD
+zoi gy. 60 gy. se smuni ma -- GOOD
+sa -- GOOD
+.ino'iji'a pa makcu nixli cu pleji fi mi lenu kelci ki'u lenu te cusku fe lesedu'u mi xamgu to malglico toi kelci -- GOOD
+si kouan -- GOOD
+su -- GOOD
+mi casnu fa la xod. le lojbo skamruebe .e lylygy. -- GOOD
+ok sure -- GOOD
+sa -- GOOD
+sisasu -- GOOD
+si -- GOOD
+sa -- GOOD
+i no'i mi na cpedu le nu fanva sidju i mi djica le nu da tcidu -- GOOD
+sa -- GOOD
+su -- GOOD
+liks rosu -- GOOD
+pante fi cyvy -- GOOD
+xu ianai le za'i le masno mrilu na se spuda kei namcu li 4 -- GOOD
+sa -- GOOD
+13.1) mi nelci le ctuca -- GOOD
+.i mi nelci le sidbo .iku'i mi djica lenu frica je pensi zmadu .i mi pensi le mi cmene gi'e pilno le pamoi cmene ce le pamoi lerfu pe le romoi cmene .iku'i mi jai fatne le lerfu -- GOOD
+ja'o zoi zoi Seqram zoi valsi no da le banrtlinganu -- GOOD
+.i ja'ebo xu zoi zoi Seqram zoi sinxa le ka tolvai me le terda korbi -- GOOD
+13.3) mi na pu klama le zarci -- GOOD
+sa -- GOOD
+y sa -- GOOD
+yyy -- GOOD
+sa -- GOOD
+sa -- GOOD
+sa -- GOOD
+sa -- GOOD
+lo tfi'inki mo -- BAD
+su -- GOOD
+ni'o le mo'ini'a skiji ve jinga klesi cu vomei syly. ce gysy. ce sygy. ce gy.y'y. -- GOOD
+y .i pa da zo'u xu za'ure'u benji da do -- GOOD
+sa -- GOOD
+sa -- GOOD
+sa -- GOOD
+sa -- GOOD
+si le gaimoi cacra -- GOOD
+sa ca le gaimoi cacra -- GOOD
+sa -- GOOD
+sa -- GOOD
+si xod. -- GOOD
+mi na nelci zoi gy. s/// gy. ca le nu mi cusku bau la lojban. -- GOOD
+sa -- GOOD
+.i zoi gy. what's new? .gy. xe fanva le preti be fi mi -- GOOD
+sa i -- GOOD
+catlu le ta dakfu ? -- GOOD
+catlu le drata dafku ? -- GOOD
+se vasru ? -- GOOD
+pamoi paxamei lo dacti ? -- GOOD
+ko pensi noda pe ko'a! -- GOOD
+pamai cpacu ..? -- GOOD
+not sure -- GOOD
+se pilno canlu? -- GOOD
+lenu te setca? -- GOOD
+not sure -- GOOD
+7.1) mi klama pamai le zarci .e remai le zdani -- GOOD
+not sure -- GOOD
+se ctuca fi le nu kelci ? -- GOOD
+13.6 mi puba klama le zarci -- GOOD
+13.7 mi ba klama le zarci puku -- GOOD
+13.8 mi bapu klama le zarci -- GOOD
+si -- GOOD
+6.6) re prenu viska mi -- GOOD
+6.7) re da poi prenu cu viska mi -- GOOD
+ro da voi djedi li 3 vau ro de voi brode vau ro di voi brodi zo'u ca da de cinba di -- GOOD
+ro da voi broda vau ro de voi djedi li 3 vau ro di voi brodi zo'u da ca de cinba di -- GOOD
+pa da voi broda vau pa de voi djedi li 3 vau pa di voi brodi zo'u da ca de cinba di -- GOOD
+pa de voi djedi li 3 -- GOOD
+pa da voi djedi li 3 vau pa de voi brode vau pa di voi brodi zo'u ca da de cinba di -- GOOD
+3 le me zoi gy. unicorns gy. cu te pixra fi mi -- GOOD
+palci ke fukpi se curmi ? -- GOOD
+se bangu mi?! -- GOOD
+xa xi xa xi xa -- GOOD
+sa -- GOOD
+pajnyxau kakne ? -- GOOD
+.i cusku zoi zo. ~/.unix/quotes .zo. -- GOOD
+cmima da poi kancu da li 1 -- GOOD
+su -- GOOD
+doi .odogwus. le nu mi co'a djuno fi do kei traji pluka mi -- BAD
+sa -- GOOD
+sisi -- GOOD
+si -- GOOD
+sa .i zo'o .ai binxygau do lo nelci be la dydyrys. -- GOOD
+mi na jimpe zo mu'ei -- GOOD
+to mi pu finti le bi'u notci poi troci co ciksi tu'a zo mu'ei toi -- GOOD
+16.8) mi pugi klama le zarci gi klama le zdani -- GOOD
+sa la ouebe'osting -- GOOD
+sa -- GOOD
+sa -- GOOD
+sa -- GOOD
+.i le si'o munje poi srana zo mu'ei cu tavla fi loi tamsmi be loi jetnykai pe ra -- GOOD
+.i le si'o munje poi srana zo mu'ei cu cmacykai -- GOOD
+si -- GOOD
+sa -- GOOD
+su -- GOOD
+ije mi pensi le nu la kasparof dutsanji pensi za'u re snidu muvdu -- GOOD
+xu do kakne lenu jimpe? -- GOOD
+mi djica ?? nu mi limna -- GOOD
+.i ma xe fanva zoi zo. apprehension .zo -- GOOD
+.i do djuno fi ma poi danlu? -- GOOD
+.i lorxu xoda? -- GOOD
+.i xu do se bangu lo porto? -- GOOD
+.i do cilre ledu'u zoi py. laranja .py se smuni ma kei ma? -- GOOD
+Not sure. -- GOOD
+si -- GOOD
+si -- GOOD
+si -- GOOD
+si -- GOOD
+No. -- BAD
+le mela'ogy. irc .gy nuncasnu be la lojban. mi pu za co'u cinri -- GOOD
+vi ku baza co'a 2003moi nanca -- GOOD
+.i no'i le nu my. cu dunda mi le cizra se dundu cu cafne je lakne -- GOOD
+le lojba malcinse? -- GOOD
+sa -- GOOD
+sa -- GOOD
+le skami tcana? -- GOOD
+mi pu tcidu lo stuzi papri me zoi ly http://escribe.com/science/keelynet/m13909.html ly -- GOOD
+da'a2da bangu mi -- GOOD
+le ba'o selsku be mi zo'u 1da poi na slabu mi pu nalgubni benji fi mi -- GOOD
+si -- GOOD
+si -- GOOD
+ije la daltn speni lo drata be la robin vau xu -- GOOD
+le remna besetai lo (?) danlu -- GOOD
+la jegvon cu cevni le xriso joi le xebro joi le muslo -- GOOD
+si -- GOOD
+si -- GOOD
+sa -- GOOD
+sa -- GOOD
+doi frac. .a'osai byfy. baza cikre lo lojbo nabmi -- GOOD
+.i no'i ny. na cafne tugni la .and. .iku'i ny. djica le nu la .and. cu lojbo girsu cmima -- GOOD
+sa -- GOOD
+si xod. -- GOOD
+doi tsali staticfree.info -- BAD
+na go'i .i mi na pilno le se nitcu skami ciste poi srana la'o gy. winamp .gy. -- GOOD
+si -- GOOD
+si cein. -- GOOD
+sure i do -- GOOD
+sa -- GOOD
+i ponse lo tcica se samymri pe 7 le fi'ortu'a gugde -- GOOD
+sa -- GOOD
+zo broda basti zo brode ? -- GOOD
+ma lojbo daptutra? -- GOOD
+si -- GOOD
+1200000 le prenu pu fonxa jdice -- GOOD
+si grins. -- GOOD
+sa coi norpan -- GOOD
+si grins. -- GOOD
+lei su -- GOOD
+sei su -- GOOD
+noda .iku'i zoi gy weasel gy simsa valsi fi le glibau -- GOOD
+sa -- GOOD
+.i .ui mi puzu mutce nelci gi'e certu vau le nu dasu -- GOOD
+xu blanu danmo? -- GOOD
+.i pamai jmaji le plibu taxfu .i remai mo .i cimai prali .ui! -- GOOD
+si fault. -- GOOD
+sa oi cliva -- GOOD
+si -- GOOD
+sa .i lenu sipna kei .enai lenu cilre la lojban cu selsurla -- GOOD
+sa -- GOOD
+su -- GOOD
+not sure -- GOOD
+.ue .i ca tcika li 19 pi'e 46 .ije le zdani bartu cu se gusni -- GOOD
+si top. -- GOOD
+sa jimpe fi la lojban -- GOOD
+sa le mi fukpi be la leming. -- GOOD
+xu le banrglico cu 1moi bangu do -- GOOD
+le cteki prije me sy. ka'e pleji 0 ni cteki -- GOOD
+sa -- GOOD
+yyyyyy -- GOOD
+sa -- GOOD
+sa -- GOOD
+.yyyyy. -- GOOD
+mi facki zoi gy http:<snipped> gy. .iku'i mi na djuno le za'i da pilno le melbi batke -- GOOD
+sa la suitserland -- GOOD
+.i mi joi la robin. pu tai tavla .ije mutce leka cinri -- GOOD
+bau le glico? -- GOOD
+cmini mi ki'e! -- GOOD
+i'e zo zoi -- GOOD
+y y yki'a -- GOOD
+not sure -- GOOD
+slilu li 2600 -- GOOD
+doi le jatna pe byfy -- GOOD
+ije mi ca zvati le 2moi loldi -- GOOD
+sa ry. xi re -- GOOD
+sa -- GOOD
+la djisus. zei malgletu -- GOOD
+.iosai la .iahugrups. ca na te benji le mi mrilu -- BAD
+sa -- GOOD
+ca ku su'o 2 lojbo selsanga cu zasti -- GOOD
+.i.uu mi na cazi ze'a stali .i tcika fa li 02 vi la melbn -- GOOD
+.i mi ze'a lo cacra be li 5 cu danfysku loi slemri pe le lylygy trukamni -- GOOD
+.i zoigy. eimi metamorfoumenos gy. cu mleca fo leni cizra -- GOOD
+.i le nuncasnu be le turni kamni beisera'a loi tergalfi be le turni javni be lylygy -- GOOD
+.i mi ckire do doi tsali mu'i tu'a ledo selgunka pe bypyfyky -- GOOD
+poi lei lojbo cu facki ze'a lepuzi nanca be li 10 -- GOOD
+ca le cfari be lo nanca 10mei poi caku fanmo ku zo'o -- GOOD
+.i co'a la 1997 la djankau,n cu sisku lo cnino cmavo poi cusku leni darno kei zi'e poi lidne lo sumti -- GOOD
+.i mi ji'a xenru lenu mi xaksu lo cacra be li 5 tu'a la'edi'u -- GOOD
+su -- GOOD
+tavla vicu'u ma .i xu do djuno la'o gy. Lojbanic Phone List gy. -- GOOD
+le nu selcme be le mlatu zo'u pluja .ije na selkei ca le nalgundei! -- GOOD
+ui ca le prulamji xabdei ku le mluni cu jbini le solri joi le gugdrnorge -- GOOD
+i pe'i le mumoi cu se detri li 1993 -- GOOD
+i va'o le nu mi drani kei le pamumoi cu se detri li 2003 -- GOOD
+i li 2003 cu detri le pamumoi ke lojbangirzu nunpenmi -- GOOD
+xu do tavla la glico? -- GOOD
+doi jaden mi co'a jbopre ca le nu mi nanla lo 16 nanca -- GOOD
+la'e de'u cu cabna le 1997moi nanca -- GOOD
+xu do tavla fu le glico? -- GOOD
+.ie do tavla le glico .i mi pu tavla do ! -- GOOD
+pei mi tavla fo la lojban? -- GOOD
+yyy. ije ge'e -- GOOD
+xu do tavla fo la glico? -- GOOD
+si -- GOOD
+le rusko .e la'o gy. Greek .gy .e la'o gy. Latin .gy .e le drata -- GOOD
+ma ticta ti? -- GOOD
+ma tcika ti? -- GOOD
+sa -- GOOD
+ije -- GOOD
+.ije e'o pei do -- GOOD
+7.9) le cukta be'u cu zvati ma -- GOOD
+14) do .i'anai na xruti do le zdani -- GOOD
+su -- GOOD
+ijeku'i lenu cilre le turnycuxna saske cu pagbu le jibri -- GOOD
+doi xorxes. .o'ocu'i do na pilno zoi gy. utf-8 gy. -- GOOD
+i mi na djuno fi zoi gy utf-8 gy -- GOOD
+.iku'i mi cilre fi ro da po la'o gy. utf-8 gy. zi'e poi mi djuno vau la taliesin. -- GOOD
+su -- GOOD
+sa -- GOOD
+la .paypal. ca morsi xu -- BAD
+lo mi palku pu cilmo lo djacu? -- GOOD
+ma nuzba lojbo? -- GOOD
+i zoi gy wow gy ki'a -- GOOD
+si easier. -- GOOD
+mi cando se tirna ? -- GOOD
+sa i mu'i ma li'o -- GOOD
+xu do tavle fo la klingon? -- GOOD
+si god. -- GOOD
+lemme make sure. -- BAD
+pau xo ma mo xu? -- GOOD
+y sa -- GOOD
+mi pu je ba zu cu zasti ? -- GOOD
+.i do se bangu ma? -- GOOD
+.i ro ckini be lo'e fipydaklycpi go'i xu? -- GOOD
+lo'e sezga'o ka'e se saurze'a le ba speni be vo'a? -- GOOD
+lo bluroi cu vasru pixo tirse? -- GOOD
+mi ponsi pa mela'ogy .sig gy po'u lu do du le jamna pinji li'u becu'u do -- GOOD
+ok sure -- GOOD
+lonu spebi'o cu nandu xu lo'e sezga'o? -- GOOD
+lonu spebi'o cu nandu xu lo'e sezga'o? -- GOOD
+ije da na'e sezga'o -- GOOD
+sa i lonu go'a noda jetnu -- GOOD
+sa i lonu go'a ku noda jetnu -- GOOD
+.i xu do ponse lo veltivni? .i mi nago'i -- GOOD
+.i sepi'o xavo jetka'u xu? -- GOOD
+Not sure. -- GOOD
+mi ka'e frili cusku le barda namcu! -- GOOD
+ma cmene le vrici veltcika le lojbo? -- GOOD
+i je mi na'e xamgu tcidu le pamoi selsku be do i ja'e mi pensi lonu mi tcidu lo'u i mu'i ma do rinsa le'u enai lo'u i mu'i ma do do rinsa le'u -- GOOD
+sa i ja'e mi jinvi lonu mi tcidu lo'u i mu'i ma do rinsa le'u enai lo'u i mu'i ma do do rinsa le'u -- GOOD
+si si re'i rab. -- GOOD
+.oiru'e mi mutce pilno zoi gy. Aaaah. gy. -- GOOD
+si bot -- GOOD
+viva la revolution -- GOOD
+.i du'o mi lo sodnynanba do la'o gy. soda bread .gy .i za'a du'o do du la'o gy, salt-rising bread gy -- GOOD
+mi pu gasnu si y ganse lenu claxu do -- GOOD
+si griz -- GOOD
+i mi na birti le du'u zo zo'oi ka'e se pilno -- GOOD
+mi puza finti zo zo'oi .iku'i mi ji'a na birti -- GOOD
+ma valsi zo zo'oi pau -- GOOD
+mi srera i ma se valsi zo zo'oi -- GOOD
+zo zo'oi cmavo be zo sitna pa valsi po'o -- GOOD
+sa -- GOOD
+sa xu cy noi ka'e li'o vizyzva -- GOOD
+na'ebo le jenmi cu jai ciste ji'u li 24 -- GOOD
+sa -- GOOD
+le sinxa cu sinxa le smuni ? -- GOOD
+yyyy -- GOOD
+.i do mi ????? ko mi denpa penmi nandu -- GOOD
+le nu mi kelci la'o gy. civilization 4 .gy -- GOOD
+i zo bliku srana zoi gy regular gy ma -- GOOD
+si si fi zo vi .i ko viska zoi zy http://lojban.org/publications/wordlists/ zy -- GOOD
+sa -- GOOD
+la logfest.? sure -- GOOD
+lu reltenfa dubmekso li'u xe fanva zoizoi. quadratic equation .zoi -- GOOD
+.i le danfu cu zvati le 455moi papri be le cukta -- GOOD
+.i le 17pi'e6moi pe le mekso pagbu -- GOOD
+.i .e'u ko stidi zo'e byfy -- GOOD
+mi djica le nu finti le samru'e poi tutci le nu binxo fa loi mekso la'o gy. LaTeX gy -- GOOD
+bu'u ry. li 0800 tcika -- GOOD
+.ija'ebo le cabdei cu 5884moi be lo'i lojbo djedi -- GOOD
+sa -- GOOD
+sa la lojyfest se detri ma -- GOOD
+lei ze prenu cu zemoi le'i prenu ? -- GOOD
+zvati la'o gy. Herdon, VA gy. to mi sruma le du'u do cusku tu'a la jbosalci doi grai,uivern. toi -- GOOD
+si -- GOOD
+sa -- GOOD
+roda poi jufra su'o2de poi selkei zo'u 1de sisku su'o selsre po'u da -- GOOD
+ti gerku la'o gy whippet gy -- GOOD
+si si si -- GOOD
+to be nomade? -- GOOD
+si xod -- GOOD
+i xo xabju xo mela'ogy channels gy -- GOOD
+sa i do xabju xo mela'ogy channels gy -- GOOD
+i mi xruti rere'u -- GOOD
+.imu'ibo le jai ca broda cu 1re'u sarcu zo xanto -- GOOD
+.uanairu'e .i mi na ckaji la'ezoi gy post-graduate gy -- GOOD
+i mi xruti rere'u -- GOOD
+ije mutce nu gleki -- GOOD
+sisi coi grizis -- GOOD
+i don't sure -- GOOD
+.i fatci .i le nanmu pu jerna le rupnu be li 100 000 tu'a lo slasi tatru -- GOOD
+go'i ze'u lo nanca be li 1 -- GOOD
+mi gunka cilre tu'a la'o gy. 3-DNS gy. -- GOOD
+si cikagos. -- GOOD
+sisisisisisisisisi ne'i la bolingbruk. -- GOOD
+si si si -- GOOD
+zo xa'i -- GOOD
+iju mi se go'i le skami -- GOOD
+sa -- GOOD
+kalci se rinci? -- GOOD
+si -- GOOD
+la'o gy seperanto gy u'i -- GOOD
+mi pu'o zbasu la linuks. pe zoi gy, 2.6.0test2 gy. -- GOOD
+ti'e ko'a ne li 2.6 cu mutce sutra -- GOOD
+ice -- GOOD
+tu'a zoi gy http://www.zompist.com/sounds.htm gy tolbanzu -- GOOD
+sa da'i mi se jbonunsla .ijanai mi jai gau pixra fa lo so'imei -- GOOD
+side by side -- GOOD
+.i co'o .i mi ca viska la'o gy. Mothman Prophecies gy. .uunaise'i -- GOOD
+sa -- GOOD
+sa -- GOOD
+coi roto -- GOOD
+si carbon -- GOOD
+ba'o vi klama? -- GOOD
+sa tu'a la mumym nuzba -- GOOD
+sa -- GOOD
+djedi li 6 -- GOOD
+sa -- GOOD
+sa ko ko ctuca fo la lojban -- GOOD
+i za'a la mumym la'ozy #mumym zy na zvati -- GOOD
+.uisai la'o gy http://www.devilwhiskey.com/main.html gy cu ponse le za'e mupli samru'e -- GOOD
+si -- GOOD
+xu do djisku zo le gi'enai djisku zo la? -- GOOD
+sa -- GOOD
+mi morji ji'i 750 loi gismu -- GOOD
+no'i spuda fi noda ni'i tu'a li 0 -- GOOD
+ca le reldjedi ko tavla fi'o simsa le bloti zerle'a to zoi url. http://www.talklikeapirate.com/ .url toi -- GOOD
+ma pe'a kevna byfy doi clsn -- GOOD
+na'i go'i .i li 2 na cenba -- GOOD
+i do cu vanci lo ba panje xusra? -- GOOD
+.i ni'o mi mutce jai mukti le nu cirke la tikik fai le nu mi cikre le ralju samselpla vreji -- GOOD
+.i ni'o ki'e le nu do mrilu -- GOOD
+xu pe'a vi cnino jbopre? -- GOOD
+birka jo titnanba? -- GOOD
+bongu xu julne doi norpan? -- GOOD
+si si -- GOOD
+sa -- GOOD
+mi mukti le nu le cicpre cemlanzu cu bajra kei ? -- GOOD
+doi robin xu do facki le se skudji be la jemna? -- GOOD
+mi pu cilre xono le cmavo ? -- GOOD
+mi pu cilre xo xano loi cmavo? -- GOOD
+va'o ma le se mrilu poi gau muvdu fo la'o gy, procmail .gy. cu canci secau lenu nunsrera te vreji -- GOOD
+.ui la rab cu sidju mi sera'a byfy -- GOOD
+baupla kuzyfamni xu? -- GOOD
+si si -- GOOD
+ije tcaci -- GOOD
+so'i lo vi prenu cu bilma fi la'o gy. cold gy. ju'oru'e -- GOOD
+le ui zei coi nadu le ui zei cai -- GOOD
+cerni tatpi xu? -- GOOD
+.ije xu do pilno la vim. -- GOOD
+si -- GOOD
+se pluka lunu pensi ??? -- GOOD
+le vi santa? -- GOOD
+coi coi coi!!! -- GOOD
+ca le ro djedi poi mi xamgu ku ??? -- GOOD
+.i bai lonu ciska lo'u ko le do se mipri le le'u vi la gugltak no'u zoi .zoi. http://douweosinga.com/projects/googletalk .zoi. ku gy cusku lo pemci pe la maiky'elsym po'u la me la .sapir. .uorf. -- GOOD
+i xu da mi tirna? -- GOOD
+mi stati ledu'u mi ciska ? -- GOOD
+le temci be le mi gunka cu kuspe le nomoi cacra ce'o le bimoi cacra -- GOOD
+lenu broda gi'a brode gi'a brodi kei cu zemucu'o? -- GOOD
+9.2 le gerku goi gy. cu xekri .i gy. klama le zdani -- GOOD
+sa -- GOOD
+.ije doi tal .oi le li re pi vo pi re re samru'e krasi poi mi ca pilno vau po la debi'an cu ba'e na vasru le snura se cikre -- GOOD
+si ie -- GOOD
+na ro'o stuzi pagbu ? -- GOOD
+na merli ? -- GOOD
+sa -- GOOD
+ije ro tansi cu na se fenra .i ku'i ro vimstizu cu go'i -- GOOD
+mi xruti ba lo mentu be li 1ji'i5 -- GOOD
+do xamgu xu? -- GOOD
+la'o gy. exam .gy pe lo ckule cu smuni ma poi lojbo? -- GOOD
+for sure -- GOOD
+si -- GOOD
+.y. su -- GOOD
+pe'u tsali ko gunka tu'a byfy -- GOOD
+doi tal xu do viska le mi puzi selrmi po byfy -- GOOD
+si si -- GOOD
+sa -- GOOD
+da lo minra? -- GOOD
+6.2 le poi blabi ku'o gerku cu klama -- GOOD
+4.2 loi ratcu -- GOOD
+4.3 lo'i ratcu cu barda -- GOOD
+4.3 lo'i ratcu cu barda -- GOOD
+coi rodoi -- GOOD
+pe'ipei ei mi co'a finti le mi pagbu be le me bypyfyky moi -- GOOD
+.iku'i le do pagbu cu na sarcu le ca se gunka po byfy -- GOOD
+xu xamgu le ka certu? -- GOOD
+lo'u mi le'u co le'u si si klama -- GOOD
+.i so'i prenu cu pilno la'o gy lojban.org/jbovlaste/ gy -- GOOD
+si -- GOOD
