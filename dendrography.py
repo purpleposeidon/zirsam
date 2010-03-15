@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import sys
-#sys.setrecursionlimit(2000)
+sys.setrecursionlimit(2000)
 #sys.setrecursionlimit(1000) #The default on my system
 import io
 
@@ -242,8 +242,19 @@ class GrammarParser:
 def parse(string):
   main(Stream(Configuration(stdin=io.StringIO(string))))
 
-def Stream(conf=None):
-  if conf == None:
+def Stream(conf=None, text=None, file=None):
+  
+  if text and file:
+    raise Exception("bebna")
+  elif text != None:
+    text += '\n' #XXX no-one must know
+    conf = Configuration(stdin=io.StringIO(text))
+  elif file:
+    if type(file) == str:
+      conf = Configuration(stdin=open(file))
+    else:
+      conf = Configuration(stdin=file)
+  elif conf == None:
     conf = Configuration()
   de_debug = conf._debug
   conf._debug = False

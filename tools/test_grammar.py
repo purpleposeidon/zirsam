@@ -22,9 +22,9 @@ def compare_camxes(line):
 def compare_jbofihe(line):
   return gso("echo %r | jbofihe" % (line))[0] == 0
 
-def compare_zirsam(line):
-  r = gso("echo %r | ~/sync/Development/JBOPARSER/dendrography.py --all-error" % line)[0]
-  return r == 0
+#def compare_zirsam(line):
+  #r = gso("echo %r | ~/sync/Development/JBOPARSER/dendrography.py --all-error" % line)[0]
+  #return r == 0
 
 def compare_zirsam(line):
   s = dendrography.Stream(config.Configuration(stdin=io.StringIO(line), args=['--all-error', '--forbid-warn'], stdout=io.StringIO(), stderr=io.StringIO()))
@@ -32,6 +32,8 @@ def compare_zirsam(line):
     #val, r = dendrography.main(s)
     list(s)
     return s.orig.good_parse
+  except KeyboardInterrupt:
+    raise SystemExit("Broke!")
   except:
     return False
   return val
@@ -95,18 +97,24 @@ def run_test():
   elif '--full' in sys.argv:
     src = open("data/gram_test_sentences.txt", errors='ignore')
     IGNORE = [6709] #Because jbofihe chokes up and dies when it sees a paren
-    print("This is going to take forever. Seriously. Like, a couple hours. Sorry.\n\n")
+    print("This is going to take forever. Seriously. Like, a couple hours. Sorry. (get pypy/cython going or something, but probably still isn't out for 3k)\n\n")
   else:
     import os
     os.system('pwd')
-    src = open("data/gram_test_sentences.txt")
-    #src = open("data/failed_gram_tests.txt")
+    #src = open("data/gram_test_sentences.txt", errors='ignore')
+    src = open("data/failed_gram_tests.txt", errors='ignore')
   i = 0
   failed_tests = 0
+  fail_lines = []
+  f = input("file to write failed lines to?")
+  if f:
+    failures = open(f, 'w')
+  else:
+    failures = None
   for line in src:
     i += 1
     if i in IGNORE:
-      failed_tests += 1
+      #failed_tests += 1
       continue
     #sys.stdout.write(str(i))
     #
@@ -121,10 +129,13 @@ def run_test():
     if not result:
       print(line)
       failed_tests += 1
+      fail_lines += line
+      failures.write(line+'\n')
       #raise SystemExit
   print("Total tests:", i, "Failed tests:", failed_tests)
   print("Grade for the course:", ((i-failed_tests)/i)*100)
   print("(Not that it means anything)")
+  
 
 if __name__ == '__main__':
   run_test()
