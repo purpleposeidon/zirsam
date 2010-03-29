@@ -1,0 +1,12 @@
+#!/usr/bin/python3
+# -*- coding: utf-8 -*-
+
+"""
+This is a wrapper around the zirsam module.
+"""
+
+
+import zirsam.dendrography
+
+for val in zirsam.dendrography.Stream():
+  print(val)
