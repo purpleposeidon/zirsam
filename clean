@@ -1,4 +1,4 @@
 #!/bin/sh
 
-rm -v *.pyc *~ */*.pyc */*~ */*/*.pyc */*/*~ 2> /dev/zero
+rm -fv *.pyc *~ */*.pyc */*~ */*/*.pyc */*/*~
 rm -rfv build

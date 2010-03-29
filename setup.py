@@ -30,5 +30,7 @@ setup(
   author_email=rz,
   url="http://github.com/purpleposeidon/zirsam",
   description="Lojban Parsing System",
+  
   packages=['zirsam', 'zirsam.bnf'],
+  scripts=['tools/zirsam'],
 )

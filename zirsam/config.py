@@ -7,8 +7,8 @@ Which is the REAL zirsam.py file? Perhaps I'll just make a seperate file to hand
 
 import sys
 
-import zirsam.common as common
-import zirsam.alphabets as alphabets
+import zirsam.common
+import zirsam.alphabets
 
 
 
@@ -154,7 +154,7 @@ Arguments:"""
       self.full_tree = True
     if arg("html"):
       self.html = True
-    _ = valued_arg("alphabet", alphabets.GlyphTable.tables)
+    _ = valued_arg("alphabet", zirsam.alphabets.GlyphTable.tables)
     if _: self.glyph_table = _
     _ = valued_arg("hate token")
 
@@ -272,7 +272,7 @@ Arguments:"""
     self.old_chars = ""
     
     #orthographic
-    self.glyph_table = alphabets.GlyphTable.tables['latin']
+    self.glyph_table = zirsam.alphabets.GlyphTable.tables['latin']
     self.permit_readline = True
     
     #morphic
@@ -300,7 +300,7 @@ Arguments:"""
     #self.handle_sa = True #Don't flush for a sentence?
     self.flush_on = None #I or NIhO?
     self.end_on_faho = True #Treat FAhO as EOT, or uhm... don't yield it...?
-    self.position = common.Position()
+    self.position = zirsam.common.Position()
     
     if args:
       self.__check_options(args)

@@ -3,7 +3,7 @@
 #foo2latin mapping information
 
 import string
-import zirsam.orthography as orthography
+import zirsam.orthography
 
 
 class GlyphTable(dict):
@@ -34,7 +34,7 @@ class GlyphTable(dict):
           config.position.pushline()
         else:
           config.position.pushcol()
-        ret.append(orthography.Character(v, config))
+        ret.append(zirsam.orthography.Character(v, config))
       return ret
 
   def __init__(self, name, mapping):
