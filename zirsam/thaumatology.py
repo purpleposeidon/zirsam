@@ -11,12 +11,12 @@
 
 import sys, io
 
-import config
-from common import Buffer
-import selmaho
-import tokens
+from zirsam import config
+from zirsam.common import Buffer
+from zirsam import selmaho
+from zirsam import tokens
 
-import morphology
+from zirsam import morphology
 
 class InterestStream:
   """

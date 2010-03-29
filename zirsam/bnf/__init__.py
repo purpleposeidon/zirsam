@@ -8,13 +8,10 @@ Get our BNF stuff, generate it if it isn't there, or re-gen if it's old
 import os
 import sys
 import time
-did_CD = False
-try:
-  os.chdir('bnf') #XXX - Do this more robustly
-  did_CD = True
-except:
-  if not 'convert_bnf.py' in os.listdir('./'):
-    raise SystemExit("Please run from the JBOPARSER directory")
+
+ORIG_DIR = os.getcwd()
+#We need the curdir to be zirsam/bnf. So...
+os.chdir(os.path.dirname(__file__))
 
 deps = "../data/lojban.bnf ../data/bnf.html ../data/extensions.bnf convert_bnf.py optimizer.py dehtml_bnf.py __init__.py".split()
 final = "bnf_data.py"
@@ -49,7 +46,7 @@ except:
 
 #os.chdir('../')
 import sys
-sys.path.append('')
+sys.path.append('./')
 import magic_bnf
 
 class BnfWrapper:
@@ -64,18 +61,15 @@ class BnfWrapper:
   def keys(self):
     return self.b.keys()
 
+
+os.chdir(ORIG_DIR)
+
 try:
-  import bnf_data
+  import zirsam.bnf.bnf_data
   magic_bnf.BNF = bnf_data.BNF
   BNF = BnfWrapper(bnf_data.BNF)
 except Exception as e:
-  raise SystemExit("Unable to load BNF data. Some possible causes: Not being run from the correct directory, bad regexp applied to lojban.bnf, missing lojban.bnf, incorrect syntax in lojban.bnf")
-__all__ = ['BNF']
+  print("Unable to load BNF data. Some possible causes: Not being run from the correct directory, bad regexp applied to lojban.bnf, missing lojban.bnf, incorrect syntax in lojban.bnf", file=sys.stderr)
+  raise
+#__all__ = ['BNF']
 
-#if needs_redo:
-  #print("lojban BNF sucessfuly loaded!", file=sys.stderr)
-
-
-
-if did_CD:
-  os.chdir("..")

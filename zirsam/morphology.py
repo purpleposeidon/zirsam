@@ -13,11 +13,11 @@ import sys
 import inspect
 import traceback
 
-from common import Buffer
-import orthography
-from orthography import valid_init_cc
-import config
-from tokens import *
+from zirsam.common import Buffer
+from zirsam import orthography
+from zirsam.orthography import valid_init_cc
+from zirsam import config
+from zirsam.tokens import *
 
 """
 Desired cl options:

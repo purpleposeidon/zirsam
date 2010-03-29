@@ -4,11 +4,14 @@
 import io
 import cgi
 
-import config
-import common
-import orthography
+import zirsam.config as config
+import zirsam.common as common
+import zirsam.orthography as orthography
+#from zirsam import config
+#from zirsam import common
+#from zirsam import orthography
 
-from selmaho import SELMAHO
+from zirsam.selmaho import SELMAHO
 
 class Token:
   #The items below are a hack for the morphology module, which re-inserts tokens into the Bit stream.

@@ -12,8 +12,8 @@ TODO: unicodedata.normalize
 import sys
 import copy
 
-import common
-import config
+import zirsam.common
+import zirsam.config
 
 
 def clean_val(v):
@@ -30,13 +30,14 @@ class Character:
     #return "<{0} {1}>".format(self.value, self.position)
     return str(self)
   
-  def __init__(self, c, config):
+  def __init__(self, c, konf):
     """
-    A single character. 
+    A single character.
+    ``c'' is that character, ``konf'' is the zirsam.config.Configuration object that holds the current position.
     """
     #self.original = c
     
-    self.position = common.Position(config.position)
+    self.position = zirsam.common.Position(konf.position)
     self.value = c
     
     self.accented = False
@@ -286,7 +287,7 @@ def stream_bit(fd):
 
 def Stream(conf=None):
   if conf == None:
-    conf = config.Configuration()
+    conf = zirsam.config.Configuration()
   
   
   if conf.stdin.isatty():
@@ -313,8 +314,8 @@ def Stream(conf=None):
       ###import atexit
       ###atexit.register(termios.tcsetattr, fd, termios.TCSADRAIN, old_settings)
       ####tty.setraw(1)
-  charbuf = common.Buffer(stream_char(conf), conf)
-  bitbuf = common.Buffer(stream_bit(charbuf), conf)
+  charbuf = zirsam.common.Buffer(stream_char(conf), conf)
+  bitbuf = zirsam.common.Buffer(stream_bit(charbuf), conf)
   return bitbuf
 
 if __name__ == '__main__':

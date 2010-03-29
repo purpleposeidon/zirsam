@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import magic_bnf
+import zirsam.bnf.magic_bnf
 
 class any_word:
   def __repr__(self):
@@ -9,8 +9,8 @@ class any_word:
     try:
       tracker.valsi[tracker.get_offset()]
     except:
-      return magic_bnf.NoMatch
+      return zirsam.bnf.magic_bnf.NoMatch
     
     tracker.accept_terminal()
     tracker.current_valsi += 1
-    return magic_bnf.Match
+    return zirsam.bnf.magic_bnf.Match

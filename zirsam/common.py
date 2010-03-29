@@ -31,9 +31,11 @@ There are other files:
 """
 
 import sys
+sys.path.append('../../') #ridiculous
 
-import config
 
+#from zirsam import config
+import zirsam.config
 #Contains the Buffer, a class used by every layer of the parser
 
 

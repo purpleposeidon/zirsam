@@ -6,11 +6,11 @@ sys.setrecursionlimit(2000)
 #sys.setrecursionlimit(1000) #The default on my system
 import io
 
-from config import Configuration
-from common import Buffer
-import thaumatology
-from bnf import BNF
-import magic_bnf
+from zirsam.config import Configuration
+from zirsam.common import Buffer
+from zirsam import thaumatology
+from zirsam.bnf import BNF
+from zirsam.bnf import magic_bnf
 
 
 def pprint(wut, first=True, html=False):

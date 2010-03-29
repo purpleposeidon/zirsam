@@ -7,8 +7,8 @@ Which is the REAL zirsam.py file? Perhaps I'll just make a seperate file to hand
 
 import sys
 
-import common
-import alphabets
+import zirsam.common as common
+import zirsam.alphabets as alphabets
 
 
 

@@ -3,7 +3,8 @@
 #foo2latin mapping information
 
 import string
-import orthography
+import zirsam.orthography as orthography
+
 
 class GlyphTable(dict):
   tables = {} #Dictionary of the GlyphTable objects
