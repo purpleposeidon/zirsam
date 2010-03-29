@@ -10,7 +10,7 @@ from zirsam.config import Configuration
 from zirsam.common import Buffer
 from zirsam import thaumatology
 from zirsam.bnf import BNF
-from zirsam.bnf import magic_bnf
+from zirsam import magic_bnf
 
 
 def pprint(wut, first=True, html=False):

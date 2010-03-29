@@ -22,7 +22,7 @@ def import_bnf():
   os.chdir(start)
 
 import_bnf()
-word_lists = ["data/gismu.txt", "data/lujvo.txt", "data/cmavo.txt"]
+
 setup(
   name="zirsam",
   version=version,
@@ -30,7 +30,5 @@ setup(
   author_email=rz,
   url="http://github.com/purpleposeidon/zirsam",
   description="Lojban Parsing System",
-  
   packages=['zirsam', 'zirsam.bnf'],
-  package_data={'zirsam':["data/*.bnf"]},
 )

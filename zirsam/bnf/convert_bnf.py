@@ -31,7 +31,7 @@ head_info = """#!/usr/bin/python3
 {0}
 
 import sys; sys.path.append('../')
-from zirsam.bnf.magic_bnf import *
+from zirsam.magic_bnf import *
 import zirsam.tokens
 from zirsam.tokens import *
 from zirsam.selmaho import *
