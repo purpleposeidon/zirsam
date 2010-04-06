@@ -32,5 +32,6 @@ setup(
   description="Lojban Parsing System",
   
   packages=['zirsam', 'zirsam.bnf'],
+  package_data={'zirsam':["data/*"]},
   scripts=['tools/zirsam'],
 )
