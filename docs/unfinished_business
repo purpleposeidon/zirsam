@@ -1,33 +1,33 @@
 Or, in other words, "TODO"
 Items marked "-" aren't as important as items marked "+"
 ###### Next
-
+ - What is up with {do cu puki broda}
+    - BNF isn't being parsed right; agh!
+    - Check all of those &'s
 
 ###### Release
  - bnf/convert_bnf.py: DISABLE_HASH = False
 
 ###### Soon
- - More error checking and recovery
-    - lai & friends in cmene
+ - More error checking
+    - lai & friends in cmene (depends on dot-side)
     - invalid consonant clusters in words
+    - bad fu'ivla (cidrsadifluffle)
  - What about that old '*' on TrackerMatch? Uhm.
     - related to funny bridi_tail that keeps following me around
  - make word_end in morphology.py indexed from 0 instead of 1?
  + Test IPA and other alphabets
  - Don't use "config" for the config.Configuration() object, use "conf"? Or rename config.py to conf.py
  - Add option for progress bar, and maybe auto-detect if you might want progress info. Say... 3 seconds or so
- - Put in GPL licensing or something and other legalese stuff in files that need it (Not lojban.bnf)
- - Should be able to run dendrography off of a raw valsi stream. Write an example!
+ - Put in GPL licensing or something and other legalese stuff in files that need it
+    - what is the legal status of lojban.bnf?
+ - Test: Should be able to run dendrography off of a raw valsi stream (without thaumatology). Write an example!
  - Move HTML-ify to a separate module
-  - What is up with {do cu puki broda}
-      - BNF isn't being parsed right; agh!
-      - Check all of those &'s
 
 ###### Later
-- Add an "--abusive" option zo'o
+ - Add an "--abusive" option zo'o
  - $ grep -C 2 "XXX\|TODO" */*.bnf *.py */*.py
  - Check for weird/odd/wrong comments
- - Make sure I didn't accidentally change/deleting anything in BRKWORDS.txt
  - (seperate out the configuration options for each section?)
  - It would be interesting to have an option to disable line-buffering; the user could see the immediate tokenization. (Bleh, meh)
  - How do I like Position? Does it match up with vi, kate, and other editors?
@@ -36,11 +36,11 @@ Items marked "-" aren't as important as items marked "+"
  + Make GlyphTable handle multi-length input characters (sampa: {l=?dZEim=s} should be {la.djeims})
  - CLI argument to read stdin from a file
  - Print out tokenization immediatly on input (import tty)
- - It could be faster! Instead of Xor(Xor(...), A) do Xor(A, Xor(...). Because that would make it faster? Only if the most common forms are listed first in the BNF. Well, at least the old method might not be faster, but the current one would be faster because it has to run more XOr tests.
+ - It could be faster! Instead of Xor(Xor(...), A) do Xor(A, Xor(...)). Because that would make it faster? Only if the most common forms are listed first in the BNF. Well, at least the old method might not be faster, but the current one would be faster because it has to run more XOr tests.
  - Another way to make it faster would be to merge Concat(A, Concat(B, C)) into Concat(A, B, C), at the cost of increased code complexity. (Or, perhaps Concat(A, Concat(B, Concat(C, D))) into Concat(Concat(A, B), Concat(C, D)), without adding more code?)
- + Move/Do lujvo/fuhivla sorting crap in morphology
+ + Move/Do lujvo/fuhivla sorting crap in morphology.py instead of token.py
  - Have a config option for zoi to be filtered by the alphabet, or just from what we get
- + could optimize by first parsing sentences and ignoring content? (Well, not reaaaaly an optimization. But better for streaming.) "--flat-parse". Parse in units of the selma'o I. x-sentence-parse-root might be, "NIhO | I | sentence"]
+ + could optimize by first parsing sentences and ignoring content? (Well, not reaaaaly an optimization. But better for streaming.) "--flat-parse". Parse in units of the selma'o I. x-sentence-parse-root might be, "NIhO | I | sentence"
     - For parsing long documents, it would probably be best to do parsing at the sentence-level.
     - Unless it isn't actually any faster?
     - In some situations, you might actually want sentence-at-a-time.
@@ -50,15 +50,13 @@ Items marked "-" aren't as important as items marked "+"
 
 ###### Much Later
  - (Have error messages in lojban?)
- - Semantics engine and supporting stuff (Nope. Seperate project.) (Well, maybe not all of it)
+ - Semantics engine and supporting stuff (Nope. Seperate project.) (Well, maybe not all of it) (bah. Whatever.)
  - Jbovlaste integration
- + Oh, also, learn how to speak lojban. Jeeze.
- - System to convert words to be spaceless
- - System to fix lack of pauses
- - look into proper distribution methods, see the distutils module http://docs.python.org/distutils/
-     "package_data" for setup.py
+ + learn how to speak lojban
+ - Tool to convert words to be spaceless
+ - Tool to fix lack of pauses
  - Optimize the parser by not checking optionals until after we know the item following doesn't match?
-    - Is this... valid?
+    - Is this valid?
       - If what follows doesn't match, then it could never match!?
         - unless the following is optional.
         - It would match if you had matched the optional.
@@ -82,10 +80,11 @@ Items marked "-" aren't as important as items marked "+"
  - Have an option for inputting by letter type (like CVCCV), which would have been good for debugging morphology but might not be so useful now
  - Make a funny/bad// joke about {tosmabru}
  - If there is demand: xml output
- - Emulate output of jbofihe and camxes? (And other parsers?)
+ - Emulate output of jbofihe and camxes and parser3?
 
 ##### Morphology: I don't care about it anymore
  - Check that each marker in brkwords is properly implemented and documented (Turns out I don't really care)
+ - Make sure I didn't accidentally change/deleting anything in BRKWORDS.txt
  - Go through everything I checked off, make sure it really is.
 
 
@@ -130,4 +129,5 @@ Ortohgraphy - what happens to capitalized letters with strict ortho?
  - Link to python3, not python3.0. (You actually have 3.1 installed...)
     But other installations might not have a python3! So no. >_>
     Bah, did it anyways.
-
+ - look into proper distribution methods, see the distutils module http://docs.python.org/distutils/
+     "package_data" for setup.py
