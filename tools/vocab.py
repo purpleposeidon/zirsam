@@ -2,7 +2,10 @@
 """Usage:
   ./tools/vocab.py
 Reads lojban text from standard input. Writes to standard output how often a word occurs. If you want to sort this list, do:
-  ./tools/vocab.py | sort -r"""
+  ./tools/vocab.py | sort -r
+
+Output format is something like:
+  {Number indicating word-count padded with at least a single zero} {word or rafsi} (optional note re. rafsi source)"""
 
 import sys
 import pickle
@@ -10,11 +13,11 @@ if len(sys.argv) > 1:
   print(__doc__, file=sys.stderr)
   raise SystemExit
 
-sys.path.append('./')
-import morphology
-import tokens
+import zirsam
+import zirsam.morphology as morphology
+import zirsam.tokens as tokens
 
-rafsi_pick = 'data/r2g.pyk3'
+rafsi_pick = zirsam.resource('r2g.pyk3')
 rafsi = pickle.load(open(rafsi_pick, 'rb'))
 words = {}
 top = 0
