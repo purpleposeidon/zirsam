@@ -10,25 +10,29 @@ Even better compression could be achieved. There are 2228 words (including some 
 
 TODO: Properly rebuild lujvo
 """
-DATA_DIR = "data/"
 
-import io, sys, os, pickle, array
-sys.path.append('./')
-import morphology
-import tokens
-import config
+import io, sys, os, pickle
+
+import zirsam
+import zirsam.morphology as morphology
+import zirsam.tokens as tokens
+import zirsam.config as config
+
+import bitbuffer
 
 ARRAY_TYPE = 'H'
 
-r2g = pickle.load(open(os.path.join(DATA_DIR, 'r2g.pyk3'), 'rb'))
-g2r = pickle.load(open(os.path.join(DATA_DIR, 'g2r.pyk3'), 'rb'))
+r2g = pickle.load(open(zirsam.resource('r2g.pyk3'), 'rb'))
+g2r = pickle.load(open(zirsam.resource('g2r.pyk3'), 'rb'))
 
-gismu = list(line.strip() for line in open(os.path.join(DATA_DIR, 'gismu'), 'r'))
-fuhivla = (line.strip() for line in open(os.path.join(DATA_DIR, 'fuhivla'), 'r'))
-cmavo = (line.strip() for line in open(os.path.join(DATA_DIR, 'cmavo'), 'r'))
-words = tuple('%')+tuple('@')+tuple('23456789')+tuple('\n')+tuple(gismu)+tuple(fuhivla)+tuple(cmavo)
-DELIM_ZOI = 0 #% is a placeholder for our uncompressable-text
-DELIM_LUJ = 1 #@ is a placeholder for a rafsi
+gismu = list(line.strip() for line in open(zirsam.resource('gismu'), 'r'))
+fuhivla = (line.strip() for line in open(zirsam.resource('fuhivla'), 'r'))
+cmavo = (line.strip() for line in open(zirsam.resource('cmavo'), 'r'))
+words = tuple('X')+tuple('%')+tuple('y')+tuple('@')+tuple('456789')+tuple('\n')+tuple(gismu)+tuple(fuhivla)+tuple(cmavo)
+MARK_EOF = 0 #X is a placeholder for the EOF marker
+DELIM_ZOI = 1 #% is a placeholder for our uncompressable-text
+LETTER_Y = 2
+DELIM_LUJ = 3 #@ is a placeholder for a rafsi
 DELIM_NEWLINE = 10 #\n is the placeholder for newlines
 #23456789 makes the newline #10 so that if there's a trailing newline in input, nobody notices.
 
@@ -45,13 +49,15 @@ for gism in gismu:
 def decompress(src):
   while 1:
     try:
-      id = next(src)
+      id = src.read()
+      if id == MARK_EOF:
+        raise StopIteration
     except StopIteration:
       break
     if id == DELIM_ZOI:
       ords = []
       while 1:
-        id = next(src)
+        id = src.read()
         if id == DELIM_ZOI:
           break
         ords.append(id)
@@ -61,10 +67,12 @@ def decompress(src):
     elif id == DELIM_LUJ:
       rafs = []
       while 1:
-        id = next(src)
+        id = src.read()
         if id == DELIM_LUJ:
           break
-        if id < WORDLIST_LEN:
+        if id == LETTER_Y:
+          rafs.append('y')
+        elif id < WORDLIST_LEN:
           rafs.append(g2r[words[id]][0])
         else:
           raise Exception("unknown word ID %r" % id)
@@ -87,7 +95,14 @@ def compress(valsi_stream):
     if valsi.ve_lujvo_rafsi:
       yield DELIM_LUJ
       for raf in valsi.ve_lujvo_rafsi:
-        gim = r2g[raf]
+        if raf == 'y':
+          yield LETTER_Y
+          continue
+        try:
+          gim = r2g[raf]
+        except:
+          print("{0!r}???".format(raf), file=sys.stderr)
+          gim = list(raf)
         if gim in words:
           yield words.index(gim)
         else:
@@ -123,28 +138,23 @@ if '--compress' in sys.argv:
   else:
     stdin = sys.stdin
   comp = compress(morphology.Stream(config.Configuration(stdin=stdin, args=[])))
-  if not('--force' in sys.argv) and sys.stdout.isatty():
-    #print("Writing decimals instead of encoded data, because output is a TTY.", file=sys.stderr)
-    for H in comp:
-      if savings:
-        final += 1
-      if '--decimal' in sys.argv:
-        print(H)
-  else:
-    out = array.array(ARRAY_TYPE, comp).tostring()
-    if savings:
-      final = len(out)
-    sys.stdout.buffer.write(out)
   if savings:
-    diff = orig - final
-    percent = round(((orig/final)-1)*100)
-    print("Original: {0} chars\nCompressed: {1} chars\nSavings: {2}%\n-------------------".format(orig, final, percent), file=sys.stderr)
+    stdout = io.BytesIO()
+  else:
+    stdout = open('/dev/stdout', 'wb')
+  b = bitbuffer.BitBuffer(stdout, WORDLIST_LEN)
+  for c in comp:
+    b.write(c)
+  b.end()
+  if savings:
+    stdout.seek(0)
+    open('/dev/stdout', 'wb').write(stdout.read())
+    stdout.seek(0)
+    final = len(stdout.read())
+    print("Compressed size: {1}\nOriginal size: {0}\nRatio: {2}".format(orig, final, final/orig), file=sys.stderr)
 elif '--decompress' in sys.argv:
-  try:
-    a = array.array(ARRAY_TYPE, sys.stdin.buffer.read())
-  except Exception as e:
-    raise SystemExit("Unable to decompress: {0}".format(e))
-  decompress(iter(a))
+  a = bitbuffer.BitBuffer(open('/dev/stdin', 'rb'), WORDLIST_LEN)
+  decompress(a)
   pass
 else:
   print("""Usage:
@@ -153,10 +163,6 @@ else:
   Other options valid for --compress:
       --show-savings
           Show how much it improved
-      --decimal
-          Print out decimals if output isn't being redirected
-      --force
-          Print stdout will be written to tty anyways
 
   ./tools/cmalu --decompress
       Reads compressed data from stdin
