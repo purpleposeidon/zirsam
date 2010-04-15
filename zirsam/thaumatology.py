@@ -128,6 +128,7 @@ class QuoteStream:
           try:
             vla = self.valsi.pop()
             if vla.type == selmaho.ZOI:
+              #XXX TODO: *should* we?
               self.config.warn("This implementation doesn't do ZOI in LOhU", vla.position)
           except EOFError:
             self.config.error("End of File reached in open LOhU quote (end it with le'u) ", lohu.position)
@@ -136,11 +137,13 @@ class QuoteStream:
             break
           jbo_tokens.append(vla)
         lohu.content = jbo_tokens
-        lohu.end = lehu #I'd rather yield lehu
         yield lohu
+        #lohu.end = lehu #This would be way better
+        yield lehu
       elif self.valsi[0].type == selmaho.LEhU: #Erroneous error quote end
         lehu = self.valsi.pop()
-        self.config.warn("Trying to close a non-existant error quote (open with lo'u)", lehu.position)
+        #self.config.warn("Trying to close a non-existant error quote (open with lo'u)", lehu.position)
+        #Nope: lo'u le'u sa le'u is a valid way to have a le'u floating about.
         yield lehu
       else:
         yield self.valsi.pop()

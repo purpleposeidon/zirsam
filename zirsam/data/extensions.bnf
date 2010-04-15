@@ -47,7 +47,7 @@ sumti-6 =
     | LI # mex /LOhO#/
     | ZO # ; ZO any-word #
     | LU text /LIhU#/
-    | LOhU LEhU # ;originally "LOhU any-word ... LEhU #". Thaumatology keeps the LEhU
+    | LOhU LEhU # ;originally "LOhU any-word ... LEhU #". Thaumatology merges any-word... into LEhU
     | ZOI # ; originally "ZOI any-word anything any-word #"
 
 ;The parens below are inserted by me. Erm.
