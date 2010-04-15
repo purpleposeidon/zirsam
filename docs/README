@@ -1,43 +1,55 @@
-To do some parsing:
-  python3 dendrograpy.py
+INSTALLATION
+============
+Should be quite simple. run "setup.py install" with administrative privlidges.
 
-If that doesn't work, and you're too lazy to fix:
-  ssh zirsam@neptune.wtf.la; password is "lojban"
-
-docs/BRKWORDS.TXT has my comments regarding morphology, I've also included the original file in this directory.
-
-docs/unfinished_business is the todo list
+If you are unable to install it, you can access the demo on my box by:
+  ssh zirsam@neptune.wtf.la
+The password is "lojban".
 
 
-To start parsing something, first pick what depth you want. Do you want orthography, morphology, thaumatology or dendrography?
+USAGE
+=====
+After the library has been installed, this command is made available:
+  zirsam
+This command will output a condensed parse tree.
 
+To start parsing something using the actual library, first pick what depth you want. Do you want orthography (letters), morphology (words), thaumatology (metasyntax/pre-processing) or dendrography?
+If all you want are valsi (morphology), then a program using this might be:
 
-If all you want are valsi (morphology), than you can do:
+  import zirsam.morphology
+  import zirsam.tokens
 
-  import morphology
-  import tokens
-
-  stream = morphology.Stream()
-  #In general, module.Stream() yields an iter object
-  vals = list(_ for _ in stream if not isinstance(_, tokens.BORING))
+  stream = zirsam.morphology.Stream()
+  #In general, module.Stream() returns an iter object
+  valsi = list(_ for _ in stream if not isinstance(_, tokens.BORING))
   
-  print("There are", len(vals), "tokens.")
+  print("There are", len(valsi), "tokens.")
 
+The valsi variable will now have a list of Token objects.
+Options can be set using the Configuration object, which is located in the config module.
 
-The vals variable will now have a list of Token objects.
-You can also set a bunch of options using the Configuration object, which is located in the config module.
+  import zirsam.orthography
+  import zirsam.config
 
+  conf = zirsam.config.Configuration([]) #The empty list prevents Configuration from parsing arguments from sys.argv
+  conf.alphabet = zirsam.config.alphabets.liberal #This could also be passed in the list to Configuration(), similiar to the 'zirsam' program
 
-  import orthography
-  import config
-
-  conf = config.Configuration([]) #The empty list prevents Configuration from parsing arguments from sys.argv
-  conf.alphabet = config.alphabets.liberal
-
-  for c in orthography.Stream(conf):
+  for c in zirsam.orthography.Stream(conf):
     print(c, end='')
 
   print()
 
+
+DOCUMENTATION NOT REALLY
+========================
+docs/BRKWORDS.TXT has my comments regarding morphology, I've also included the original file in this directory.
+
+docs/unfinished_business is the todo list
+
+Many directories have README files.
+
+TESTING
+=======
+I've got two scripts to test zirsam: one to test morphology, the other to test grammar. They are under tools/test_* . The test lines for the grammar (zirsam/data/gram_test_sentences [TODO I moved this]) are from rlpowell's website.
 
 

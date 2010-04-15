@@ -1,0 +1,20 @@
+bnf.html
+  the html source from which the bnf data was originally extracted
+cmavo
+  simple list of (single) cmavo
+cmavo.txt
+  cmavo wordlist
+extensions.bnf
+  zirsam-specific additions and modifications to the grammar. Also includes test cases.
+fuhivla
+  a simple list of some fu'ivla (no idea where/when it's from)
+g2r.pyk3
+  python pickle containing dict mapping gismu to rafsi; pickle.load(open('g2r.pyk3', 'rb'))
+gismu
+  simple listing of gismu
+gismu.txt
+  gismu wordlist
+lojban.bnf
+  The Lojban BNF grammar from edition 1 of the CLL
+r2g.pyk3
+  python pickle containing dict mapping rafsi to gismu; pickle.load(open('r2g.pyk3', 'rb'))

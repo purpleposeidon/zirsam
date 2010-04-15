@@ -23,6 +23,9 @@ Items marked "-" aren't as important as items marked "+"
     - what is the legal status of lojban.bnf?
  - Test: Should be able to run dendrography off of a raw valsi stream (without thaumatology). Write an example!
  - Move HTML-ify to a separate module
+ - Move unnecessary files out of zirsam/data/
+ - Put parser into quiet mode inside ZOI
+ - Also, perhaps an option to *not* be quiet inside ZOI; preventing embedded non-Lojban text
 
 ###### Later
  - Add an "--abusive" option zo'o
@@ -47,6 +50,7 @@ Items marked "-" aren't as important as items marked "+"
  - have switches that enable or disable certain parts of the BNF to allow for grammars designed for other situations
     - Such as...?
  + Investigate cython! (Used to be called pyrex?)
+ - Have cmalu use bitbuffer.py
 
 ###### Much Later
  - (Have error messages in lojban?)
