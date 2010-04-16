@@ -62,27 +62,30 @@ class QuoteStream:
         if delim_start.type in (selmaho.SI, selmaho.SA, selmaho.SU, selmaho.ZO, selmaho.BU, selmaho.ZEI, selmaho.FAhO):
           self.config.message("This ZOI deliminator (%r) could be confusing to the unenlightened" % (delim_start.value), position=delim_start.position)
         quote_tokens = []
-        
-        orig_stderr = self.config.stderr #Only hide errors inside the actual zoi quote, don't exclude errors
-        self.config.stderr = io.StringIO() #involving the deliminator
-        
+
+        #Get the contents of the ZOI. Don't permit any messages of any kind until we're out of the quote.
         try:
+          self.config.in_zoi = True #No errors
           while self.valsi[0].value != delim_start.value:
             next = self.valsi.pop()
             quote_tokens.append(next)
         except (EOFError, StopIteration):
-          self.config.stderr = orig_stderr
+          self.config.in_zoi = False
           self.config.error("End of File reached in open ZOI quote (close it off with {0!r})".format(delim_start.value), delim_start.position)
+        finally:
+          self.config.in_zoi = False
+        
         delim_end = self.valsi.pop()
         zoi.end = delim_end
         zoi.start = delim_start
         zoi.zoi_tokens = quote_tokens
-        self.config.stderr = orig_stderr
         
+
         start = delim_start.position.offset+len(delim_start.value)
         end = delim_end.position.offset-1
         
         if len(quote_tokens) >= 1:
+          #NOTE: This is djeims-ZOI stuff
           """
           How to trim the data...
           "zoi ", "zoi. ", "zoi."

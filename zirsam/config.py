@@ -186,6 +186,7 @@ Arguments:"""
   
   
   def error(self, msg, position=None):
+    if self.in_zoi: return
     print('ERROR: ', position, ': ', msg, sep='', file=self.stderr)
     if self._debug:
       input("HEY! There's no position argument given! Okay?")
@@ -196,7 +197,7 @@ Arguments:"""
     raise SystemExit(1)
   
   def warn(self, msg, position):
-    
+    if self.in_zoi: return
     self.has_warnings = True
     if not (self._quiet or self.forbid_warn):
       print('WARN: ', position, ': ', msg, sep='', file=self.stderr)
@@ -209,6 +210,7 @@ Arguments:"""
     #raise Exception
   def message(self, *msg, position=None, **kwargs):
     #Discussion: Should position be required?
+    if self.in_zoi: return
     if not self._quiet:
       if position:
         print("MESG: ", position, ': ', *msg, sep='', file=self.stderr, **kwargs)
@@ -226,6 +228,7 @@ Arguments:"""
         print('DEBUG:', msg, file=self.stderr, end=end)
   
   def strict(self, msg, position=None):
+    if self.in_zoi: return
     if self._strict:
       if position:
         print('STRICT:', position, ': ', msg, sep='', file=self.stderr)
@@ -301,6 +304,7 @@ Arguments:"""
     self.flush_on = None #I or NIhO?
     self.end_on_faho = True #Treat FAhO as EOT, or uhm... don't yield it...?
     self.position = zirsam.common.Position()
+    self.in_zoi = False
     
     if args:
       self.__check_options(args)
