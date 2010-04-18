@@ -189,8 +189,9 @@ class XOr(Condition): #Bad name, it belies its' true function, should be "Altern
       ##B_state = tracker.get_state() #XXX may rm later
       if b == Match:
         if tracker.current_valsi == A_state[0]:
-          #It matches TWO things? Shit pants.
-          raise Exception("@@@@@@@@@@@@@@@@@@@@@@@@@\n!!!!AMBIGIOUS GRAMMAR!!!!\n@@@@@@@@@@@@@@@@@@@@@@@@@\ntracker.valsi: {}\nself:{}\ntracker.get_state():{}\n\nContact your grammar provider.".format(tracker.valsi, self, tracker.get_state()))
+          tracker.restore_state(A_state)
+          tracker.commit()
+          return Match
         if A_state[0] > tracker.current_valsi:
           tracker.restore_state(A_state)
       else:

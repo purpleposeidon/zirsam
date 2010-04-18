@@ -50,10 +50,6 @@ sumti-6 =
     | LOhU LEhU # ;originally "LOhU any-word ... LEhU #". Thaumatology merges any-word... into LEhU
     | ZOI # ; originally "ZOI any-word anything any-word #"
 
-;The parens below are inserted by me. Erm.
-time =
-    ZI & time-offset ... & (ZEhA [PU [NAI]]) & interval-property ...
-
 
 x-parse-root =
   ;;;; This is the default starting point

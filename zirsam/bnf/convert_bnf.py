@@ -20,7 +20,7 @@ if __name__ != '__main__':
 DATA_OUTPUT = "bnf_data.py"
 BNF_SOURCES = {
   'standard': ('../data/lojban.bnf', '../data/extensions.bnf'),
-  #'simplified': ('../data/simple.bnf'), 
+  'simplified': ('../data/simple.bnf',),
 }
 
 
@@ -70,6 +70,7 @@ if __name__ == '__main__':
 sys.stdout = open(DATA_OUTPUT, 'w')
 def convert_source_files(bnf_name, filenames):
   bnf = ''
+  assert type(filenames) != str
   for name in filenames:
     bnf += open(name).read()
     bnf += '\n'

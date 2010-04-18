@@ -9,7 +9,7 @@ import sys
 
 import zirsam.common
 import zirsam.alphabets
-
+#import zirsam.bnf.bnf_data
 
 
 def format_arg(w):
@@ -33,6 +33,7 @@ Arguments:"""
   'full tree':"Show a complete grammar parse tree", \
   
   'alphabet':"Select alphabet. --alphabet=? lists available values. The default is 'latin'", \
+  'use grammar':"Select which grammar to use. --use-grammar=? lists available values. The default is 'standard'", \
   
   'no dotside':"Don't require a pause following cmene-markers (XXX CHECKME)", \
   'forbid warn':"Treat warnings as errors", \
@@ -53,7 +54,7 @@ Arguments:"""
   
   }
   #Why don't you just be smart and use two tupples, or something?
-  __help_order = 'help, quiet, show progress, err2out, full tree, no readline, alphabet, no dotside, forbid warn, strict, all error, debug, parse debug, full buffer, cbreak, token error, hate token, do exit, print tokens, no exit, no space, html'.split(', ') #Help, Parsing configuration, Debug, unimplemented
+  __help_order = 'help, quiet, show progress, err2out, full tree, no readline, alphabet, use grammar, no dotside, forbid warn, strict, all error, debug, parse debug, full buffer, cbreak, token error, hate token, do exit, print tokens, no exit, no space, html'.split(', ') #Help, Parsing configuration, Debug, unimplemented
   for val in __help:
     if val not in __help_order:
       raise Exception("Command option %r is not present in Configuration.__help_order"%val)
@@ -157,12 +158,16 @@ Arguments:"""
       self.may_exit = False
     if arg("html"):
       self.html = True
+    
     _ = valued_arg("alphabet", zirsam.alphabets.GlyphTable.tables)
     if _: self.glyph_table = _
-    _ = valued_arg("hate token")
-
     
+    _ = valued_arg("hate token")
     if _: self.hate_token = _
+
+    names = ['standard', 'simplified'] #bnf.bnf_data.bnf_data.keys()  #XXX
+    _ = valued_arg("use grammar", dict(zip(names, names)))
+    if _: self.bnf_name = _
     if possible_args:
       #To let that developer fellow if an argument doesn't have documentation
       print("The following arguments have documentation, but no implementation:", file=self.stderr)
