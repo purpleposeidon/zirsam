@@ -46,13 +46,14 @@ Arguments:"""
   'hate token':"(DEBUG OPTION) Raise an exception when that text is encountered", \
   'do exit':"(DEBUG OPTION) Exit without parsing", \
   'print tokens':"(DEBUG OPTION) Print out a tokens as they are created", \
+  'no exit': "(DEV OPTION) Don't let the parser raise SystemExit", \
   
   'no space':"(NOT IMPLEMENTED) Convert input to not use spaces", \
   'html': "(XXX NOT DONE YET?) Output an annotated parse tree in HTML", \
   
   }
   #Why don't you just be smart and use two tupples, or something?
-  __help_order = 'help, quiet, show progress, err2out, full tree, no readline, alphabet, no dotside, forbid warn, strict, all error, debug, parse debug, full buffer, cbreak, token error, hate token, do exit, print tokens, no space, html'.split(', ') #Help, Parsing configuration, Debug, unimplemented
+  __help_order = 'help, quiet, show progress, err2out, full tree, no readline, alphabet, no dotside, forbid warn, strict, all error, debug, parse debug, full buffer, cbreak, token error, hate token, do exit, print tokens, no exit, no space, html'.split(', ') #Help, Parsing configuration, Debug, unimplemented
   for val in __help:
     if val not in __help_order:
       raise Exception("Command option %r is not present in Configuration.__help_order"%val)
@@ -75,7 +76,7 @@ Arguments:"""
           argv.pop(index)
           if not val_dict:
             if val == '?' or val == '':
-              raise SystemExit("{1}\n{0} accepts most any string.".format(name, Configuration.__help[name]))
+              self.exit("{1}\n{0} accepts most any string.".format(name, Configuration.__help[name]))
             return val
           if val in val_dict:
             r = val
@@ -83,14 +84,14 @@ Arguments:"""
             r = 'Usage for --{0}=VALUE\n  Possible values for {0} are:\n'.format(name)
             for v in val_dict:
               r += '\t{0}\n'.format(v)
-            raise SystemExit(r)
+            self.exit(r)
           else:
             raise Exception("{0} is an invalid value for --{1}".format(repr(val), name))
         elif arg.find('--'+name) == 0:
           r = 'Usage for --{0}=VALUE\n  Possible values for {0} are:\n'.format(name)
           for v in val_dict:
             r += '\t{0}\n'.format(v)
-          raise SystemExit(r)
+          self.exit(r)
         index += 1
       if r:
         return val_dict[r]
@@ -152,6 +153,8 @@ Arguments:"""
       self.permit_readline = False
     if arg('full tree'):
       self.full_tree = True
+    if arg('no exit'):
+      self.may_exit = False
     if arg("html"):
       self.html = True
     _ = valued_arg("alphabet", zirsam.alphabets.GlyphTable.tables)
@@ -187,6 +190,7 @@ Arguments:"""
   
   def error(self, msg, position=None):
     if self.in_zoi: return
+    self.perfect_parse = False
     print('ERROR: ', position, ': ', msg, sep='', file=self.stderr)
     if self._debug:
       input("HEY! There's no position argument given! Okay?")
@@ -199,6 +203,7 @@ Arguments:"""
   def warn(self, msg, position):
     if self.in_zoi: return
     self.has_warnings = True
+    self.perfect_parse = False
     if not (self._quiet or self.forbid_warn):
       print('WARN: ', position, ': ', msg, sep='', file=self.stderr)
     if self.forbid_warn:
@@ -218,7 +223,7 @@ Arguments:"""
         print("MESG:", *msg, file=self.stderr, **kwargs)
     if self.all_error:
       print("Exiting with failure", file=self.stderr)
-      raise SystemExit(2)
+      self.exit(2)
   
   def debug(self, msg, position=None, end='\n'):
     if self._debug:
@@ -229,17 +234,22 @@ Arguments:"""
   
   def strict(self, msg, position=None):
     if self.in_zoi: return
+    self.perfect_parse = False
     if self._strict:
       if position:
         print('STRICT:', position, ': ', msg, sep='', file=self.stderr)
       else:
         print('STRICT: ', msg, file=self.stderr)
-      raise SystemExit(1)
+      self.exit(1)
     else:
       self.warn(msg, position=position)
     if self.all_error:
       print("Exiting with failure", file=self.stderr)
-      raise SystemExit(2)
+      self.exit(2)
+
+  def exit(self, arg=None):
+    if self.may_exit:
+      raise SystemExit(arg)
   
   def __init__(self, args=None, stdin=None, stdout=None, stderr=None):
     """
@@ -290,8 +300,11 @@ Arguments:"""
     self.hate_token = None #If we see this token, raise Exception
     
     self.html = False
-    
+
+    self.may_exit = True
     self.has_warnings = False
+    self.perfect_parse = True
+    self.bnf_name = 'standard'
     self.parsing_unit = 'text' #'x_parse_root'
     self.parsing_unit = self.parsing_unit.replace('-', '_')
     self.show_progress = False
@@ -309,5 +322,5 @@ Arguments:"""
     if args:
       self.__check_options(args)
     if self.do_exit:
-      raise SystemExit(0)
+      self.exit(0)
 
