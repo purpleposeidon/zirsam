@@ -28,13 +28,13 @@ def compare_jbofihe(line):
   #return r == 0
 
 def compare_zirsam(line):
-  s = dendrography.Stream(config.Configuration(stdin=io.StringIO(line), args=['--all-error', '--forbid-warn'], stdout=io.StringIO(), stderr=io.StringIO()))
+  s = dendrography.Stream(config.Configuration(stdin=io.StringIO(line), args=['--all-error', '--forbid-warn', '--no-exit'], stdout=io.StringIO(), stderr=io.StringIO()))
   try:
     l = len(list(s))
     if l == 0:
       #XXX Assuming that it is 0 because stuff was deleted
       return True
-    return s.orig.good_parse
+    return s.orig.good_parse and s.orig.config.perfect_parse
   except KeyboardInterrupt:
     raise SystemExit("Keyboard Interrupt")
   except:
@@ -112,7 +112,7 @@ def run_test():
   i = 0
   failed_tests = 0
   fail_lines = []
-  f = input("Enter file to append errors to: ")
+  f = input("Enter file to append errors to [/dev/null]: ")
   if f: failures = open(f, 'a')
   else: failures = open('/dev/null', 'w')
   for line in src:
