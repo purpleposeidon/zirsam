@@ -18,6 +18,12 @@ if __name__ != '__main__':
 
 
 DATA_OUTPUT = "bnf_data.py"
+BNF_SOURCES = {
+  'standard': ('../data/lojban.bnf', '../data/extensions.bnf'),
+  #'simplified': ('../data/simple.bnf'), 
+}
+
+
 date = time.asctime()
 author = os.popen('whoami').read().strip()+'@'+os.popen('hostname').read().strip()
 
@@ -40,112 +46,121 @@ from zirsam.special_terminals import *
 
 
 """.format(geninfo)
-tail_info = """BNF['any_word'] = any_word()
-#BNF['unmatched'] = 'unmatched'
+bnf_list_dictionary = ''
+for bnf_name in BNF_SOURCES.keys():
+  bnf_list_dictionary += "{0!r}: {0}_bnf_data, ".format(bnf_name)
+
+tail_info = """
+BNF_LIST = {%s}
+
+for bnf_data in BNF_LIST.values():
+  bnf_data['any_word'] = any_word()
+
 if __name__ == '__main__':
+  BNF = standard_bnf_data
   if len(sys.argv) > 1:
     for key in sys.argv[1:]:
       print (key, ":", BNF[key])
   else:
-    print (BNF)
-"""
+    print ('''Usage:
+  python3 bnf_data.py bnf_item1 ...''')
+""" % (bnf_list_dictionary,)
 
 #Painful. Why?
 sys.stdout = open(DATA_OUTPUT, 'w')
-bnf = ''
-bnf = open('../data/lojban.bnf').read()
-bnf += '\n'
-bnf += open('../data/extensions.bnf').read()
+def convert_source_files(bnf_name, filenames):
+  bnf = ''
+  for name in filenames:
+    bnf += open(name).read()
+    bnf += '\n'
 
 
-### The Relacing Part
+  ### The Relacing Part
 
-#bnf = re.sub(pattern, rep, bnf)
+  #bnf = re.sub(pattern, rep, bnf)
 
-#Remove comments
-bnf = re.sub(r"(?m)(\w*;.*?$)", '', bnf) #m == MULTILINE
+  #Remove comments
+  bnf = re.sub(r"(?m)(\w*;.*?$)", '', bnf) #m == MULTILINE
 
-''' ### This now dealt with in dehtml_bnf.py
-#Get rid of the subscripts -- only 1 number at the end!
-bnf = re.sub(r"([\w-]\d)\d*", r"\1", bnf) #foo-bar-123 -> foo-bar-1
-'''
-while '  ' in bnf: bnf = bnf.replace("  ", ' ') #Kill extra spaces
-while ' \n' in bnf: bnf = bnf.replace(' \n', '\n')
-while '\n\n' in bnf: bnf = bnf.replace('\n\n', '\n')
-#sys.stderr.write(bnf.replace('\n', '\\n\n'))
+  while '  ' in bnf: bnf = bnf.replace("  ", ' ') #Kill extra spaces
+  while ' \n' in bnf: bnf = bnf.replace(' \n', '\n')
+  while '\n\n' in bnf: bnf = bnf.replace('\n\n', '\n')
+  #sys.stderr.write(bnf.replace('\n', '\\n\n'))
 
-bnf = re.sub(r"([\w\d-]*) =", r";\n\1 = ", bnf).strip(';') +';' #Add ; after rules and at the end
-bnf = bnf.replace('\n', '') #destroy newlines!
-bnf = bnf.replace(';', "\n") #Now put the newlines back!
-bnf = bnf.replace('  ', ' ').replace('\n\n', '\n').strip() #Cleanup again
+  bnf = re.sub(r"([\w\d-]*) =", r";\n\1 = ", bnf).strip(';') +';' #Add ; after rules and at the end
+  bnf = bnf.replace('\n', '') #destroy newlines!
+  bnf = bnf.replace(';', "\n") #Now put the newlines back!
+  bnf = bnf.replace('  ', ' ').replace('\n\n', '\n').strip() #Cleanup again
 
 
-bnf = bnf.replace('#', " #").replace('  ', ' ') #Fix /foo#/ to be /foo #/
-if DISABLE_HASH:
-  bnf = bnf.replace('#', ' ').replace('  ', '')
-else:
-  bnf = bnf.replace('#', '[free...]') #expand the #
-
-
-#Now get ready to make that space our new concat operator
-bnf = bnf.replace(' | ', '|').replace(' & ', '&').replace(' = ', '=')
-bnf = bnf.replace(' ...', '...') #... binds closest
-
-bnf = bnf.replace('-', '_') #For python validity
-
-#Now make real python
-
-bnf = re.sub(r"([\w\d_]+)", r"Term(\1)", bnf) #Rule contents
-
-bnf = re.sub(r"Term\(([a-z\d_]+)\)", r"Rule('\1')", bnf) #Rule contents
-bnf = re.sub(r"Term\(([A-Zh]+)\)", r"Terminal(\1)", bnf) #Rule contents
-
-
-bnf = re.sub(r"/(.*?)/", r"Elidable(\1)", bnf) #Fix // (There are no //'s inside of //)
-
-bnf = bnf.replace('[', "Optional(").replace(']', ")") #Fix []
-
-
-
-while ' \n' in bnf: bnf = bnf.replace(' \n', '\n')
-
-
-"""
-Now for the malmakfa: I have the python parser parse it for me!
-  I just have to exploit the orders of operation, and then write classes to implement those ops
-
-Some orders of operations, from strongest precedent, to lowest precedent:
-  **
-  *
-  +
-  <<
-  ^  (Don't want to use)
-  |  (Don't want to use)
-  == (Only if I'm desperate)
-"""
-
-if 1:
-  #This is where everything becomes absolutely illegible
-  bnf = bnf.replace('...', '**"REPEAT"') #repeat
-  if 1: #The BNF seems unable to make up its mind on this point? >_>
-    bnf = bnf.replace('&', '*') #and/or
-    bnf = bnf.replace(' ', '+') #concat
+  bnf = bnf.replace('#', " #").replace('  ', ' ') #Fix /foo#/ to be /foo #/
+  if DISABLE_HASH:
+    bnf = bnf.replace('#', ' ').replace('  ', '')
   else:
-    bnf = bnf.replace(' ', '/') #concat
-    bnf = bnf.replace('&', '-') #and/or
+    bnf = bnf.replace('#', '[free...]') #expand the # #XXX A thought - don't expand, but handle while parsing?
 
-  bnf = bnf.replace('|', '<<') #alternation
 
-#Format it to look like a dictionary
-bnf = bnf.replace('\n', ';\n')
-bnf = bnf.replace('=', ':  ')
-bnf = '\n'+bnf
-bnf = bnf.replace('\nTerm', '\n  Term')
-bnf = bnf.replace('\n\n', '\n')
-bnf = bnf.replace(';', ',')
+  #Now get ready to make that space our new concat operator
+  bnf = bnf.replace(' | ', '|').replace(' & ', '&').replace(' = ', '=')
+  bnf = bnf.replace(' ...', '...') #... binds closest
 
+  bnf = bnf.replace('-', '_') #For python validity
+
+  #Now make real python
+
+  bnf = re.sub(r"([\w\d_]+)", r"Term(\1)", bnf) #Rule contents
+
+  bnf = re.sub(r"Term\(([a-z\d_]+)\)", r"Rule('\1')", bnf) #Rule contents
+  bnf = re.sub(r"Term\(([A-Zh]+)\)", r"Terminal(\1)", bnf) #Rule contents
+
+
+  bnf = re.sub(r"/(.*?)/", r"Elidable(\1)", bnf) #Fix // (There are no //'s inside of //)
+
+  bnf = bnf.replace('[', "Optional(").replace(']', ")") #Fix []
+
+
+
+  while ' \n' in bnf: bnf = bnf.replace(' \n', '\n')
+
+
+  """
+  Now for the malmakfa: I have the python parser parse it for me!
+    I just have to exploit the orders of operation, and then write classes to implement those ops
+
+  Some orders of operations, from strongest precedent, to lowest precedent:
+    **
+    *
+    +
+    <<
+    ^  (Don't want to use)
+    |  (Don't want to use)
+    == (Only if I'm desperate)
+  """
+
+  if 1:
+    #This is where everything becomes absolutely illegible
+    bnf = bnf.replace('...', '**"REPEAT"') #repeat
+    if 1: #The BNF seems unable to make up its mind on this point? >_>
+      bnf = bnf.replace('&', '*') #and/or
+      bnf = bnf.replace(' ', '+') #concat
+    else:
+      bnf = bnf.replace(' ', '/') #concat
+      bnf = bnf.replace('&', '-') #and/or
+
+    bnf = bnf.replace('|', '<<') #alternation
+
+  #Format it to look like a dictionary
+  bnf = bnf.replace('\n', ';\n')
+  bnf = bnf.replace('=', ':  ')
+  bnf = '\n'+bnf
+  bnf = bnf.replace('\nTerm', '\n  Term')
+  bnf = bnf.replace('\n\n', '\n')
+  bnf = bnf.replace(';', ',')
+  return "%s_bnf_data = {"%(bnf_name,) + bnf + "\n}\n"
 
 print(head_info)
-print("BNF = {", bnf, "}", sep='\n')
+#print("BNF = {", bnf, "}", sep='\n')
+for bnf_src in BNF_SOURCES:
+  print(convert_source_files(bnf_src, BNF_SOURCES[bnf_src]))
 print(tail_info)
 #This + magic_bnf.BnfObjectBase == easier than writing a bnf parser, right?

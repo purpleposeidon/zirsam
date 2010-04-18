@@ -85,8 +85,10 @@ except Exception as e:
 #bnf_data.BNF
 #magic_bnf.BNF
 
-magic_bnf.BNF = bnf_data.BNF
+#magic_bnf.BNF = bnf_data.BNF
 
-BNF = BnfWrapper(bnf_data.BNF)
-
+#BNF = BnfWrapper(bnf_data.BNF)
+def choose(bnf_name):
+  return BnfWrapper(bnf_data.BNF_LIST[bnf_name])
+  
 os.chdir(ORIG_DIR)

@@ -12,10 +12,10 @@ Match:
 NoFill:
   {} into <PA ...>
 NoMatch:
-  {gletu} info <PA ...>
+  {fu} info <PA ...>
 """
 #Logic values
-class LogicValue:
+class LogicValue: #XXX bad name, pick a better one
   def __repr__(self): return self.n
   def __init__(self, n, b): self.n, self.b = n, b
   def __bool__(self): return self.b
@@ -31,7 +31,7 @@ NoTake = LogicValue('NoTake', True) #A relative of NoFill? This is for Optional
 
 
 
-BNF = None  #This will be set by bnf/__init__.py; it is used by the Rule.
+BNF = None  #This must be set later on; it is used by Rule
 
 class BnfObjectBase:
   #All bnf items will need these methods
@@ -189,22 +189,8 @@ class XOr(Condition): #Bad name, it belies its' true function, should be "Altern
       ##B_state = tracker.get_state() #XXX may rm later
       if b == Match:
         if tracker.current_valsi == A_state[0]:
-          #We are SERIOUSLY FUCKED. Which one do we use? Let's shit our pants, and make extra-certain the user catches it.
-          msg = """***********Ah, well, this is a somewhat disconcerting situation in lojbanistan**********\nThe item: {}\nThe rulelette: {}\nThe state: {}\n\nThe grammar is ambigious or something! (Sorry for being so noisy about it, I think this is really really important)\nPlease report this issue.\n  -- zirsam/bnf/magic_bnf.py""".format(tracker.valsi, self, tracker.get_state())
-          import sys, os
-          try:
-            print(msg, file=sys.stderr)
-          except: pass
-          if not self.tracker.conf.debug:
-            try:
-              print(msg, file=sys.stdout)
-            except: pass
-            try:
-              open('/tmp/README_IN_THE_NAME_OF_CEVNI_________________________________.txt', 'wa').write(msg+'\n')
-            except: pass
-            os.system("xmessage \"Please look in /tmp/ for a horrible zirsam error\" &")
-            os.system("beep; beep; beep; beep; beep; beep; beep; beep")
-          raise Exception(msg)
+          #It matches TWO things? Shit pants.
+          raise Exception("@@@@@@@@@@@@@@@@@@@@@@@@@\n!!!!AMBIGIOUS GRAMMAR!!!!\n@@@@@@@@@@@@@@@@@@@@@@@@@\ntracker.valsi: {}\nself:{}\ntracker.get_state():{}\n\nContact your grammar provider.".format(tracker.valsi, self, tracker.get_state()))
         if A_state[0] > tracker.current_valsi:
           tracker.restore_state(A_state)
       else:

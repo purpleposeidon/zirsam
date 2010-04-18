@@ -9,13 +9,11 @@ import io
 from zirsam.config import Configuration
 from zirsam.common import Buffer
 from zirsam import thaumatology
-from zirsam.bnf import BNF
+from zirsam import bnf
 from zirsam import magic_bnf
 
-
 def pprint(wut, first=True, html=False):
-  """More complex than the one below.
-  We can output in a few different ways:
+  """We can output in a few different ways:
     * Print the entire parse tree, including sub-rules like "sumti_6"
     * Don't print sub-rules, but print everything
     * Print only nodes that don't have 2 branches"""
@@ -25,7 +23,7 @@ def pprint(wut, first=True, html=False):
     
     #wut.config._debug = False
     if head[-1] in '1234567890' and not (wut.config._debug or wut.config.full_tree):
-      #It is part of a big rule
+      #It is not a super-rule
       head = ''
       for v in wut.value:
         head += pprint(v, first=False, html=html)
@@ -201,6 +199,8 @@ class GrammarParser:
 
   def __iter__(self):
     #yield ROOT_TOKENs
+    BNF = bnf.choose(self.config.bnf_name)
+    magic_bnf.BNF = BNF
     root_rule = magic_bnf.Rule(self.config.parsing_unit)
     root_value = BNF[root_rule]
     while 1:
