@@ -4,6 +4,7 @@
 import io
 import cgi
 
+import zirsam
 import zirsam.config as config
 import zirsam.common as common
 import zirsam.orthography as orthography
@@ -259,16 +260,16 @@ class Token:
     defin = ''
     if taip == "brivla":
       g = "\n {0}".format(self.value)
-      for line in open("data/gismu.txt").readlines():
+      for line in open(zirsam.resource("gismu.txt")).readlines():
         line = '\n'+line
         if g in line:
           defin = line
           break
       if not defin:
-        #assert g in open("data/gismu.txt").read()
+        #assert g in open(zirsam.resource("gismu.txt")).read()
         g = "\n{0}:".format(self.value)
         g = self.value
-        for line in open("data/lujvo.txt").readlines():
+        for line in open(zirsam.resource("lujvo.txt")).readlines():
           line = '\n'+line
           if g in line:
             defin = line
@@ -276,7 +277,7 @@ class Token:
       if not defin and self.ve_lujvo_rafsi:
         for raf in self.ve_lujvo_rafsi:
           raf = " {0} ".format(raf)
-          for line in open("data/gismu.txt").readlines():
+          for line in open(zirsam.resource("gismu.txt")).readlines():
             test = line[:20]
             if raf in test and not(line in defin):
               #import sys
@@ -292,7 +293,7 @@ class Token:
       if v[0] in 'aeiou': v = '.'+v
       else: v= ' '+v
       g = "\n{0} ".format(v)
-      for line in open("data/cmavo.txt").readlines():
+      for line in open(zirsam.resource("cmavo.txt")).readlines():
         line = '\n'+line
         if g in line:
           defin = line.strip()
