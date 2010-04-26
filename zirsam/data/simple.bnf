@@ -1,0 +1,291 @@
+; A 'sumtisix' is something that looks kinda like
+; foo-N = thingie1 | thingie2 | thingie3 | thingie4
+; and follows a bunch of other foo's, most containing connectives
+; What I want to do is make the sumtisixes be accessed
+; more directly.
+
+; So, separate... those out into foo-simple and foo-connective-N
+
+
+x-parse-root =
+  text
+text =
+    [NAI ...] [CMENE ... # | (indicators & free ...)] [joik-jek] text-1
+text-1 =
+    [(I [jek | joik] [[stag] BO] #) ... | NIhO ... #] [paragraphs]
+paragraphs =
+    paragraph [NIhO ... # paragraphs]
+paragraph =
+    (statement | fragment) [I # [statement | fragment]] ...
+
+statement =
+    statement-simple
+    | statement-connective-1
+    | prenex statement
+statement-simple =
+    sentence
+    | [tag] TUhE # text-1 /TUhU#/
+statement-connective-1 =
+    statement-connective-2 [I joik-jek [statement-connective-2]] ...
+statement-connective-2 =
+    statement-simple [I [jek | joik] [stag] BO # [statement-connective-2]]
+
+fragment =
+    ek #
+    | gihek #
+    | quantifier
+    | NA #
+    | terms /VAU#/
+    | prenex
+    | relative-clauses
+    | links
+    | linkargs
+
+
+prenex =
+    terms ZOhU #
+sentence =
+    [terms [CU #]] bridi-tail
+subsentence =
+    sentence
+    | prenex subsentence
+
+bridi-tail =
+    bridi-tail-simple
+    | bridi-tail-connective
+bridi-tail-simple =
+    selbri tail-terms
+    | gek-sentence
+bridi-tail-connective =
+    bridi-tail-connective-1 [gihek [stag] KE # bridi-tail /KEhE#/ tail-terms]
+bridi-tail-connective-1 =
+    bridi-tail-connective-2 [gihek # bridi-tail-connective-2 tail-terms] ...
+bridi-tail-connective-2 =
+    bridi-tail-simple [gihek [stag] BO # bridi-tail-connective-2 tail-terms]
+
+gek-sentence =
+    gek subsentence gik subsentence tail-terms
+    | [tag] KE # gek-sentence /KEhE#/
+    | NA # gek-sentence
+tail-terms =
+    [terms] /VAU#/
+terms =
+    term ...
+    | terms-1 ...
+terms-1 =
+    terms-2 [PEhE # joik-jek terms-2] ...
+terms-2 =
+    term [CEhE # term] ...
+term =
+    sumti
+    | (tag | FA #) (sumti | /KU#/)
+    | termset
+    | NA KU #
+termset =
+    NUhI # gek terms /NUhU#/ gik terms /NUhU#/
+    | NUhI # terms /NUhU#/
+
+sumti =
+    sumti-simple
+    | sumti-connective-1 [VUhO # relative-clauses]
+sumti-simple =
+    (LAhE # | NAhE BO #) [relative-clauses] sumti /LUhU#/
+    | KOhA #
+    | lerfu-string /BOI#/
+    | LA # [relative-clauses] CMENE ... #
+    | (LA | LE) # sumti-tail /KU#/
+    | LI # mex /LOhO#/
+    | ZO # ; ZO any-word #
+    | LU text /LIhU#/
+    | LOhU LEhU #
+    | ZOI #
+sumti-connective-1 =
+    sumti-connective-2 [(ek | joik) [stag] KE # sumti /KEhE#/]
+sumti-connective-2 =
+    sumti-connective-3 [joik-ek sumti-connective-3] ...
+sumti-connective-3 =
+    sumti-connective-4 [(ek | joik) [stag] BO # sumti-connective-3]
+sumti-connective-4 =
+    sumti-connective-5
+    | gek sumti gik sumti-connective-4
+sumti-connective-5 =
+    [quantifier] sumti-simple [relative-clauses]
+    | quantifier selbri /KU#/ [relative-clauses]
+sumti-tail =
+    [sumti-simple [relative-clauses]] sumti-tail-1
+    | relative-clauses sumti-tail-1
+sumti-tail-1 =
+    [quantifier] selbri [relative-clauses]
+    | quantifier sumti
+relative-clauses =
+    relative-clause [ZIhE # relative-clause] ...
+relative-clause =
+    GOI # term /GEhU#/
+    | NOI # subsentence /KUhO#/
+
+selbri =
+    [tag] selbri-1
+selbri-1 =
+    selbri-2
+    | NA # selbri
+selbri-2 =
+    selbri-3 [CO # selbri-2]
+selbri-3 =
+    tanru-unit
+    | selbri-connective-4 ...
+selbri-connective-4 =
+    selbri-connective-5 [joik-jek selbri-connective-5 | joik [stag] KE # selbri-connective-3 /KEhE#/] ...
+selbri-connective-5 =
+    selbri-connective-6 [(jek | joik) [stag] BO # selbri-connective-5]
+selbri-connective-6 =
+    tanru-unit [BO # selbri-6]
+    | [NAhE #] guhek selbri gik selbri-connective-6
+tanru-unit =
+    tanru-unit-1 [CEI # tanru-unit-1] ...
+tanru-unit-1 =
+    tanru-unit-2 [linkargs]
+tanru-unit-2 =
+    BRIVLA #
+    | GOhA [RAhO] #
+    | KE # selbri-3 /KEhE#/
+    | ME # sumti /MEhU#/ [MOI #]
+    | (number | lerfu-string) MOI #
+    | NUhA # mex-operator
+    | SE # tanru-unit-2
+    | JAI # [tag] tanru-unit-2
+    | NAhE # tanru-unit-2
+    | NU [NAI] # [joik-jek NU [NAI] #] ... subsentence /KEI#/
+linkargs =
+    BE # term [links] /BEhO#/
+links =
+    BEI # term [links]
+quantifier =
+    number /BOI#/
+    | VEI # mex /VEhO#/
+mex =
+    mex-1 [operator mex-1] ...
+    | FUhA # rp-expression
+mex-1 =
+    mex-2 [BIhE # operator mex-1]
+mex-2 =
+    operand
+    | [PEhO #] operator mex-2 ... /KUhE#/
+rp-expression =
+    rp-operand rp-operand operator
+rp-operand =
+    operand
+    | rp-expression
+operator =
+    operator-simple
+    | operator-1 [joik-jek operator-1 | joik [stag] KE # operator /KEhE#/] ...
+operator-connective-1 =
+    operator-simple
+    | guhek operator-connective-1 gik operator-simple
+    | operator-simple (jek | joik) [stag] BO # operator-connective-1
+operator-simple =
+    mex-operator
+    | KE # operator /KEhE#/
+mex-operator =
+    SE # mex-operator
+    | NAhE # mex-operator
+    | MAhO # mex /TEhU#/
+    | NAhU # selbri /TEhU#/
+    | VUhU #
+operand =
+    operand-simple
+    | operand-connective-1 [(ek | joik) [stag] KE # operand /KEhE#/]
+operand-connective-1 =
+    operand-2 [joik-ek operand-2] ...
+operand-connective-2 =
+    operand-simple [(ek | joik) [stag] BO # operand-connective-2]
+operand-simple =
+    quantifier
+    | lerfu-string /BOI#/
+    | NIhE # selbri /TEhU#/
+    | MOhE # sumti /TEhU#/
+    | JOhI # mex-2 ... /TEhU#/
+    | gek operand gik operand-3
+    | (LAhE # | NAhE BO #) operand /LUhU#/
+number =
+    PA [PA | lerfu-word] ...
+lerfu-string =
+    lerfu-word [PA | lerfu-word] ...
+lerfu-word =
+    BY
+    | BU
+    | LAU lerfu-word
+    | TEI lerfu-string FOI
+ek =
+    [NA] [SE] A [NAI]
+gihek =
+    [NA] [SE] GIhA [NAI]
+jek =
+    [NA] [SE] JA [NAI]
+joik =
+    [SE] JOI [NAI]
+    | interval
+    | GAhO interval GAhO
+interval =
+    [SE] BIhI [NAI]
+joik-ek =
+    joik #
+    | ek #
+joik-jek =
+    joik #
+    | jek #
+gek =
+    [SE] GA [NAI] #
+    | joik GI #
+    | stag gik
+guhek =
+    [SE] GUhA [NAI] #
+gik =
+    GI [NAI] #
+tag =
+    tense-modal [joik-jek tense-modal] ...
+stag =
+    simple-tense-modal [(jek | joik) simple-tense-modal] ...
+tense-modal =
+    simple-tense-modal #
+    | FIhO # selbri /FEhU#/
+simple-tense-modal =
+    [NAhE] [SE] BAI [NAI] [KI]
+    | [NAhE] (time [space]
+    | space [time]) & CAhA [KI]
+    | KI
+    | CUhE
+time =
+    ZI & time-offset ... & ZEhA [PU [NAI]] & interval-property ...
+time-offset =
+    PU [NAI] [ZI]
+space =
+    VA & space-offset ... & space-interval & (MOhI space-offset)
+space-offset =
+    FAhA [NAI] [VA]
+space-interval =
+    ((VEhA & VIhA) [FAhA [NAI]]) & space-int-props
+space-int-props =
+    (FEhE interval-property) ...
+interval-property =
+    number ROI [NAI]
+    | TAhE [NAI]
+    | ZAhO [NAI]
+free =
+    SEI # [terms [CU #]] selbri /SEhU/
+    | SOI # sumti [sumti] /SEhU/
+    | vocative [relative-clauses] selbri [relative-clauses] /DOhU/
+    | vocative [relative-clauses] CMENE ... # [relative-clauses] /DOhU/
+    | vocative [sumti] /DOhU/
+    | (number | lerfu-string) MAI
+    | TO text /TOI/
+    | XI # (number | lerfu-string) /BOI/
+    | XI # VEI # mex /VEhO/
+vocative =
+    (COI [NAI]) ... & DOI
+indicators =
+    [FUhE] indicator ...
+indicator =
+    (UI | CAI) [NAI]
+    | Y
+    | DAhO
+    | FUhO
