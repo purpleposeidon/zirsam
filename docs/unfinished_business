@@ -49,7 +49,9 @@ Items marked "-" aren't as important as items marked "+"
     - In some situations, you might actually want sentence-at-a-time.
  - have switches that enable or disable certain parts of the BNF to allow for grammars designed for other situations
     - Such as...?
- + Investigate cython! (Used to be called pyrex?)
+ - Investigate cython! (Used to be called pyrex?)
+    - Currently (cython 0.12.1; April 2010) doesn't support "yield". Absolutely unusable until it is.
+       - It *would* be possible to rewrite it such that each step built up and returned a list
  - Have cmalu use bitbuffer.py
 
 ###### Much Later
