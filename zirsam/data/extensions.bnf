@@ -51,14 +51,6 @@ sumti-6 =
     | ZOI # ; originally "ZOI any-word anything any-word #"
 
 
-x-parse-root =
-  ;;;; This is the default starting point
-  ;;;; This should refer to a single rule.
-  ;;;; (An old bug, haven't tested recently TODO)
-  ;sentence
-  text
-  ;x-test
-
 x-parse-sentence =
   [I] sentence
 
@@ -78,8 +70,6 @@ x-test =
   ;x-test-elide
   ;x-test-puki
   x-test-tail
-
-
 
 x-test-issue-1 =
   LA CMENE ...

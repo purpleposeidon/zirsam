@@ -143,7 +143,9 @@ def convert_source_files(bnf_name, filenames):
   if 1:
     #This is where everything becomes absolutely illegible
     bnf = bnf.replace('...', '**"REPEAT"') #repeat
-    if 1: #The BNF seems unable to make up its mind on this point? >_>
+    #Okay. Seriously. Finally. FOR. REAL. NOW.
+    #    ~~CONCAT has greater precendence than ANDOR.~~
+    if 0: #The BNF seems unable to make up its mind on this point? >_>
       bnf = bnf.replace('&', '*') #and/or
       bnf = bnf.replace(' ', '+') #concat
     else:

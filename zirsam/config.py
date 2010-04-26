@@ -310,7 +310,7 @@ Arguments:"""
     self.has_warnings = False
     self.perfect_parse = True
     self.bnf_name = 'standard'
-    self.parsing_unit = 'text' #'x_parse_root'
+    self.parsing_unit = 'text'
     self.parsing_unit = self.parsing_unit.replace('-', '_')
     self.show_progress = False
 
