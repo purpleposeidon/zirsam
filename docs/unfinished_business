@@ -5,6 +5,8 @@ Items marked "-" aren't as important as items marked "+"
     - BNF isn't being parsed right; agh!
     - Check all of those &'s
  * Oh god. What did I do. {mi pu viska}
+    AGH! That stupid & thing again!
+      OKAY. SO. CLEARLY, CONCATENATION HAS GREATER PRECEDENCE THAN &. I"M GLAD THAT WE HAVE DETERMINED THIS TO BE TRUE.
 
 ###### Release
  - bnf/convert_bnf.py: DISABLE_HASH = False
