@@ -1,19 +1,26 @@
 INSTALLATION
 ============
-Should be quite simple. run "setup.py install" with administrative privlidges.
+1) There must be a 'python3' command in the $PATH. The easiest way to do this
+     sudo ln /usr/bin/python3.0 /usr/bin/python3
+   The other versions in the py3k series will work, of course.
+2) Update the BNF data. The following command should be run as a user
+     ./setup.py build
+3) Then install the program, with admin privlidges
+     sudo ./setup.py install
 
-If you are unable to install it, you can access the demo on my box by:
+
+If you are unable to install it, you may be able to access the demo on my box by:
   ssh zirsam@neptune.wtf.la
 The password is "lojban".
 
 
 USAGE
 =====
-After the library has been installed, this command is made available:
+Installing the library also installs a command for running the parser from the command line:
   zirsam
 This command will output a condensed parse tree.
 
-To start parsing something using the actual library, first pick what depth you want. Do you want orthography (letters), morphology (words), thaumatology (metasyntax/pre-processing) or dendrography?
+To start parsing something using the actual library, first pick what depth you want. Do you want orthography (letters), morphology (words), thaumatology (metasyntax/pre-processing) or dendrography (grammar parsing)?
 If all you want are valsi (morphology), then a program using this might be:
 
   import zirsam.morphology

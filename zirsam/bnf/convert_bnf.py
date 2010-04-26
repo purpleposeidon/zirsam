@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/python3.0
 # -*- coding: utf-8 -*-
 
 #After you have put the *formal rules* of the CLL's BNF to data/lojban.bnf,
