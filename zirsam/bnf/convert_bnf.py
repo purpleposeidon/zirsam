@@ -19,8 +19,9 @@ if __name__ != '__main__':
 
 DATA_OUTPUT = "bnf_data.py"
 BNF_SOURCES = {
-  'standard': ('../data/lojban.bnf', '../data/extensions.bnf'),
-  'simplified': ('../data/simple.bnf',),
+  'standard': ['../data/lojban.bnf', '../data/extensions.bnf'],
+  'simplified': ['../data/simple.bnf'],
+  'xorxestags': ['../data/xorxes_tags.bnf'],
 }
 
 
