@@ -23,6 +23,7 @@ BNF_SOURCES = {
   'simplified': ['../data/simple.bnf'],
   'xorxestags': ['../data/xorxes_tags.bnf'],
 }
+#XXX config.py's list of valid grammars must be updated manually to reflect this list
 
 
 date = time.asctime()
@@ -161,7 +162,6 @@ def convert_source_files(bnf_name, filenames):
   return "%s_bnf_data = {"%(bnf_name,) + bnf + "\n}\n"
 
 print(head_info)
-#print("BNF = {", bnf, "}", sep='\n')
 for bnf_src in BNF_SOURCES:
   print(convert_source_files(bnf_src, BNF_SOURCES[bnf_src]))
 print(tail_info)

@@ -218,13 +218,24 @@ gik =
 tag =
     tense-modal [joik-jek tense-modal] ...
 stag =
-    simple-tense-modal [(jek | joik) simple-tense-modal] ...
+    tense-modal [(jek | joik) tense-modal] ...
 
 ; The following two rules are from http://www.lojban.org/tiki/Internal+grammar+of+tags
 ; Made by xorxes
-tense-modal = ([NAhE] [SE] tag-unit [NAI] #) ...
+;
+; I made an additional change under 'stag':
+; simple-tense-modal --> tense-modal
 
-tag-unit = BAI | CAhA | CUhE | KI | ZI | PU | VA | [MOhI] FAhA | ZEhA | VEhA | VIhA | [FEhE] number ROI | [FEhE] TAhE | [FEhE] ZAhO | FIhO # selbri /FEhU/
+tense-modal =
+    ([NAhE] [SE] tag-unit [NAI] #) ...
+
+tag-unit =
+    BAI | CAhA | CUhE | KI | ZI | PU | VA | ZEhA | VEhA | VIhA
+    | [MOhI] FAhA
+    | [FEhE] number ROI
+    | [FEhE] TAhE
+    | [FEhE] ZAhO
+    | FIhO # selbri /FEhU/
 
 free =
     SEI # [terms [CU #]] selbri /SEhU/

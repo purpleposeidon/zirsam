@@ -1,4 +1,5 @@
 #!/bin/sh
 
+./setup.py clean
 rm -fv *.pyc *~ */*.pyc */*~ */*/*.pyc */*/*~
 rm -rfv build

@@ -165,7 +165,7 @@ Arguments:"""
     _ = valued_arg("hate token")
     if _: self.hate_token = _
 
-    names = ['standard', 'simplified'] #bnf.bnf_data.bnf_data.keys()  #XXX
+    names = ['standard', 'simplified', 'xorxestags'] #bnf.bnf_data.bnf_data.keys()  #XXX Must be updated manually; see bnf/convert_bnf.py
     _ = valued_arg("use grammar", dict(zip(names, names)))
     if _: self.bnf_name = _
     if possible_args:

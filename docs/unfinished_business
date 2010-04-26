@@ -4,6 +4,7 @@ Items marked "-" aren't as important as items marked "+"
  - What is up with {do cu puki broda}
     - BNF isn't being parsed right; agh!
     - Check all of those &'s
+ * Oh god. What did I do. {mi pu viska}
 
 ###### Release
  - bnf/convert_bnf.py: DISABLE_HASH = False
