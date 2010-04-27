@@ -18,15 +18,17 @@ Items marked "-" aren't as important as items marked "+"
  - Add option for progress bar, and maybe auto-detect if you might want progress info. Say... 3 seconds or so
  - Put in GPL licensing or something and other legalese stuff in files that need it
     - what is the legal status of lojban.bnf?
+       - Public domain
  - Test: Should be able to run dendrography off of a raw valsi stream (without thaumatology). Write an example!
  - Move HTML-ify to a separate module
  - Move unnecessary files out of zirsam/data/
  - Put parser into quiet mode inside ZOI
  - Also, perhaps an option to *not* be quiet inside ZOI; preventing embedded non-Lojban text
+ - Make zirsam runnable from the package again, so that continously building and installing isn't needed
 
 ###### Later
  - $ grep -C 2 "XXX\|TODO" */*.bnf *.py */*.py
- - Check for weird/odd/wrong comments
+ - Check for weird/odd/wrong comments. There are probably many...
  - (seperate out the configuration options for each section?)
  - It would be interesting to have an option to disable line-buffering; the user could see the immediate tokenization. (Bleh, meh)
  - How do I like Position? Does it match up with vi, kate, and other editors?
@@ -35,7 +37,6 @@ Items marked "-" aren't as important as items marked "+"
  + Make GlyphTable handle multi-length input characters (sampa: {l=?dZEim=s} should be {la.djeims})
  - CLI argument to read stdin from a file
  - Print out tokenization immediatly on input (import tty)
- - It could be faster! Instead of Xor(Xor(...), A) do Xor(A, Xor(...)). Because that would make it faster? Only if the most common forms are listed first in the BNF. Well, at least the old method might not be faster, but the current one would be faster because it has to run more XOr tests.
  - Another way to make it faster would be to merge Concat(A, Concat(B, C)) into Concat(A, B, C), at the cost of increased code complexity. (Or, perhaps Concat(A, Concat(B, Concat(C, D))) into Concat(Concat(A, B), Concat(C, D)), without adding more code?)
  + Move/Do lujvo/fuhivla sorting crap in morphology.py instead of token.py
  - Have a config option for zoi to be filtered by the alphabet, or just from what we get
@@ -141,4 +142,4 @@ Ortohgraphy - what happens to capitalized letters with strict ortho?
  - What is up with {do cu puki broda}
     - BNF isn't being parsed right; agh!
     - Check all of those &'s
-
+ - It could be faster! Instead of Xor(Xor(...), A) do Xor(A, Xor(...)). Because that would make it faster? Only if the most common forms are listed first in the BNF. Well, at least the old method might not be faster, but the current one would be faster because it has to run more XOr tests.

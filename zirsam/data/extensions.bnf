@@ -137,10 +137,6 @@ x-test-elide-bit-1 =
 x-test-elide-bit-2 =
   (/CU/ BRIVLA) | PA
 
-x-inefficiency-example =
-  a b c
-;TODO: Stored as "Concat(Concat(a, b), c)". It would be better to be done as Concat(a, Concat(b, c))
-
 x-test-puki =
   sentence ; XXX TODO XXX
 
