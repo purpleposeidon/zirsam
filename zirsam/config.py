@@ -165,7 +165,10 @@ Arguments:"""
     _ = valued_arg("hate token")
     if _: self.hate_token = _
 
-    names = ['standard', 'simplified', 'xorxestags'] #bnf.bnf_data.bnf_data.keys()  #XXX Must be updated manually; see bnf/convert_bnf.py
+    names = []
+    for line in open(zirsam.resource("BNFLIST")):
+      if line and line[0] != '#':
+        names.append(line.split(':')[0])
     _ = valued_arg("use grammar", dict(zip(names, names)))
     if _: self.bnf_name = _
     if possible_args:

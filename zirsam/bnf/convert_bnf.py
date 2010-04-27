@@ -18,13 +18,16 @@ if __name__ != '__main__':
 
 
 DATA_OUTPUT = "bnf_data.py"
-BNF_SOURCES = {
-  'standard': ['../data/lojban.bnf', '../data/extensions.bnf'],
-  'simplified': ['../data/simple.bnf'],
-  'xorxestags': ['../data/xorxes_tags.bnf'],
-}
-#XXX config.py's list of valid grammars must be updated manually to reflect this list
-
+BNF_PATH = "../data/"
+BNF_RESOURCE_LIST = os.path.join(BNF_PATH, "BNFLIST")
+BNF_SOURCES = {}
+for line in open(BNF_RESOURCE_LIST):
+  line = line.strip()
+  if not line or line[0] == '#':
+    continue
+  name, files = line.split(':')
+  files = files.strip().split(' ')
+  BNF_SOURCES[name] = [os.path.join(BNF_PATH, filename) for filename in files]
 
 date = time.asctime()
 author = os.popen('whoami').read().strip()+'@'+os.popen('hostname').read().strip()

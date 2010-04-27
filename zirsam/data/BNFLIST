@@ -1,0 +1,20 @@
+#This file defines the grammars.
+#'standard' is the default grammar.
+#
+#syntax:
+# GRAMMARNAME: file1.bnf file2.bnf ... fileN.bnf
+#
+#If a rule is defined multiple times in a BNF source
+#file, then the last definition is used.
+#
+#comments:
+# Comments must be on seperate lines, and the # must
+# be at the begining of the line
+#
+#usage:
+# zirsam --use-grammar=?
+#Parsing starts at the 'text' node.
+standard: lojban.bnf extensions.bnf
+simplified: simple.bnf extensions.bnf
+xorxestags: xorxes_tags.bnf
+test: tests.bnf

@@ -1,0 +1,98 @@
+
+x-test =
+  ;;;; All my BNF tests
+  ;x-test-issue-1
+  ;x-test-issue-2
+  ;x-test-issue-3
+  ;x-test-cat
+  ;x-test-cat-2
+  ;x-test-undermatch
+  ;x-test-xor
+  ;x-test-and
+  ;x-test-optional-1
+  ;x-test-optional-2
+  ;x-test-optional-3
+  ;x-test-elide
+  ;x-test-puki
+  x-test-tail
+
+x-test-issue-1 =
+  LA CMENE ...
+  | LA BRIVLA
+
+x-test-issue-2 =
+    a [b] ...
+
+x-test-issue-3 =
+  x-test-issue-3-bit-1 KOhA
+
+x-test-issue-3-bit-1 =
+    LAhE x-test-issue-3-bit-2 /LUhU#/
+
+x-test-issue-3-bit-2 =
+  KOhA
+  | x-test-issue-3-bit-1
+
+x-test-undermatch = x-short | x-long
+x-short = PA
+x-long = [PA] LE BRIVLA
+
+a =
+  A
+b =
+  CMENE
+c =
+  PA
+
+
+x-test-cat =
+  ;coi bab
+  a b
+
+x-test-cat-2 =
+  a b ...
+
+x-test-xor =
+  ;coi
+  ;bab
+  a | b
+
+x-test-and =
+  ;coi bab; bab; coi
+  a & b
+
+x-test-optional-1 =
+  a [b]
+
+x-test-optional-2 =
+  [b] a
+
+x-test-optional-3 =
+  a [x-test-optional-3-bit] a
+x-test-optional-3-bit = [b]
+
+x-test-elide =
+  ;lo broda broda selbri; lo broda broda cu selbri; lo broda pa; ko'a selbri; ko'a pa
+  x-test-elide-bit-1 [x-test-elide-bit-2]
+  ;Does it actually work? No. Idea.
+
+x-test-elide-bit-1 =
+  (LE BRIVLA...) | KOhA
+
+x-test-elide-bit-2 =
+  (/CU/ BRIVLA) | PA
+
+x-test-puki =
+  sentence ; XXX TODO XXX
+
+x-test-tail =
+  [x-test-tail-a [CU]] x-test-tail-b
+
+x-test-tail-a =
+  a
+
+x-test-tail-b =
+  b [x-test-tail-c]
+
+x-test-tail-c =
+  c ...
