@@ -100,7 +100,7 @@ def run_test():
     src = io.StringIO("""zomimi klama -- GOOD\nbroda do brodi -- BAD""")
     #src = io.StringIO("""zomimi klama -- BAD\nbroda do brodi -- GOOD""")
   elif '--full' in sys.argv:
-    src = open(zirsam.resource("gram_test_sentences.txt"), errors='ignore')
+    src = open("gram_test_sentences.txt", errors='ignore')
     IGNORE = [6709] #Because jbofihe chokes up and dies when it sees a paren
     print('*'*10, file=sys.stderr)
     print("This is going to take forever; like, a couple hours (1.5 on my machine). Sorry! (bnf optimizations, get pypy/cython going or something, but probably still isn't out for py3k)", file=sys.stderr)
@@ -108,7 +108,7 @@ def run_test():
   elif '--use' in sys.argv:
     src = open(sys.argv[sys.argv.index('--use')+1], errors='ignore')
   else:
-    src = open(zirsam.resource('failed_gram_tests.txt'), errors='ignore')
+    src = open('failed_gram_tests.txt', errors='ignore')
   i = 0
   failed_tests = 0
   fail_lines = []
