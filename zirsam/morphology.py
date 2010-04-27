@@ -626,7 +626,7 @@ we: {4}""".format(self.bit.buffer, cc_location, cc, ps, word_end))
       #{2.A.1)}
       #The cmene must have a pause in front unless (not DOTSIDE and) there is a marker
       if self.config.dotside and not self.dot_sided:
-        self.config.strict("Dotside requires a period in front of cmene", self.bit[0].position) #And beep angrily .u'i zo'oru'e
+        self.config.strict("Dotside requires a pause in front of cmene", self.bit[0].position) #And beep angrily .u'i zo'oru'e
 
       # NOTE: dotside pretty much sends this bit of BRKWORDS to hell, uhm... let's just use a big IF.
       #(dotside is the default)
