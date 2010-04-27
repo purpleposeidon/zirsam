@@ -1,0 +1,3 @@
+#!/bin/sh
+
+./clean && ./make && echo pu gleki | zirsam --full-tree || exit 64

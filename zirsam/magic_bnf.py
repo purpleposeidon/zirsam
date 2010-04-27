@@ -152,8 +152,18 @@ class Condition(BnfObjectBase):
   def test(self, tracker):
     raise Exception(NotImplemented)
 
+class OptimizedCondition(Condition):
+  def __init__(self, A, B):
+    if type(A) == type(self):
+      #We can make a little optimization: f(f(a, b), c) --> f(a, f(b, c))
+      args = A.terms[0], A.terms[1], B
+      A.terms = args[1:]
+      B = A
+      A = args[0]
+    Condition.__init__(self, A, B)
 
-class AndOr(Condition):
+
+class AndOr(OptimizedCondition):
   def test(self, tracker):
     A = self.terms[0].match(tracker)
     B = self.terms[1].match(tracker)
@@ -162,7 +172,7 @@ class AndOr(Condition):
     else:
       return NoMatch
 
-class XOr(Condition): #Bad name, it belies its' true function, should be "Alternation" TODO, tho shortness is nice.
+class XOr(OptimizedCondition): #Bad name, it belies its' true function, should be "Alternation" TODO, tho shortness is nice.
   #def __repr__(self):
     #return " {0}\n  |{1}".format(*self.terms)
   def test(self, tracker):
@@ -210,7 +220,7 @@ class XOr(Condition): #Bad name, it belies its' true function, should be "Altern
     tracker.checkout()
     return NoMatch
 
-class Concat(Condition):
+class Concat(OptimizedCondition):
   def test(self, tracker):
     """
     Used to be, Match NoFill (e.g, "Match NoMatch...") would get 'Match'. But that isn't working with a bit in sumti-6, so it should be NoFill? NO! That doesn't work! Why doesn't that work? It is quite likely that I will need to implement Yet Another LogicValue....

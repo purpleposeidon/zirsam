@@ -1,15 +1,9 @@
 Or, in other words, "TODO"
 Items marked "-" aren't as important as items marked "+"
-###### Next
- - What is up with {do cu puki broda}
-    - BNF isn't being parsed right; agh!
-    - Check all of those &'s
- * Oh god. What did I do. {mi pu viska}
-    AGH! That stupid & thing again!
-      OKAY. SO. CLEARLY, CONCATENATION HAS GREATER PRECEDENCE THAN &. I"M GLAD THAT WE HAVE DETERMINED THIS TO BE TRUE.
 
-###### Release
+###### Release Checklist
  - bnf/convert_bnf.py: DISABLE_HASH = False
+ - clean
 
 ###### Soon
  - More error checking
@@ -31,7 +25,6 @@ Items marked "-" aren't as important as items marked "+"
  - Also, perhaps an option to *not* be quiet inside ZOI; preventing embedded non-Lojban text
 
 ###### Later
- - Add an "--abusive" option zo'o
  - $ grep -C 2 "XXX\|TODO" */*.bnf *.py */*.py
  - Check for weird/odd/wrong comments
  - (seperate out the configuration options for each section?)
@@ -90,6 +83,7 @@ Items marked "-" aren't as important as items marked "+"
  - Make a funny/bad// joke about {tosmabru}
  - If there is demand: xml output
  - Emulate output of jbofihe and camxes and parser3?
+ - Add an "--abusive" option zo'o
 
 ##### Morphology: I don't care about it anymore
  - Check that each marker in brkwords is properly implemented and documented (Turns out I don't really care)
@@ -140,3 +134,11 @@ Ortohgraphy - what happens to capitalized letters with strict ortho?
     Bah, did it anyways.
  - look into proper distribution methods, see the distutils module http://docs.python.org/distutils/
      "package_data" for setup.py
+ - Oh god. What did I do. {mi pu viska}
+    AGH! That stupid & thing again!
+      OKAY. SO. CLEARLY, CONCATENATION HAS GREATER PRECEDENCE THAN &. I"M GLAD THAT WE HAVE DETERMINED THIS TO BE TRUE.
+    I LOOK FORWARD TO CONTINUED MUTUAL COOPERATION AND RESPECT.
+ - What is up with {do cu puki broda}
+    - BNF isn't being parsed right; agh!
+    - Check all of those &'s
+
