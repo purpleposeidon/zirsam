@@ -6,6 +6,7 @@ Items marked "-" aren't as important as items marked "+"
  - clean
 
 ###### Soon
+ * Oh my god, zirsam has HORRIBLE MEMORY ISSUES
  - More error checking
     - lai & friends in cmene (depends on dot-side)
     - invalid consonant clusters in words
@@ -49,7 +50,6 @@ Items marked "-" aren't as important as items marked "+"
  - Investigate cython! (Used to be called pyrex?)
     - Currently (cython 0.12.1; April 2010) doesn't support "yield". Absolutely unusable until it is.
        - It *would* be possible to rewrite it such that each step built up and returned a list
- - Have cmalu use bitbuffer.py
 
 ###### Much Later
  - (Have error messages in lojban?)
@@ -143,3 +143,4 @@ Ortohgraphy - what happens to capitalized letters with strict ortho?
     - BNF isn't being parsed right; agh!
     - Check all of those &'s
  - It could be faster! Instead of Xor(Xor(...), A) do Xor(A, Xor(...)). Because that would make it faster? Only if the most common forms are listed first in the BNF. Well, at least the old method might not be faster, but the current one would be faster because it has to run more XOr tests.
+ - Have cmalu use bitbuffer.py

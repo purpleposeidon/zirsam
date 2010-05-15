@@ -30,22 +30,31 @@ def add(word):
   global top
   top = max(words[word], top)
 
+def run_bunch():
+  for word in morphology.Stream():
+    if isinstance(word, tokens.CMENE):
+      continue #Ignore cmevla
+    if isinstance(word, tokens.GARBAGE):
+      continue #Ignore crap
+    if not isinstance(word, tokens.BORING):
+      if word.ve_lujvo_rafsi:
+        for raf in word.ve_lujvo_rafsi:
+          if len(raf) == 4:
+            raf = raf[:3] #Chop out an r
+          if len(raf) == 3:
+            try:
+              giz = rafsi[raf]
+              add("{0} (rafsi of {1})".format(raf, giz))
+            except:
+              pass
+      else:
+        add(word.value)
 
-for word in morphology.Stream():
-  if isinstance(word, tokens.CMENE):
-    continue #Ignore cmevla
-  if not isinstance(word, tokens.BORING):
-    if word.ve_lujvo_rafsi:
-      for raf in word.ve_lujvo_rafsi:
-        if len(raf) == 4:
-          raf = raf[:3] #Chop out an r
-        if len(raf) == 3:
-          try:
-            giz = rafsi[raf]
-            add("{0} (rafsi of {1})".format(raf, giz))
-          except:
-            pass
-    else:
-      add(word.value)
+while 1:
+  try:
+    run_bunch()
+  except:
+    break
+  break
 for word in words:
   print('{0:0{2}} {1}'.format(words[word], word, len(str(top))+1))

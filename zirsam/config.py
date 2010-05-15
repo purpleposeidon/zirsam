@@ -184,7 +184,7 @@ Arguments:"""
       for a in argv:
         self.message('\t{0}'.format(a))
       
-      raise SystemExit(3)
+      #raise SystemExit(3)
     
   def __str__(self):
     r = ''

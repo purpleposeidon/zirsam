@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/environ python3
 
 
 from magic_bnf import *
