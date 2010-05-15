@@ -1,0 +1,18 @@
+The zirsam main program is released under GPLv3.
+
+Various files are from other sources:
+
+  docs/original_brkwords.txt (As well as docs/BRKWORDS.TXT)
+      Err, not specified as to copyright. However, they are from http://www.lojban.org/files/software/BRKWORDS.TXT .
+
+  tools/gram_test_sentences.txt and tools/morph_test_sentences.txt
+      from rlpowell. His lojban-specific homepage is located at http://teddyb.org/~rlpowell/hobbies/lojban/
+
+  zirsam/data/lojban.bnf
+      From Chapter 21, Section 2 of "The Complete Lojban Language," from http://dag.github.com/cll/21/2/ (Or, optionally, from http://www.lojban.org/publications/reference_grammar/chapter21.html )
+      It is dedicated to the Public Domain.
+ 
+  zirsam/data/xorxestags.bnf
+      A proposed grammar change by xorxes, as specified by http://www.lojban.org/tiki/Internal+grammar+of+tags
+
+  zirsam/data
