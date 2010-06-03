@@ -138,7 +138,7 @@ def run_test():
       #raise SystemExit
   failures.close()
   print("Total tests:", i, "Failed tests:", failed_tests, file=sys.stderr)
-  print("Grade for the course:", ((i-failed_tests)/i)*100, file=sys.stderr)
+  print("Grade for the course:", ((i-failed_tests)/i)*100, "%", file=sys.stderr)
   print("(Not that it means anything)", file=sys.stderr)
   
 

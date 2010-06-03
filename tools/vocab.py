@@ -1,19 +1,22 @@
 #!/usr/bin/python3
+# -*- coding: utf-8 -*-
 """Usage:
-  ./tools/vocab.py
+  ./tools/vocab.py [input file]
 Reads lojban text from standard input. Writes to standard output how often a word occurs. If you want to sort this list, do:
   ./tools/vocab.py | sort -r
 
 Output format is something like:
   {Number indicating word-count padded with at least a single zero} {word or rafsi} (optional note re. rafsi source)"""
 
+import gc
 import sys
 import pickle
-if len(sys.argv) > 1:
+if "--help" in sys.argv:
   print(__doc__, file=sys.stderr)
   raise SystemExit
 
 import zirsam
+import zirsam.config as config
 import zirsam.morphology as morphology
 import zirsam.tokens as tokens
 
@@ -30,8 +33,10 @@ def add(word):
   global top
   top = max(words[word], top)
 
-def run_bunch():
-  for word in morphology.Stream():
+def run_bunch(stdin=None):
+  c = config.Configuration(args=[], stdin=stdin)
+  for word in morphology.Stream(conf=c):
+    gc.collect()
     if isinstance(word, tokens.CMENE):
       continue #Ignore cmevla
     if isinstance(word, tokens.GARBAGE):
@@ -50,11 +55,19 @@ def run_bunch():
       else:
         add(word.value)
 
-while 1:
-  try:
-    run_bunch()
-  except:
-    continue
-  break
-for word in words:
-  print('{0:0{2}} {1}'.format(words[word], word, len(str(top))+1))
+if __name__ == '__main__':
+  if len(sys.argv) == 2:
+    stdin = open(sys.argv[1])
+  else:
+    stdin = None
+  while 1:
+    try:
+      run_bunch(stdin=stdin)
+    except Exception as e:
+      sys.stderr.write(str(e)+'\n')
+      continue
+    except KeyboardInterrupt:
+      break
+    break
+  for word in words:
+    print('{0:0{2}} {1}'.format(words[word], word, len(str(top))+1))

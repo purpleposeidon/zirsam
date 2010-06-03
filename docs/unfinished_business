@@ -6,7 +6,10 @@ Items marked "-" aren't as important as items marked "+"
  - clean
 
 ###### Soon
- * Oh my god, zirsam has HORRIBLE MEMORY ISSUES
+ + Oh my god, zirsam has HORRIBLE MEMORY ISSUES
+    - improved by running gc.collect()
+    - But where to run it?
+    - Actually, it's "vocab.py" that has horrible memory issues; what happens if you parse a long document?
  - More error checking
     - lai & friends in cmene (depends on dot-side)
     - invalid consonant clusters in words

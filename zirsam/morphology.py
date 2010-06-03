@@ -9,6 +9,7 @@ __author__ = "djeims.roistn <purpleposeidon@gmail.com>"
 """
 
 import io
+import gc
 import sys
 import inspect
 import traceback
@@ -131,6 +132,7 @@ class ValsiParser:
           yield extra_token
       else:
         yield v
+      
   
   #Utilities for ValsiParser.bit
   def word(self, start=0):

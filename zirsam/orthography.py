@@ -9,6 +9,7 @@ This file handles the inputting of text, and the classification and grouping of 
 TODO: unicodedata.normalize
 
 """
+
 import sys
 import copy
 
@@ -211,7 +212,6 @@ class Bit:
         self.cc_letter_counts += 1
     
     self.position = self.chars[0].position
-  
   
   #def __bool__(self): raise Exception("No")
 
