@@ -58,6 +58,7 @@ class MatchTracker:
   def __str__(self):
     return pprint(self)
   def __repr__(self):
+    return "<MatchTracker of {0}>".format(self.rule)
     #if str(self.rule)[-1] in '1234567890' and self.accepted:
     #if not self.config._debug and (len(self.value) == 1 and type(self.value[0]) == MatchTracker):
     #if not self.config._debug and (len(self.value) == 1 and type(self.value[0]) == MatchTracker):

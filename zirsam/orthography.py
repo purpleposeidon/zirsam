@@ -22,6 +22,7 @@ def clean_val(v):
   return repr(v)[1:-1]
 
 class Character:
+  __slots__ = "position", "value", "accented", "V", "C", "y", "comma", "period", "h", "whitespace", "garbage", "EOF", 
   def __str__(self):
     return clean_val(self.value)
   
@@ -97,7 +98,7 @@ class Bit:
   
   def __getitem__(self, index):
     return self.chars[index]
-  
+  __slots__ = "chars", "value", "valid_cc", "valid_initial_cc", "C", "CC", "CCC", "CyC", "CyCC", "CCyC", "counts_CC", "has_C", "V", "VV", "VhV", "counts_VV", "has_V", "accented", "h", "y", "comma", "period", "whitespace", "wordsep", "garbage", "cc_letter_counts", "position"
   def __init__(self, fd):
     """
     Create a group of characters

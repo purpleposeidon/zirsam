@@ -24,10 +24,10 @@ class Token:
   has_V = False
   def __init__(self, bits, config):
     self.config = config
-    self.bits = bits
+    #self.bits = bits
     if not len(bits):
       self.config.error("Trying to tokenize nothing!")
-    self.position = self.bits[0].position
+    self.position = bits[0].position
     self.type = ...
     self.content = None
     self.ve_lujvo_rafsi = []
@@ -35,14 +35,14 @@ class Token:
     self.whitespace = [] #Whitespace and pauses that occur BEFORE the token.
     self.start = None #Acceptable types: None, Token
     self.end = None #Acceptable types: None, Token
-    self.value = self.calculate_value()
+    self.value = self.calculate_value(bits)
 
-    self.classify()
+    self.classify(bits)
     if self.config.hate_token and self.config.hate_token == self.value:
       #Be hatin' - for morphology debugging
       raise Exception("Tokenization Backtrace")
 
-  def classify(self):
+  def classify(self, bits):
     #Sets self.type to whatever is appropriate
     #Also verifies lujvo/fu'ivla
     if self.type != ...:
@@ -59,10 +59,10 @@ class Token:
       #A gismu, a lujvo, or a fuhivla?
       #gismu: CCVCV or CVCCV
       #This will probably never be used.
-      if len(self.bits) == 4:
-        if self.bits[0].CC and self.bits[1].V and self.bits[2].C and self.bits[3].V:
+      if len(bits) == 4:
+        if bits[0].CC and bits[1].V and bits[2].C and bits[3].V:
           self.type = GISMU
-        elif self.bits[0].C and self.bits[1].V and self.bits[2].CC and self.bits[3].V:
+        elif bits[0].C and bits[1].V and bits[2].CC and bits[3].V:
           self.type = GISMU
         else:
           if self._lujvo_analyze(self.value):
@@ -350,7 +350,7 @@ class Token:
 
     return r
 
-  def calculate_value(self):
+  def calculate_value(self, bits):
     """
     Return the ascii value of the token
     XXX This feels out of place
@@ -358,26 +358,26 @@ class Token:
     #Assemble a string out of the values of every bit
     v = ''
     bad_bit = False
-    for bit in self.bits:
+    for bit in bits:
       v += bit.value
       if not isinstance(bit, orthography.Bit):
         bad_bit = True
 
     if bad_bit:
-      ##self.config.warn("Observation: A token of non-bits has been made, so it might have a weird value", self.bits[0].position)
-      ##self.config.debug(repr(self.bits)+'='+v, self.bits[0].position)
+      ##self.config.warn("Observation: A token of non-bits has been made, so it might have a weird value", bits[0].position)
+      ##self.config.debug(repr(bits)+'='+v, bits[0].position)
       return v
 
     #Check for irregular stress. If the stress is regular, then we can do str.lower()
     #We want penultimate stress.
     stressed_regularly = ...
-    i = len(self.bits)
+    i = len(bits)
     encountered_vowels = 0
     while i >= 0:
       i -= 1
-      if self.bits[i].has_V:
+      if bits[i].has_V:
         encountered_vowels += 1
-      if self.bits[i].accented and encountered_vowels != 2:
+      if bits[i].accented and encountered_vowels != 2:
         stressed_regularly = False
 
     if stressed_regularly:

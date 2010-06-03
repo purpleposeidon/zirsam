@@ -54,7 +54,7 @@ while 1:
   try:
     run_bunch()
   except:
-    break
+    continue
   break
 for word in words:
   print('{0:0{2}} {1}'.format(words[word], word, len(str(top))+1))
