@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import zirsam.common
 
 DEBUG = False
 def debug(*args, **kwargs):
@@ -109,6 +110,8 @@ class Terminal(BnfObjectBase):
       return NoMatch
 
 class Rule(BnfObjectBase):
+  def __init__(self, rulename):
+    BnfObjectBase.__init__(common.FastString(rulename))
   def test(self, tracker):
     debug(' '*tracker.depth, '*', self, '*', sep='')
     #debug("Rule:", "entering", self)
@@ -263,10 +266,10 @@ class Repeat(Condition):
       #We are golden, no matter what
       i = 1
       while term.match(tracker) == Match:
-        #Continue matching; only stop if something is obviously broken.
+        #Continue matching
         i += 1
-        if i == 100:
-          raise Exception("A repeat of more than {0} items is ridiculous. (in {1})".format(i, self)) #For debugging
+        #if i == 100:
+          #raise Exception("A repeat of more than {0} items is ridiculous. (in {1})".format(i, self)) #For debugging
       return Match
     else:
       if t1 == NoTake:
@@ -305,20 +308,3 @@ class Optional(Condition):
     #return r
 
 
-
-
-
-"""
-indicator = (Terminal(UI)<<Terminal(CAI))*Optional(Terminal(NAI))<<Terminal(Y)<<Terminal(DAhO)<<Terminal(FUhO)
-
-indicator =
-    (UI | CAI) [NAI]
-    | Y
-    | DAhO
-    | FUhO
-
-XOr(UI, CAI, Y, DAhO, FUhO) [NAI]
-...wrong!
-Should be
-XOr(Xor(UI, CAI) [NAI], Y, DAhO, FUhO)
-"""

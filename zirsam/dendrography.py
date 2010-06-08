@@ -5,6 +5,7 @@ import sys
 sys.setrecursionlimit(2000)
 #sys.setrecursionlimit(1000) #The default on my system
 import io
+import weakref
 
 from zirsam.config import Configuration
 from zirsam.common import Buffer
@@ -21,7 +22,6 @@ def pprint(wut, first=True, html=False):
   if isinstance(wut, MatchTracker):
     head = str(wut.rule)
     
-    #wut.config._debug = False
     if head[-1] in '1234567890' and not (wut.config._debug or wut.config.full_tree):
       #It is not a super-rule
       head = ''
@@ -59,14 +59,6 @@ class MatchTracker:
     return pprint(self)
   def __repr__(self):
     return "<MatchTracker of {0}>".format(self.rule)
-    #if str(self.rule)[-1] in '1234567890' and self.accepted:
-    #if not self.config._debug and (len(self.value) == 1 and type(self.value[0]) == MatchTracker):
-    #if not self.config._debug and (len(self.value) == 1 and type(self.value[0]) == MatchTracker):
-    #  return repr(self.value)[1:-1]
-    r = str(self.rule)+':{'+repr(self.value)[1:-1]+'}'+"*"*(not self.accepted) #XXX That self.accepted isn't always the same is probably indicative of a horrifying bug
-    #if self.stack:
-    #  r += '<'+str(self.stack)[1:-1]+'>'
-    return r
   def html(self):
     return pprint(self, html=True)
   def text(self, first=True):
@@ -81,30 +73,28 @@ class MatchTracker:
       r = r.strip()
     return r
   def search(self, rule_name, first=True, stops=("text", "sentence")):
-    #iter over every node in tracker, returning nodes who's rule is rule_name
-    #It does not look inside of matches for more matches
-    #It does not search inside of rules mentioned in stops.
+    """iter over every node in tracker, returning nodes who's rule is rule_name
+    It does not look inside of matches for more matches
+    It does not search inside of rules mentioned in stops."""
     if self.rule.name == rule_name:
       yield self
     elif not first and (self.rule.name in stops):
-      print("Stopping at", self.rule.name)
       return
     else:
       for val in self.value:
         if isinstance(val, MatchTracker):
           for _ in val.search(rule_name, first=False, stops=stops):
             yield _
+  
   def pull(self, *dive_list):
-    #nodes is a list of nodes to dive through, tries to descend through the tree to get it.
-    #More of a pain in the ass to use, however, it is more trustworthy than search().
-    # TODO: Could be implemented as a while loop?
-    if dive_list:
-      val = dive_list[0]
-      child = self.node.get(val)
-      if child:
-        return child.pull(*dive_list[1:])
-    else: #You called?
-      return self #Ta da! :D
+    """*dive_list are the nodes to descend through. This function returns the node
+    at the end of that list. More of a pain in the ass to use, however, it is more
+    trustworthy than search()."""
+    dive_list = list(dive_list)
+    child = self
+    while dive_list:
+      child = child.node[dive_list.pop(0)]
+    return child
   def __init__(self, valsi, rule, conf=None, current_valsi=0, parent=None, depth=0):
     assert conf
     self.config = conf
@@ -112,7 +102,10 @@ class MatchTracker:
     self.valsi = valsi
     self.start = current_valsi
     self.current_valsi = self.start
-    self.parent = parent
+    if parent:
+      self.parent = weakref.proxy(parent)
+    else:
+      self.parent = None
     self.depth = depth # TODO: Might I wish to abort at some depth?
     self.rule = rule
     self.accepted = False
@@ -133,11 +126,6 @@ class MatchTracker:
     assert self.value
     self.accepted = True
     self.current_valsi = self.value[-1].current_valsi  #+ 1
-    #print(self.rule.name)
-    #XXX
-    #if self.rule.name == 'bridi_tail_3':
-      ##This is where the tail_terms comes from...
-      #print(self.parent)
     self.used_rules.append(self.rule.name)
     if self.parent:
       self.parent.child_rules[self.rule.name] = self.value[-1]
@@ -210,8 +198,14 @@ class GrammarParser:
       try:
         v = root_value.match(tracker)
       except (EOFError, StopIteration) as e:
-        input("EXCEPTION: Hit the end (press enter)")
+        self.config.message("Hit then end")
         raise e
+      except RuntimeError:
+        self.config.warn("Runtime Error! Perhaps you've hit Max Recursion Depth?")
+        raise
+      except MemoryError:
+        self.config.warn("Out of memory!")
+        raise
       
       tracker.finalize()
       if v:
@@ -236,7 +230,6 @@ class GrammarParser:
         self.good_parse = True
         break
       raise Exception("Unable to parse token {0} at {1}".format(self.valsi[0], self.valsi[0].position))
-      #break #XXX Only do one for now
 
 
 
@@ -248,7 +241,7 @@ def Stream(conf=None, text=None, file=None):
   if text and file:
     raise Exception("bebna")
   elif text != None:
-    text += '\n' #XXX no-one must know
+    text += '\n' #XXX no-one must know.
     conf = Configuration(stdin=io.StringIO(text))
   elif file:
     if type(file) == str:
@@ -265,17 +258,13 @@ def Stream(conf=None, text=None, file=None):
   return Buffer(treebuff, conf)
 
 def main(_stream):
-  #Returns, Was_A_Satisfactory_Parse, Parsed_Texts
+  #Returns Was_A_Satisfactory_Parse, Parsed_Texts
   r = []
-  #r = 
-  #print('='*70)
   for i in _stream:
-    #print('*************************\n', pprint(i), '\n-------------------------')
     if not _stream.config.html:
       print()
       print(pprint(i))
     r.append(i)
-    #print(i)
   if _stream.config.html:
     print("Converting to html...", file=sys.stderr)
     print("""<html>
@@ -319,7 +308,4 @@ padding-left: 1px;*/
 
 if __name__ == '__main__':
   val, r = main(Stream())
-  #print('--->', val)
   raise SystemExit(not val)
-  #if r:
-    #return True

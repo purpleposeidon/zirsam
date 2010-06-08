@@ -6,14 +6,10 @@ Items marked "-" aren't as important as items marked "+"
  - clean
 
 ###### Soon
- + Oh my god, zirsam has HORRIBLE MEMORY ISSUES
-    - improved by running gc.collect()
-    - But where to run it?
-    - Actually, it's "vocab.py" that has horrible memory issues; what happens if you parse a long document?
  - More error checking
     - lai & friends in cmene (depends on dot-side)
     - invalid consonant clusters in words
-    - bad fu'ivla (cidrsadifluffle)
+    - waaay too liberal with allowing bad fu'ivla (cidrsadifluffle), and even funky symbols!
  - What about that old '*' on TrackerMatch? Uhm.
     - related to funny bridi_tail that keeps following me around
  - make word_end in morphology.py indexed from 0 instead of 1?
@@ -50,9 +46,7 @@ Items marked "-" aren't as important as items marked "+"
     - In some situations, you might actually want sentence-at-a-time.
  - have switches that enable or disable certain parts of the BNF to allow for grammars designed for other situations
     - Such as...?
- - Investigate cython! (Used to be called pyrex?)
-    - Currently (cython 0.12.1; April 2010) doesn't support "yield". Absolutely unusable until it is.
-       - It *would* be possible to rewrite it such that each step built up and returned a list
+ - Hand-code the [free...] in the BNF?
 
 ###### Much Later
  - (Have error messages in lojban?)
@@ -147,3 +141,15 @@ Ortohgraphy - what happens to capitalized letters with strict ortho?
     - Check all of those &'s
  - It could be faster! Instead of Xor(Xor(...), A) do Xor(A, Xor(...)). Because that would make it faster? Only if the most common forms are listed first in the BNF. Well, at least the old method might not be faster, but the current one would be faster because it has to run more XOr tests.
  - Have cmalu use bitbuffer.py
+ + Oh my god, zirsam has HORRIBLE MEMORY ISSUES
+    - improved by running gc.collect()
+    - But where to run it?
+    - Actually, it's "vocab.py" that has horrible memory issues; what happens if you parse a long document?
+      - Just really slow
+ - Investigate cython! (Used to be called pyrex?)
+    - Currently (cython 0.12.1; April 2010) doesn't support "yield". Absolutely unusable until it is.
+       - It *would* be possible to rewrite it such that each step built up and returned a list
+
+
+
+

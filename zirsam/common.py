@@ -30,9 +30,6 @@ There are other files:
 
 """
 
-import sys
-sys.path.append('../../') #ridiculous
-
 
 #from zirsam import config
 import zirsam.config
@@ -145,9 +142,21 @@ class Position:
     self.col += 1
 
 def lineno():
-    #Returns the current line number in our program. Debug thing.
-    return inspect.currentframe().f_back.f_lineno
+  #Returns the current line number in our program. Debug thing.
+  return inspect.currentframe().f_back.f_lineno
 
+
+
+class FastString(str):
+  #A string that pre-calculates its' hash
+  def __init__(self, val):
+    str.__init__(val)
+    self.__value = val
+    self.__hash = hash(val)
+  def __hash__(self):
+    return self.__hash
+  def __eq__(self, o):
+    return self.__hash == hash(o)
 
 
 
