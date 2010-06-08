@@ -1,0 +1,8 @@
+Evaluate anaphora
+  mi klama do --> #1 klama #2
+  OKAY. Here's how it'll go down:
+    They'll be replaced by a, uhhhm...
+      TrackerReference
+    It'll show that this is not the actual node, but in fact a reference.
+  lo mlatu ku barda
+  .i do jo mi klama --> #1 klama .ijo #2 klama

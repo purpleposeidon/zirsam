@@ -5,11 +5,17 @@
 This is a wrapper around the zirsam module.
 """
 
-
-import zirsam.dendrography
+import sys
+m = "Loading grammar."
+sys.stderr.write(m)
+sys.stderr.flush()
+import zirsam.dendrography #That's right! This is SLOW AS SHIT.
 
 try:
-  for val in zirsam.dendrography.Stream():
+  i = zirsam.dendrography.Stream()
+  sys.stderr.write('\x1b[2K\r') #Clear line, cursor left
+  sys.stderr.flush()
+  for val in i:
     print(val)
 except KeyboardInterrupt:
   pass
