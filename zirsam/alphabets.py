@@ -239,6 +239,7 @@ liberal = GlyphTable("liberal",
       'Y':'y',
       'h':"'",
       'H':"'",
+      '`':"'",
       '!':'sai',
     }
   )
