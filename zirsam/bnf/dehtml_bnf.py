@@ -26,10 +26,10 @@ os.close(outFD); os.close(out2FD)
 os.unlink(out)
 os.unlink(out2)
 while ' \n' in bnf:
-  bnf = bnf.replace(' \n', '\n') #Agh! The trailing spaces! They BURN
+    bnf = bnf.replace(' \n', '\n') #Agh! The trailing spaces! They BURN
 open('../data/lojban.bnf', 'w').write(bnf)
 ###def kill_tag(a, bnf):
-  ###return re.sub(r"<a.*?>".replace('a', a), '', bnf, re.S)
+    ###return re.sub(r"<a.*?>".replace('a', a), '', bnf, re.S)
 
 ###bnf = re.sub(r"<a .*?>(.*)</a>", '\0', bnf, re.S)
 ###bnf = re.sub(r"<a .*?>", '', bnf, re.S)
