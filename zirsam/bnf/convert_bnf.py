@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+#XXX This is stupid.
+
 #After you have put the *formal rules* of the CLL's BNF to data/lojban.bnf,
 #run this program. It will utilize string handling and malmakfa to convert it
 #into a python dictionary.
@@ -29,14 +31,16 @@ for line in open(BNF_RESOURCE_LIST):
     files = files.strip().split(' ')
     BNF_SOURCES[name] = [os.path.join(BNF_PATH, filename) for filename in files]
 
-date = time.asctime()
-author = os.popen('whoami').read().strip()+'@'+os.popen('hostname').read().strip()
+DATE = time.asctime()
+AUTHOR = os.popen('whoami').read().strip()
+HOST = os.popen('hostname').read().strip()
 
-geninfo = "#automatically generated\n#on {0}".format(date)
-if author:
-    geninfo += "\n#by " + author
+GENINFO = "#automatically generated\n#on {0}".format(DATE)
+if AUTHOR:
+    GENINFO += "\n#by " + AUTHOR
+    if HOST: GENINFO += '@'+HOST
 
-head_info = """#!/usr/bin/python3
+HEAD_INFO = """#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
 {0}
@@ -52,12 +56,12 @@ from zirsam.selmaho import *
 from zirsam.special_terminals import *
 
 
-""".format(geninfo)
-bnf_list_dictionary = ''
+""".format(GENINFO)
+BNF_LIST_DICTIONARY = ''
 for bnf_name in BNF_SOURCES.keys():
-    bnf_list_dictionary += "{0!r}: {0}_bnf_data, ".format(bnf_name)
+    BNF_LIST_DICTIONARY += "{0!r}: {0}_bnf_data, ".format(bnf_name)
 
-tail_info = """
+TAIL_INFO = """
 BNF_LIST = {%s}
 
 for bnf_data in BNF_LIST.values():
@@ -71,10 +75,8 @@ if __name__ == '__main__':
     else:
         print ('''Usage:
     python3 bnf_data.py bnf_item1 ...''')
-""" % (bnf_list_dictionary,)
+""" % (BNF_LIST_DICTIONARY,)
 
-#Painful. Why?
-sys.stdout = open(DATA_OUTPUT, 'w')
 def convert_source_files(bnf_name, filenames):
     bnf = ''
     assert type(filenames) != str
@@ -95,7 +97,8 @@ def convert_source_files(bnf_name, filenames):
     while '\n\n' in bnf: bnf = bnf.replace('\n\n', '\n')
     #sys.stderr.write(bnf.replace('\n', '\\n\n'))
 
-    bnf = re.sub(r"([\w\d-]*) =", r";\n\1 = ", bnf).strip(';') +';' #Add ; after rules and at the end
+    #Add ; after rules and at the end
+    bnf = re.sub(r"([\w\d-]*) =", r";\n\1 = ", bnf).strip(';') +';'
     bnf = bnf.replace('\n', '') #destroy newlines!
     bnf = bnf.replace(';', "\n") #Now put the newlines back!
     bnf = bnf.replace('    ', ' ').replace('\n\n', '\n').strip() #Cleanup again
@@ -105,7 +108,8 @@ def convert_source_files(bnf_name, filenames):
     if DISABLE_HASH:
         bnf = bnf.replace('#', ' ').replace('  ', '')
     else:
-        bnf = bnf.replace('#', '[free...]') #expand the # #XXX A thought - don't expand, but handle while parsing?
+        bnf = bnf.replace('#', '[free...]') #expand the #
+        #TODO A thought - don't expand, but handle while parsing? Any benefits?
 
 
     #Now get ready to make that space our new concat operator
@@ -131,19 +135,18 @@ def convert_source_files(bnf_name, filenames):
     while ' \n' in bnf: bnf = bnf.replace(' \n', '\n')
 
 
-    """
-    Now for the malmakfa: I have the python parser parse it for me!
-        I just have to exploit the orders of operation, and then write classes to implement those ops
-
-    Some orders of operations, from strongest precedent, to lowest precedent:
-        **
-        *
-        +
-        <<
-        ^    (Don't want to use)
-        |    (Don't want to use)
-        == (Only if I'm desperate)
-    """
+    #Now for the malmakfa: I have the python parser parse it for me!
+    #    I just have to exploit the orders of operation, and then write
+    #    classes to implement those ops
+    #
+    #Some orders of operations, from strongest precedent, to lowest precedent:
+    #    **
+    #    *
+    #    +
+    #    <<
+    #    ^    (Don't want to use)
+    #    |    (Don't want to use)
+    #    == (Only if I'm desperate)
 
     if 1:
         #This is where everything becomes absolutely illegible
@@ -168,8 +171,12 @@ def convert_source_files(bnf_name, filenames):
     bnf = bnf.replace(';', ',')
     return "%s_bnf_data = {" % (bnf_name,) + bnf + "\n}\n"
 
-print(head_info)
+
+sys.stdout = open(DATA_OUTPUT, 'w') #This is kind of silly.
+print(HEAD_INFO)
 for bnf_src in BNF_SOURCES:
     print(convert_source_files(bnf_src, BNF_SOURCES[bnf_src]))
-print(tail_info)
+print(TAIL_INFO)
 #This + magic_bnf.BnfObjectBase == easier than writing a bnf parser, right?
+
+
