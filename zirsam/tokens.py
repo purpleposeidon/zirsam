@@ -24,7 +24,7 @@ class Token:
     has_V = False
     def __init__(self, bits, config):
         self.config = config
-        #self.bits = bits
+        self.bits = bits
         if not len(bits):
             self.config.error("Trying to tokenize nothing!")
         self.position = bits[0].position
