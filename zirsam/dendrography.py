@@ -63,10 +63,14 @@ def pprint(wut, first=True, html=False):
             head = head.replace(' \n', '')
             return head+''
         head += ':'
-        for v in wut.value:
-            for line in pprint(v, first=False).split('\n'):
-                head += '\n  '+line
-        head += '\n'
+        if len(wut.value) > 1 or (wut.config._debug or wut.config.full_tree):
+            for v in wut.value:
+                for line in pprint(v, first=False).split('\n'):
+                    head += '\n  '+line
+            head += '\n'
+        else:
+            if wut.value:
+                head += ' ' + pprint(wut.value[0], first=False)
         if first:
             while ' \n' in head: head = head.replace(' \n', '\n')
             while '\n\n' in head: head = head.replace('\n\n', '\n')
