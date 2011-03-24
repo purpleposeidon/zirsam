@@ -13,12 +13,8 @@ from zirsam import thaumatology
 from zirsam import bnf
 from zirsam import magic_bnf
 
-def pprint(wut, first=True, html=False):
-    """We can output in a few different ways:
-        * Print the entire parse tree, including sub-rules like "sumti_6"
-        * Don't print sub-rules, but print everything
-        * Print only nodes that don't have 2 branches"""
-    
+
+def html_pprint(wut, first=True):
     if isinstance(wut, MatchTracker):
         head = str(wut.rule)
         
@@ -26,29 +22,56 @@ def pprint(wut, first=True, html=False):
             #It is not a super-rule
             head = ''
             for v in wut.value:
-                head += pprint(v, first=False, html=html)
+                head += html_pprint(v, first=False)
             while '    \n' in head:
                 head = head.replace('    \n', ' \n')
             head = head.replace(' \n', '')
             return head+''
-        if not html: head += ':'
-        else: head = """<span class="rule {0}" title="{0}">""".format(str(wut.rule), head)
+        head = """<span class="rule {0}" title="{0}">""".format(str(wut.rule), head)
         for v in wut.value:
-            for line in pprint(v, first=False, html=html).split('\n'):
-                head += '\n    '+line
+            for line in html_pprint(v, first=False).split('\n'):
+                head += '\n  '+line
         head += '\n'
-        if html:
-            head += "</span>"
+        head += "</span>"
         if first:
             while ' \n' in head: head = head.replace(' \n', '\n')
             while '\n\n' in head: head = head.replace('\n\n', '\n')
-            if html:
-                head = """<span class="rule {0}" title="{0}">{1}</span>""".format(str(wut.rule), head)
-                #head += "</span>"
+            head = """<span class="rule {0}" title="{0}">{1}</span>""".format(str(wut.rule), head)
+            #head += "</span>"
             return head.strip()
         return head
-    if html:
-        return wut.html()+'\n'
+    return wut.html()+'\n'
+
+  
+
+def pprint(wut, first=True, html=False):
+    """We can output in a few different ways:
+        * Print the entire parse tree, including sub-rules like "sumti_6"
+        * Don't print sub-rules, but print everything
+        * Print only nodes that don't have 2 branches"""
+    if html: return html_pprint(wut)
+    if isinstance(wut, MatchTracker):
+        head = str(wut.rule)
+        
+        if head[-1] in '1234567890' and not (wut.config._debug or wut.config.full_tree):
+            #It is not a super-rule
+            head = ''
+            for v in wut.value:
+                head += pprint(v, first=False)
+            while '    \n' in head:
+                head = head.replace('    \n', ' \n')
+            head = head.replace(' \n', '')
+            return head+''
+        head += ':'
+        for v in wut.value:
+            for line in pprint(v, first=False).split('\n'):
+                head += '\n  '+line
+        head += '\n'
+        if first:
+            while ' \n' in head: head = head.replace(' \n', '\n')
+            while '\n\n' in head: head = head.replace('\n\n', '\n')
+            return head.strip()
+        return head
     return str(wut)+'\n'
 
 class MatchTracker:
@@ -249,7 +272,7 @@ def Stream(conf=None, text=None, file=None):
         else:
             conf = Configuration(stdin=file)
     elif conf == None:
-        conf = Configuration()
+        conf = Configuration(sys.argv[1:])
     de_debug = conf._debug
     conf._debug = False
     valsibuff = thaumatology.Stream(conf)
