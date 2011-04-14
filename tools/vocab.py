@@ -2,11 +2,11 @@
 # -*- coding: utf-8 -*-
 """Usage:
   ./tools/vocab.py [input file]
-Reads lojban text from standard input. Writes to standard output how often a word occurs. If you want to sort this list, do:
+Reads lojban text from standard input, or from the input file. Writes to standard output how often a word occurs. If you want to sort this list, do:
   ./tools/vocab.py | sort -r
 
-Output format is something like:
-  {Number indicating word-count padded with at least a single zero} {word or rafsi} (optional note re. rafsi source)"""
+Output format is:
+  (Number indicating word-count padded with at least a single zero) (word or rafsi) [optional note re. rafsi source]"""
 
 import gc
 import sys
@@ -44,7 +44,7 @@ def run_bunch(stdin=None):
     if not isinstance(word, tokens.BORING):
       if word.ve_lujvo_rafsi:
         for raf in word.ve_lujvo_rafsi:
-          if len(raf) == 4:
+          if len(raf) == 4 and raf[-1] == 'r':
             raf = raf[:3] #Chop out an r
           if len(raf) == 3:
             try:
@@ -71,3 +71,5 @@ if __name__ == '__main__':
     break
   for word in words:
     print('{0:0{2}} {1}'.format(words[word], word, len(str(top))+1))
+
+
